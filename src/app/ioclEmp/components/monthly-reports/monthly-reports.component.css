@@ -1,0 +1,33 @@
+mat-form-field {
+  /* width: 100%; */
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+button {
+  margin-top: 20px;
+}
+.form-card{
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: space-evenly;
+  overflow:auto;
+}
+
+.header-cell {
+font-weight: 600; /* Makes the text slightly thinner */
+font-size: 1rem; /* Optional: Adjust the font size to your preference */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

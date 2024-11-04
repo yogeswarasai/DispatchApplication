@@ -1,0 +1,70 @@
+<mat-card class="form-card">
+  <mat-card-header>
+    <button mat-icon-button (click)="onClose()" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+    </mat-card-header>
+  <mat-card-title>editParcel In</mat-card-title>
+  <mat-card-content>
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="form-grid"> 
+  <mat-form-field>
+    <mat-label>Consignment Number</mat-label>
+    <input matInput placeholder="Consignment Number" formControlName="consignmentNumber">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Consignment Date</mat-label>
+    <input matInput [matDatepicker]="picker" placeholder="Consignment Date" formControlName="consignmentDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Received Date</mat-label>
+    <input matInput [matDatepicker]="receivedPicker" placeholder="Received Date" formControlName="receivedDate">
+    <mat-datepicker-toggle matSuffix [for]="receivedPicker"></mat-datepicker-toggle>
+    <mat-datepicker #receivedPicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Sender LocCode</mat-label>
+    <input matInput placeholder="Sender LocCode" formControlName="senderLocCode">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Sender Department</mat-label>
+    <input matInput placeholder="Sender Department" formControlName="senderDepartment">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Sender Name</mat-label>
+    <input matInput placeholder="Sender Name" formControlName="senderName">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Recipient Department</mat-label>
+    <input matInput placeholder="Recipient Department" formControlName="recipientDepartment">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Recipient Name</mat-label>
+    <input matInput placeholder="Recipient Name" formControlName="recipientName">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Courier Name</mat-label>
+    <input matInput placeholder="Courier Name" formControlName="courierName">
+  </mat-form-field>
+
+  <!-- <mat-form-field>
+    <mat-label>Created Date</mat-label>
+    <input matInput [matDatepicker]="createdPicker" placeholder="Created Date" formControlName="createdDate">
+    <mat-datepicker-toggle matSuffix [for]="createdPicker"></mat-datepicker-toggle>
+    <mat-datepicker #createdPicker></mat-datepicker>
+  </mat-form-field> -->
+  <div class="button-container">
+    <button mat-raised-button color="primary" type="submit"  class="submitButton">Update</button>
+  </div>
+    </form>
+  </mat-card-content>
+</mat-card>

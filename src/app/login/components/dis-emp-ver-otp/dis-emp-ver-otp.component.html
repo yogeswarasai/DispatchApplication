@@ -1,0 +1,46 @@
+<div class="login-container">
+  <div class="login-card">
+      <img src="../../../../assets/indianOilLogo.png" alt="IndianOil Logo" class="logo">
+      <h2>Verify OTP</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Phone Number</mat-label>
+              <input matInput formControlName="phoneNumber" readonly>
+          </mat-form-field>
+
+          <div class="otp-container">
+              <input *ngFor="let otpControl of otpControls; let i = index" type="text" maxlength="1" [formControl]="otpControl" (input)="onOtpInput($event, i)">
+          </div>
+
+          <!-- <div class="captcha-container">
+          
+              <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Enter CAPTCHA</mat-label>
+                  <input matInput formControlName="captcha">
+              </mat-form-field>
+              <div class="captcha">
+                <span>{{ captchaText }}</span>
+                <button type="button" (click)="generateCaptcha()" style="background-color:blue;">&#x21bb;</button>
+            </div>
+          </div> -->
+          <mat-form-field appearance="fill">
+            <mat-label>Captcha</mat-label>
+            <input matInput formControlName="captcha" required>
+            <div matSuffix class="captcha-container">
+              <div class="captcha-text">{{ captchaText }}</div>
+              <button mat-icon-button (click)="generateCaptcha()">
+                <mat-icon>refresh</mat-icon>
+              </button>
+            </div>
+          </mat-form-field>
+          <button mat-raised-button color="primary" type="submit"  style="width: 100%;" >Login</button>
+      </form>
+
+      <div class="links">
+          <!-- <a  routerLink="/disEmpReqOtp">Change Mobile Number</a> -->
+          <a (click)="changeMobileNumber()">Change Mobile</a>
+          <a (click)="resendOtp()">Resend OTP</a>
+      </div>
+  </div>
+</div>
+     

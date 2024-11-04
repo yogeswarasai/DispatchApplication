@@ -1,0 +1,58 @@
+.form-card {
+    /* max-width: 600px; */
+    margin: 10px auto;
+    padding: 20px;
+    height: 500px;
+    width:100%;
+  
+   /* overflow: auto;*/
+  }
+  
+  /* .full-width {
+    width: 40%;
+    margin-left: 20px;
+    margin-right: 40px;
+  } */
+  /* .form-grid {
+    display:grid;
+  
+  } */
+  
+  .two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    
+  }
+  
+  .three-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
+  }
+  
+  .button-container {
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+  }
+  .submitButton
+  {
+    text-align: center;
+    width: 30%;
+  }
+  mat-card-header {
+    position: relative;
+    padding: 5px; /* Adjust based on your design */
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 5px; /* Adjust based on your design */
+    right: 5px; /* Adjust based on your design */
+    z-index: 1; /* Ensure it is above other content */
+  }
+  mat-card-title{
+    padding: 10px;
+  }

@@ -1,0 +1,428 @@
+
+
+<!-- 
+<div class="container">
+  <div>
+  
+    <h1 style="text-align: center; font-weight: bold; color: brown;">{{empProfile?.locationName}}</h1>
+
+  </div>
+  <div class="add-courier-section">
+    <mat-card class="form-card">
+     
+   
+      <mat-card-title>Add Courier</mat-card-title>
+      <mat-card-content>
+        <form class="form-grid" (ngSubmit)="onSubmitCourier()">
+          <mat-form-field appearance="fill">
+            <mat-label>Courier Code</mat-label>
+            <input matInput [(ngModel)]="courierCode" name="courierCode" placeholder="Enter Courier Code" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Courier Name</mat-label>
+            <input matInput [(ngModel)]="courierName" name="courierName" placeholder="Enter Courier Name" required>
+          </mat-form-field>
+          <div class="button-container">
+            <button mat-raised-button color="primary" class="submitButton" type="submit">Submit</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="combined-sections">
+    <mat-card class="form-card">
+      <mat-card-title>Courier Contract</mat-card-title>
+      <mat-card-content>
+        <form class="form-grid">
+          <mat-form-field appearance="fill">
+            <mat-label>Courier Code</mat-label>
+            <input matInput [(ngModel)]="courierCode" name="courierCode" placeholder="Enter Courier Code" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Courier Contract No</mat-label>
+            <input matInput [(ngModel)]="courierControlNo" name="courierControlNo" placeholder="Enter Control No" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="pickerStart" placeholder="Choose Start Date" [(ngModel)]="startDate" name="startDate" required>
+            <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+            <mat-datepicker #pickerStart></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="pickerEnd" placeholder="Choose End Date" [(ngModel)]="endDate" name="endDate" required>
+            <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+            <mat-datepicker #pickerEnd></mat-datepicker>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="form-card">
+      <mat-card-title>Courier Discount</mat-card-title>
+      <mat-card-content>
+        <form class="form-grid">
+          <mat-form-field appearance="fill">
+            <mat-label>From Monthly Amount</mat-label>
+            <input matInput [(ngModel)]="fromMonthlyAmt" name="fromMonthlyAmt" type="number" placeholder="Enter From Monthly Amount" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>To Monthly Amount</mat-label>
+            <input matInput [(ngModel)]="toMonthlyAmt" name="toMonthlyAmt" type="number" placeholder="Enter To Monthly Amount" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Discount Percentage</mat-label>
+            <input matInput [(ngModel)]="discountPercentage" name="discountPercentage" type="number" placeholder="Enter Discount Percentage" required>
+          </mat-form-field>
+          
+          <div class="button-container inline-button-container">
+            <button mat-button color="accent" type="button" (click)="addDiscount()">Add More</button>
+          </div>
+        </form>
+        <div class="added-items">
+          <div *ngFor="let discount of discounts; let i = index" class="item-box">
+            {{ discount.fromMonthlyAmt }} - {{ discount.toMonthlyAmt }} - {{ discount.discountPercentage }}%
+            <button (click)="removeDiscount(i)" class="remove-button">✖</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    
+   
+    <mat-card class="form-card">
+      <mat-card-title>Courier Rate</mat-card-title>
+      <mat-card-content>
+        <form class="form-grid">
+          <mat-form-field appearance="fill">
+            <mat-label>From Weight (gms)</mat-label>
+            <input matInput [(ngModel)]="fromWeightGms" name="fromWeightGms" type="number" placeholder="Enter From Weight (gms)" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>To Weight (gms)</mat-label>
+            <input matInput [(ngModel)]="toWeightGms" name="toWeightGms" type="number" placeholder="Enter To Weight (gms)" required>
+          </mat-form-field>
+         
+          <mat-form-field appearance="fill">
+            <mat-label>From Distance (kms)</mat-label>
+            <input matInput [(ngModel)]="fromDistanceKms" name="fromDistanceKms" type="number" placeholder="Enter From Distance (kms)" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>To Distance (kms)</mat-label>
+            <input matInput [(ngModel)]="toDistanceKms" name="toDistanceKms" type="number" placeholder="Enter To Distance (kms)" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Rate</mat-label>
+            <input matInput [(ngModel)]="rate" name="rate" type="number" placeholder="Enter Rate" required>
+          </mat-form-field>
+
+          <div class="button-container inline-button-container">
+            <button mat-button color="accent" type="button" (click)="addRate()">Add More</button>
+          </div>
+        </form>
+        <div class="added-items">
+          <div *ngFor="let rate of rates; let i = index" class="item-box">
+            {{ rate.fromWeightGms }}g - {{ rate.toWeightGms }}g - {{ rate.fromDistanceKms }}km - {{ rate.toDistanceKms }}km - {{ rate.rate }}
+            <button (click)="removeRate(i)" class="remove-button">✖</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="button-container">
+      <button mat-raised-button color="primary" class="submitButton" type="submit" (click)="onSubmitContractDiscountRate()">Submit</button>
+    </div>
+  </div>
+</div> -->
+
+
+
+
+<div class="container">
+  <!-- Display location name -->
+  <div>
+    <h1 style="text-align: center; font-weight: bold; color: brown;">
+      {{ empProfile?.locationName }}
+    </h1>
+  </div>
+
+  <!-- Add Courier Section -->
+   <div class="add-courier-section">
+    <mat-card class="form-card">
+      <mat-card-title>Add Courier</mat-card-title>
+      <mat-card-content>
+        <form class="form-grid" [formGroup]="courierForm" (ngSubmit)="onSubmitCourier()">
+          <mat-form-field appearance="fill">
+            <mat-label>Courier Code</mat-label>
+            <input matInput formControlName="courierCode" placeholder="Enter Courier Code" required />
+            <mat-error *ngIf="courierForm.get('courierCode')?.invalid && (courierForm.get('courierCode')?.dirty || courierForm.get('courierCode')?.touched)">
+              Courier Code is required.
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill">
+            <mat-label>Courier Name</mat-label>
+            <input matInput formControlName="courierName" placeholder="Enter Courier Name" required />
+            <mat-error *ngIf="courierForm.get('courierName')?.invalid && (courierForm.get('courierName')?.dirty || courierForm.get('courierName')?.touched)">
+              Courier Name is required.
+            </mat-error>
+          </mat-form-field>
+  
+          <div class="button-container">
+            <button mat-raised-button color="primary" type="submit">Add Courier</button>
+          </div>
+
+          <div *ngIf="courierResponseMessage" class="response-message">
+            {{ courierResponseMessage }}
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div> 
+
+  <div class="combined-sections">
+    <mat-card class="form-card">
+      <mat-card-title>Courier Contract</mat-card-title>
+      <mat-card-content>
+        <form class="form-grid" [formGroup]="contractForm" (ngSubmit)="onSubmitContract()">
+          <mat-form-field appearance="fill">
+            <mat-label>Courier Code</mat-label>
+            <input matInput formControlName="courierCode" name="courierCode" placeholder="Enter Courier Code" required />
+            <mat-error *ngIf="contractForm.get('courierCode')?.hasError('required')">Courier code is required.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Courier Contract No</mat-label>
+            <input matInput formControlName="courierContNo" placeholder="Enter Contract No" required />
+            <mat-error *ngIf="contractForm.get('courierContNo')?.hasError('required')">Contract number is required.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="pickerStart" placeholder="Choose Start Date" formControlName="contractStartDate" required />
+            <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+            <mat-datepicker #pickerStart></mat-datepicker>
+            <mat-error *ngIf="contractForm.get('contractStartDate')?.hasError('required')">Start date is required.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="pickerEnd" placeholder="Choose End Date" formControlName="contractEndDate" required />
+            <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+            <mat-datepicker #pickerEnd></mat-datepicker>
+            <mat-error *ngIf="contractForm.get('contractEndDate')?.hasError('required')">End date is required.</mat-error>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  
+    <!-- Courier Discount Section -->
+    <mat-card class="form-card">
+      <mat-card-title>Courier Discount</mat-card-title>
+      <mat-card-content>
+        <form class="form-grid" [formGroup]="contractForm">
+          <mat-form-field appearance="fill">
+            <mat-label>From Monthly Amount</mat-label>
+            <input matInput formControlName="fromMonthlyAmt" type="number" placeholder="Enter From Monthly Amount" required />
+            <mat-error *ngIf="contractForm.get('fromMonthlyAmt')?.value < 0">Amount cannot be negative.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>To Monthly Amount</mat-label>
+            <input matInput formControlName="toMonthlyAmt" type="number" placeholder="Enter To Monthly Amount" required />
+            <mat-error *ngIf="contractForm.get('toMonthlyAmt')?.value < 0">Amount cannot be negative.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Discount Percentage</mat-label>
+            <input matInput formControlName="discountPercentage" type="number" placeholder="Enter Discount Percentage" required />
+            <mat-error *ngIf="contractForm.get('discountPercentage')?.value < 0 || contractForm.get('discountPercentage')?.value > 100">
+              Discount Percentage must be between 0 and 100.
+            </mat-error>
+          </mat-form-field>
+          <div class="button-container inline-button-container">
+            <button mat-button color="accent" type="button" (click)="addDiscount()">Add Discount</button>
+          </div>
+        </form>
+  
+        <!-- Display Added Discounts -->
+        <div class="added-items">
+          <div *ngFor="let discount of discounts; let i = index" class="item-box">
+            {{ discount.fromMonthlyAmt }} - {{ discount.toMonthlyAmt }} - {{ discount.discountPercentage }}%
+            <button (click)="removeDiscount(i)" class="remove-button">✖</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  
+    <!-- Courier Rate Section -->
+    <mat-card class="form-card">
+      <mat-card-title>Courier Rate</mat-card-title>
+      <mat-card-content>
+        <form class="form-grid" [formGroup]="contractForm">
+          <mat-form-field appearance="fill">
+            <mat-label>From Weight (gms)</mat-label>
+            <input matInput formControlName="fromWtGms" type="number" placeholder="Enter From Weight (gms)" required />
+            <mat-error *ngIf="contractForm.get('fromWtGms')?.value < 0">Weight cannot be negative.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>To Weight (gms)</mat-label>
+            <input matInput formControlName="toWtGms" type="number" placeholder="Enter To Weight (gms)" required />
+            <mat-error *ngIf="contractForm.get('toWtGms')?.value < 0">Weight cannot be negative.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>From Distance (kms)</mat-label>
+            <input matInput formControlName="fromDistanceKm" type="number" placeholder="Enter From Distance (kms)" required />
+            <mat-error *ngIf="contractForm.get('fromDistanceKm')?.value < 0">Distance cannot be negative.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>To Distance (kms)</mat-label>
+            <input matInput formControlName="toDistanceKm" type="number" placeholder="Enter To Distance (kms)" required />
+            <mat-error *ngIf="contractForm.get('toDistanceKm')?.value < 0">Distance cannot be negative.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Rate</mat-label>
+            <input matInput formControlName="rate" type="number" placeholder="Enter Rate" required />
+            <mat-error *ngIf="contractForm.get('rate')?.value < 0">Rate cannot be negative.</mat-error>
+          </mat-form-field>
+          
+          <div class="button-container inline-button-container">
+            <button mat-button color="accent" type="button" (click)="addRate()">Add Rate</button>
+          </div>
+        </form>
+  
+        <!-- Display Added Rates -->
+        <div class="added-items">
+          <div *ngFor="let rate of rates; let i = index" class="item-box">
+            {{ rate.fromWtGms }}g - {{ rate.toWtGms }}g - {{ rate.fromDistanceKm }}km - {{ rate.toDistanceKm }}km - {{ rate.rate }}
+            <button (click)="removeRate(i)" class="remove-button">✖</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  
+    <!-- Submit Button for Entire Form -->
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit" (click)="onSubmitContract()">Submit</button>
+    </div>
+    <div *ngIf="contractResponseMessage" class="response-message">
+      {{ contractResponseMessage }}
+    </div>
+  </div>
+  
+  <!-- Add Courier Contract Section -->
+  <!-- <div class="combined-sections">
+    <mat-card class="form-card">
+      <mat-card-title>Courier Contract</mat-card-title>
+      <mat-card-content>
+        <form class="form-grid" [formGroup]="courierForm" (ngSubmit)="onSubmitContract()">
+          <mat-form-field appearance="fill">
+            <mat-label>Courier Code</mat-label>
+            <input matInput formControlName="courierCode" name="courierCode" placeholder="Enter Courier Code" required>
+            <mat-error *ngIf="courierForm.get('courierCode')?.hasError('required')">Courier code is required.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Courier Contract No</mat-label>
+            <input matInput formControlName="courierContNo" placeholder="Enter Contract No" required />
+            <mat-error *ngIf="courierForm.get('courierContNo')?.hasError('required')">Contract number is required.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="pickerStart" placeholder="Choose Start Date" formControlName="contractStartDate" required />
+            <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+            <mat-datepicker #pickerStart></mat-datepicker>
+            <mat-error *ngIf="courierForm.get('contractStartDate')?.hasError('required')">Start date is required.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="pickerEnd" placeholder="Choose End Date" formControlName="contractEndDate" required />
+            <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+            <mat-datepicker #pickerEnd></mat-datepicker>
+            <mat-error *ngIf="courierForm.get('contractEndDate')?.hasError('required')">End date is required.</mat-error>
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  
+    <mat-card class="form-card">
+      <mat-card-title>Courier Discount</mat-card-title>
+      <mat-card-content>
+        <form class="form-grid" [formGroup]="courierForm">
+          <mat-form-field appearance="fill">
+            <mat-label>From Monthly Amount</mat-label>
+            <input matInput formControlName="fromMonthlyAmt" type="number" placeholder="Enter From Monthly Amount" required />
+            <mat-error *ngIf="courierForm.get('fromMonthlyAmt')?.value < 0">Amount cannot be negative.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>To Monthly Amount</mat-label>
+            <input matInput formControlName="toMonthlyAmt" type="number" placeholder="Enter To Monthly Amount" required />
+            <mat-error *ngIf="courierForm.get('toMonthlyAmt')?.value < 0">Amount cannot be negative.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Discount Percentage</mat-label>
+            <input matInput formControlName="discountPercentage" type="number" placeholder="Enter Discount Percentage" required />
+            <mat-error *ngIf="courierForm.get('discountPercentage')?.value < 0 || courierForm.get('discountPercentage')?.value > 100">
+              Discount Percentage must be between 0 and 100.
+            </mat-error>
+          </mat-form-field>
+          <div class="button-container inline-button-container">
+            <button mat-button color="accent" type="button" (click)="addDiscount()">Add Discount</button>
+          </div>
+        </form>
+  
+        <div class="added-items">
+          <div *ngFor="let discount of discounts; let i = index" class="item-box">
+            {{ discount.fromMonthlyAmt }} - {{ discount.toMonthlyAmt }} - {{ discount.discountPercentage }}%
+            <button (click)="removeDiscount(i)" class="remove-button">✖</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  
+    <mat-card class="form-card">
+      <mat-card-title>Courier Rate</mat-card-title>
+      <mat-card-content>
+        <form class="form-grid" [formGroup]="courierForm">
+          <mat-form-field appearance="fill">
+            <mat-label>From Weight (gms)</mat-label>
+            <input matInput formControlName="fromWtGms" type="number" placeholder="Enter From Weight (gms)" required />
+            <mat-error *ngIf="courierForm.get('fromWtGms')?.value < 0">Weight cannot be negative.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>To Weight (gms)</mat-label>
+            <input matInput formControlName="toWtGms" type="number" placeholder="Enter To Weight (gms)" required />
+            <mat-error *ngIf="courierForm.get('toWtGms')?.value < 0">Weight cannot be negative.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>From Distance (kms)</mat-label>
+            <input matInput formControlName="fromDistanceKm" type="number" placeholder="Enter From Distance (kms)" required />
+            <mat-error *ngIf="courierForm.get('fromDistanceKm')?.value < 0">Distance cannot be negative.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>To Distance (kms)</mat-label>
+            <input matInput formControlName="toDistanceKm" type="number" placeholder="Enter To Distance (kms)" required />
+            <mat-error *ngIf="courierForm.get('toDistanceKm')?.value < 0">Distance cannot be negative.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Rate</mat-label>
+            <input matInput formControlName="rate" type="number" placeholder="Enter Rate" required />
+            <mat-error *ngIf="courierForm.get('rate')?.value < 0">Rate cannot be negative.</mat-error>
+        </mat-form-field>
+        
+          <div class="button-container inline-button-container">
+            <button mat-button color="accent" type="button" (click)="addRate()">Add Rate</button>
+          </div>
+        </form>
+  
+        <div class="added-items">
+          <div *ngFor="let rate of rates; let i = index" class="item-box">
+            {{ rate.fromWtGms }}g - {{ rate.toWtGms }}g - {{ rate.fromDistanceKm }}km - {{ rate.toDistanceKm }}km - {{ rate.rate }}
+            <button (click)="removeRate(i)" class="remove-button">✖</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit" (click)="onSubmitContract()">Submit</button>
+    </div>
+    <div *ngIf="contractResponseMessage" class="response-message">
+      {{ contractResponseMessage }}
+    </div>
+  </div>
+   -->

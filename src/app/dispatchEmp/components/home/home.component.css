@@ -1,0 +1,26 @@
+.cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 400px;
+    text-align: center;
+    width: 100%;
+}
+
+.logo-container {
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+}
+
+.parcels-count {
+    width: 100%;
+}
+.mat-cart{
+    align-items: center;
+    text-align: center;
+}

@@ -1,0 +1,65 @@
+<!-- <div><h1 style="text-align: center; font-weight: bold; color: brown;">Welcome {{profile.EmpName}}</h1></div>
+<mat-card class="cart">
+   <div class="logo-container">
+       <img src="../../../../assets/indianOilLogo.png" alt="Logo" class="logo">
+   </div>
+   <div class="parcels-count">
+       <h2>Parcels Count</h2>
+       <mat-table matTable [dataSource]="parcelsData">
+           <ng-container matColumnDef="total">
+               <mat-header-cell *matHeaderCellDef>Total</mat-header-cell>
+               <mat-cell *matCellDef="let parcel">{{ parcel.total }}</mat-cell>
+           </ng-container>
+           <ng-container matColumnDef="in">
+               <mat-header-cell *matHeaderCellDef>Parcels In</mat-header-cell>
+               <mat-cell *matCellDef="let parcel">{{ parcel.in }}</mat-cell>
+           </ng-container>
+           <ng-container matColumnDef="out">
+               <mat-header-cell *matHeaderCellDef>Parcels Out</mat-header-cell>
+               <mat-cell *matCellDef="let parcel">{{ parcel.out }}</mat-cell>
+           </ng-container>
+           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+           <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+       </mat-table>
+   </div>
+</mat-card> -->
+<div>
+    
+  </div>
+  
+  <mat-card class="cart">
+    <div class="logo-container">
+      <img src="../../../../assets/indianOilLogo.png" alt="Logo" class="logo">
+    </div>
+    <h1 style="text-align: center; font-weight: bold; color: brown;">Welcome {{profile.EmpName}}</h1>
+
+    <div class="parcels-count">
+      <mat-card>
+        <!-- <h2>Parcel Totals</h2> -->
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!-- totalParcels Column -->
+          <ng-container matColumnDef="totalParcels">
+            <th mat-header-cell *matHeaderCellDef> Total Parcels </th>
+            <td mat-cell *matCellDef="let element"> {{element.totalParcels}} </td>
+          </ng-container>
+      
+          <!-- ParcelIn Column -->
+          <ng-container matColumnDef="ParcelIn">
+            <th mat-header-cell *matHeaderCellDef> Parcel In </th>
+            <td mat-cell *matCellDef="let element"> {{element.ParcelIn}} </td>
+          </ng-container>
+
+           <!-- ParcelOut Column -->
+           <ng-container matColumnDef="ParcelOut">
+            <th mat-header-cell *matHeaderCellDef> Parcel Out </th>
+            <td mat-cell *matCellDef="let element"> {{element.ParcelOut}} </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </mat-card>
+      
+    </div>
+  </mat-card>
+  

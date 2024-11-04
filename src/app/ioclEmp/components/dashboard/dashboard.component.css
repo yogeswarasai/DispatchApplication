@@ -1,0 +1,118 @@
+.cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 5px;
+  box-sizing: border-box;
+  /* width: 400px; */
+  text-align: center;
+  /* width: 100%; */
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  width: 100%;
+  padding-top: 20px; /* Adjust padding as needed to control the space above the logo */
+  box-sizing: border-box;
+}
+
+
+.logo {
+  width: 120px; /* Adjust size as needed */
+  height: auto;
+}
+.mat-cart {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.header-title{
+text-align: left;
+align-items:start;
+}
+.history-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* Adds space between the Parcel In and Parcel Out sections */
+  width: 100%;
+  align-items: flex-start;
+}
+
+.parcel-section {
+  flex: 1;
+  min-width: 48%; /* Ensure each section takes up roughly half of the container width */
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+
+.filter-container {
+  display: flex;
+  justify-content:flex-start;
+  margin-bottom: 10px;
+}
+
+.mat-form-field {
+  width: 70%;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+.details-container {
+  margin-top: 20px;
+}
+
+.parcelDetails {
+  width: 100%;
+  max-width: 600px;
+}
+
+.details-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  width: 400px;
+}
+
+.details-row strong {
+  flex-basis: 40%;
+  text-align: left;
+}
+
+.details-row span {
+  flex-basis: 60%;
+  text-align: left;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+mat-card-header {
+  position: relative;
+  padding: 16px; /* Adjust based on your design */
+}
+
+.close-button {
+  position: absolute;
+  top: 16px; /* Adjust based on your design */
+  right: 16px; /* Adjust based on your design */
+  z-index: 1; /* Ensure it is above other content */
+}
+
+.header-title {
+  /*margin-left: 70px;  Adjust based on the size of the close button */
+  /* font-size: 1.2em;
+  font-weight: bold; */
+  font-size: 26px;
+  color: brown;
+  padding: 20px 0 15px 0;
+}

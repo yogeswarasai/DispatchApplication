@@ -1,0 +1,51 @@
+
+   <mat-card class="small-card">
+    <div class="profile-photo-container">
+      <img src="../../../../assets/location.jpg" alt="Profile Image" class="profile-image">
+    </div>
+    <mat-card-content>
+      <form [formGroup]="seqForm" (ngSubmit)="onSubmit()">
+        
+         <!-- Loc Code -->
+         <div class="form-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Loc Code</mat-label>
+              <input matInput formControlName="locCode" [matAutocomplete]="autoLocCode" placeholder="Enter Loc Code">
+              <mat-autocomplete #autoLocCode="matAutocomplete">
+                <mat-option *ngFor="let locCode of filteredLocationCodes | async" [value]="locCode">
+                  {{ locCode }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="seqForm.get('locCode')?.invalid && seqForm.get('locCode')?.touched">
+                Loc Code is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+        <!-- Mobile Number -->
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>In Sequence Number</mat-label>
+            <input matInput formControlName="inSequenceNo" placeholder=" Max InSequenceNo Is 0">
+          </mat-form-field>
+        </div>
+
+         <!-- Mobile Number -->
+         <div class="form-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Out Sequence Number</mat-label>
+              <input matInput formControlName="outSequenceNo" placeholder=" Max OutSequenceNo Is 0">
+            </mat-form-field>
+          </div>
+  
+        
+  
+        <!-- Submit Button -->
+        <div class="add-button-container">
+          <button mat-raised-button color="primary" type="submit">Add</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  
+  

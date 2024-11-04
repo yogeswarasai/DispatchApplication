@@ -1,0 +1,44 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f4f8;
+    text-align: center;
+  }
+  
+  .login-card {
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .login-header {
+    text-align: center;
+  }
+  
+  .logo {
+    width: 200px;
+    margin-bottom: 20px;
+  }
+  
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+    height: 70px;
+  }
+  
+  .captcha-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .captcha-text {
+    font-size: 18px;
+    font-family: monospace;
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+  }

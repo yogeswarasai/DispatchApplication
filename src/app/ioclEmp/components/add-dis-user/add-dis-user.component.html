@@ -1,0 +1,91 @@
+<!-- <p>add-dis-user works!</p> -->
+<mat-card class="small-card">
+    <div class="profile-photo-container">
+      <img src="assets/profile.webp" alt="Profile Image" class="profile-image">
+    </div>
+    <mat-card-content>
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Loc Code -->
+        <!-- <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Loc Code</mat-label>
+            <input matInput formControlName="locCode" [matAutocomplete]="autoLocCode" placeholder="Enter Loc Code">
+            <mat-autocomplete #autoLocCode="matAutocomplete">
+              <mat-option *ngFor="let locCode of filteredLocationCodes | async" [value]="locCode">
+                {{ locCode }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="userForm.get('locCode')?.invalid && userForm.get('locCode')?.touched">
+              Loc Code is required
+            </mat-error>
+          </mat-form-field>
+        </div> -->
+  
+        <!-- User ID -->
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>User ID</mat-label>
+            <input matInput formControlName="userId" [matAutocomplete]="autoUserId" placeholder="Enter User ID">
+            <mat-autocomplete #autoUserId="matAutocomplete">
+              <mat-option *ngFor="let id of filteredEmployeeCodes | async" [value]="id">
+                {{ id }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="userForm.get('userId')?.invalid && userForm.get('userId')?.touched">
+              User ID is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+  
+        <!-- User Name -->
+        <!-- <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>User Name</mat-label>
+            <input matInput formControlName="userName" [matAutocomplete]="autoUserName" placeholder="Enter User Name">
+            <mat-autocomplete #autoUserName="matAutocomplete">
+              <mat-option *ngFor="let name of filteredUserNames | async" [value]="name">
+                {{ name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="userForm.get('userName')?.invalid && userForm.get('userName')?.touched">
+              User Name is required
+            </mat-error>
+            <mat-hint *ngIf="!empNames.length">Please enter a valid loc code to load usernames.</mat-hint>
+          </mat-form-field>
+        </div> -->
+
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>User Name</mat-label>
+            <input matInput formControlName="userName" placeholder="Enter userName"   [(ngModel)]="empName">
+          </mat-form-field>
+        </div>
+  
+        <!-- Mobile Number -->
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Mobile Number</mat-label>
+            <input matInput formControlName="mobileNumber" placeholder="Enter Mobile Number">
+          </mat-form-field>
+        </div>
+  
+        <!-- Role ID -->
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Role ID</mat-label>
+            <mat-select formControlName="roleId" placeholder="Enter Role ID">
+              <mat-option *ngFor="let role of empRoles" [value]="role">
+                {{ role }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+  
+        <!-- Submit Button -->
+        <div class="add-button-container">
+          <button mat-raised-button color="primary" type="submit">Add</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>

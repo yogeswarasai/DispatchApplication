@@ -1,0 +1,37 @@
+<!-- <p>emp-profile works!</p> -->
+<div class="profile-container">
+  <mat-card class="profile-card">
+    <div class="profile-photo-container">
+      <img src="../../../../assets/profile.webp" alt="Profile Photo" class="profile-image">
+    </div>
+    <mat-card-content>
+      <!-- <div class="profile-field">
+        <strong>Username:</strong> {{ empProfile?.EmpName }}
+      </div>
+      <div class="profile-field">
+        <strong>Designation:</strong> {{ empProfile?.Designation }}
+      </div>
+      <div class="profile-field">
+        <strong>Role:</strong> {{ empProfile?.role }}
+      </div>
+      <div class="profile-field">
+        <strong>Location Name:</strong> {{ empProfile?.locationName }}
+      </div> -->
+      <div class="profile-field">
+        <strong>Username:</strong> <span class="profile-value">{{ empProfile?.EmpName }}</span>
+      </div>
+      <div class="profile-field">
+        <strong>Designation:</strong> <span class="profile-value">{{ empProfile?.Designation }}</span>
+      </div>
+      <div class="profile-field">
+        <strong>Role:</strong> <span class="profile-value">{{ empProfile?.role }}</span>
+      </div>
+      <div class="profile-field">
+        <strong>Location Name:</strong> <span class="profile-value">{{ empProfile?.locationName }}</span>
+      </div>
+      
+     
+      
+    </mat-card-content>
+  </mat-card>
+</div>

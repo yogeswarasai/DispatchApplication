@@ -1,0 +1,151 @@
+<!-- <p>dispatch works!</p> -->
+
+<mat-card>
+  <mat-card-header>
+    <div class="title-bar">
+      <div class="title-left">
+        <mat-icon color="primary">people</mat-icon>
+        <span>Dispatch Users Personnel</span>
+      </div>
+      <div class="title-right">
+        <button mat-raised-button color="primary" (click)="addNew()" class="add-button">
+          <mat-icon>person_add</mat-icon>
+          Add
+        </button>
+      </div>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- <div class="action-bar">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Filter By EmpName</mat-label>
+        <input matInput placeholder="Enter Emp Name" [(ngModel)]="empNameFilter" (input)="applyFilter()">
+      </mat-form-field>
+      <button mat-button (click)="clearFilter()" color="primary">Clear</button>
+    </div> -->
+
+    <div class="card-body table-container">
+      <table mat-table [dataSource]="filteredData" class="mat-elevation-z8">
+
+        <!-- Columns -->
+        <ng-container matColumnDef="locCode">
+          <th mat-header-cell *matHeaderCellDef> LocCode </th>
+          <td mat-cell *matCellDef="let element"> {{element.locCode}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="userId">
+          <th mat-header-cell *matHeaderCellDef> UserId </th>
+          <td mat-cell *matCellDef="let element"> {{element.userId}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="userName">
+          <th mat-header-cell *matHeaderCellDef> UserName </th>
+          <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="mobileNumber">
+          <th mat-header-cell *matHeaderCellDef> Mobile Number </th>
+          <td mat-cell *matCellDef="let element"> {{element.mobileNumber}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="roleId">
+          <th mat-header-cell *matHeaderCellDef> RoleId </th>
+          <td mat-cell *matCellDef="let element"> {{element.roleId}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> Status </th>
+          <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="view">
+          <th mat-header-cell *matHeaderCellDef> View </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="openViewDialog(element)" color="primary">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Header and Row Declarations -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        
+      </table>
+      <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons (page)="onPageChange($event)" #paginator></mat-paginator> -->
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<!-- User Details Dialog -->
+<ng-template #userDialogTemplate let-data>
+  <mat-card class="user-details-card">
+    <mat-card-header class="user-details-header">
+      <span class="header-title">Employee Details</span>
+      <button mat-icon-button (click)="onClose()" class="close-button">
+        <mat-icon>close</mat-icon>
+      </button>
+     
+    </mat-card-header>
+    <div class="profile-photo-container">
+      <img src="../../../../assets/profile.webp" alt="Profile Photo" class="profile-image">
+    </div>
+
+    <mat-card-content class="details">
+      <div class="details-row">
+        <strong>Loc Code</strong>
+        <span>:&nbsp;{{data.locCode}}</span>
+      </div>
+      <div class="details-row">
+        <strong>User Id</strong>
+        <span>:&nbsp;{{data.userId}}</span>
+      </div>
+      <div class="details-row">
+        <strong>User Name</strong>
+        <span>:&nbsp;{{data.userName}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Mobile No</strong>
+        <span>:&nbsp;{{data.mobileNumber}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Role Id</strong>
+        <span>:&nbsp;{{data.roleId}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Created By</strong>
+        <span>:&nbsp;{{data.createdBy}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Created Date</strong>
+        <span>:&nbsp;{{data.createdDate | date}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Record Status</strong>
+        <span>:&nbsp;{{data.status}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Last Update Date</strong>
+        <span>:&nbsp;{{data.lastUpdatedDate ? (data.lastUpdatedDate | date:'dd-MM-yyyy HH:mm:ss') : 'N/A'}}</span>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions class="buttons">
+      <button mat-raised-button color="primary" class="w-50" (click)="editUser(data)">Edit</button>
+      <button mat-raised-button color="accent" class="w-50" (click)="onChangeStatus(data)">Delete</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
+<!-- Confirm Dialog Template -->
+<ng-template #confirmDialogTemplate let-data>
+  <mat-card>
+    <mat-card-content>
+      <p style="font-weight: bold;">Are you sure you want to delete the user {{data.userName}}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" (click)="deleteUser(data.locCode, data.userId)">Yes</button>
+      <button mat-button color="accent" (click)="dialogRef.close()">No</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>

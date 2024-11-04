@@ -1,0 +1,35 @@
+.form-card {
+  margin: 20px auto;
+  padding: 20px;
+  width: 100%;
+  height: auto;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+.button-container {
+  grid-column: span 3;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Optional: Adds some space above the button */
+}
+.submitButton
+{
+  text-align: center;
+  width: 30%;
+}
+.loading-indicator {
+  position: absolute;
+  right: 12px; /* Adjust based on your layout */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+}

@@ -1,0 +1,135 @@
+.logo {
+  width:60px;
+  margin-right: 10px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.profile-button {
+  margin-right: 0px;
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+
+.profile-details {
+  /* margin-left: 2px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+ 
+}
+/* .profile-image {
+ 
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3f51b5;
+  /* height: 50px; 
+  width: 30px;
+} */
+
+.profile-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.profile-info {
+  font-size: 14px;
+  color: #757575;
+}
+  
+
+  .main-content {
+    padding: 16px;
+  }
+  mat-sidenav {
+    width: 250px;
+    
+  }
+  
+  .example-container {
+    height: 85vh;
+  }
+  
+  .mat-sidenav {
+    width: 250px;
+    
+  }
+  
+  .mat-toolbar.mat-primary {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .custom-menu-icon {
+    height: 24px;
+    width: 24px;
+  }
+  mat-list-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  mat-list-item:hover {
+    background-color: #f0f0f0; /* Optional hover effect */
+  }
+  
+  mat-icon {
+    margin-right: 8px; /* Space between the icon and text */
+  }
+
+   /* .child-menu-list {
+    padding-left: 20px; 
+  }
+  
+  .child-menu {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  
+  .child-menu:hover {
+    color: #1976d2; 
+    cursor: pointer;
+  }
+  
+  
+  .mat-list-item {
+    margin-bottom: 10px;
+  }
+  
+  .child-menu-list .mat-list-item {
+    margin-bottom: 5px;
+  }  */
+    /* Indent the child menus to make them appear as sub-items */
+.child-menu {
+  margin-left: 20px; /* Indent the child menu */
+  padding-left: 10px;
+}
+
+/* Optionally, adjust the child item for further visual distinction */
+.child-item {
+  padding-left: 15px;
+  font-size: 14px; /* Reduce font size for child items */
+}
+
+/* Style parent and child items differently for better visibility */
+mat-list-item {
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+.child-menu mat-list-item {
+  height: 40px; /* Smaller height for child items */
+}
+

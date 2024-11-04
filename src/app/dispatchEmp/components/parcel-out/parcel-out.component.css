@@ -1,0 +1,44 @@
+.form-card {
+  /* max-width: 600px; */
+  margin: 20px auto;
+  padding: 20px;
+  height: 500px;
+  width:100%;
+
+ /* overflow: auto;*/
+}
+
+/* .full-width {
+  width: 40%;
+  margin-left: 20px;
+  margin-right: 40px;
+} */
+/* .form-grid {
+  display:grid;
+
+} */
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+  
+}
+
+.three-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.button-container {
+  grid-column: span 2;
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+.submitButton
+{
+  text-align: center;
+  width: 30%;
+}

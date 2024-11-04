@@ -1,0 +1,92 @@
+<mat-toolbar class="custom-toolbar">
+  <img src="assets/indianOilLogo.png" alt="IndianOil Logo" class="logo">
+  <span class="title">INDIAN OIL</span>
+  <span class="spacer"></span>
+  
+  <button mat-icon-button color="primary" [matMenuTriggerFor]="profileMenu" class="profile-button">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+  
+  <mat-menu #profileMenu="matMenu">
+    <button mat-menu-item (click)="navigate('/dispatchEmployee/profile')">
+      Profile
+    </button>
+    <button mat-menu-item (click)="logout()">
+      Logout
+    </button>
+  </mat-menu>
+  <div class="profile-details">
+    <span class="profile-name">{{ profile.EmpName }}</span>
+    <span class="profile-info">{{ profile.Role }} | {{ profile.Designation }}</span>
+  </div>
+</mat-toolbar>
+
+<mat-sidenav-container class="example-container">
+  <mat-sidenav #sidenav mode="side" [(opened)]="isMenuOpened">
+    <mat-toolbar>
+      <button mat-icon-button (click)="toggleSidenav(sidenav)">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item (click)="navigate('/dispatchEmployee/home')">
+        <mat-icon class="list-icon">home</mat-icon>
+        <span class="list-text">Home</span>
+      </a>
+      <a mat-list-item (click)="navigate('/dispatchEmployee/parcelIn')">
+        <mat-icon class="list-icon">inbox</mat-icon>
+        <span class="list-text">Parcel In</span>
+      </a>
+      <a mat-list-item (click)="navigate('/dispatchEmployee/parcelOut')">
+        <mat-icon class="list-icon">outbox</mat-icon>
+        <span class="list-text">Parcel Out</span>
+      </a>
+      <a mat-list-item (click)="navigate('/dispatchEmployee/history')">
+        <mat-icon class="list-icon">history</mat-icon>
+        <span class="list-text">History</span>
+      </a>
+      <!-- <a mat-list-item (click)="navigate('/dispatchEmployee/courier')">
+        <mat-icon class="list-icon">mail</mat-icon>
+        <span class="list-text">courier</span>
+      </a> -->
+      <!-- <a mat-list-item (click)="navigate('/dispatchEmployee/reports')"  (click)="toggleReports()" >
+        <mat-icon class="list-icon">assessment</mat-icon>
+        <span class="list-text">Reports</span>
+      </a> -->
+      <a mat-list-item (click)="toggleReports()">
+        <mat-icon class="list-icon">assessment</mat-icon>
+        <span class="list-text">Reports</span>
+      </a>
+
+      <!-- <a mat-list-item (click)="navigate('/dispatchEmployee/profile')">
+        <mat-icon class="list-icon">person</mat-icon>
+        <span class="list-text">Profile</span>
+      </a> -->
+      <ng-container *ngIf="showReports">
+        <!-- <a mat-list-item (click)="navigate('/dispatchEmployee/reports/dailyReports')" class="child-item">
+          <mat-icon class="list-icon">today</mat-icon>
+          <span class="list-text">Daily Reports</span>
+        </a>
+        <a mat-list-item (click)="navigate('/dispatchEmployee/reports/monthlyReports')" class="child-item">
+          <mat-icon class="list-icon">date_range</mat-icon>
+          <span class="list-text">Monthly Reports</span>
+        </a> -->
+        <a mat-list-item (click)="navigate('/dispatchEmployee/reports/Dispatch-Details')" class="child-item">
+          <mat-icon class="list-icon">description</mat-icon>
+          <span class="list-text">Dispatch Details</span>
+        </a>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar>
+      <button *ngIf="!isMenuOpened" mat-icon-button (click)="toggleSidenav(sidenav)">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="disapp">DispatchApp</span>
+    </mat-toolbar>
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

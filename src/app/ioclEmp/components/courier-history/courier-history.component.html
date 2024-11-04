@@ -1,0 +1,269 @@
+
+<!-- 
+   <div class="history-container">
+    <div class="courier-section">
+        <h2>Courier</h2>
+      
+        <mat-table [dataSource]="couriers" class="mat-elevation-z8">
+            <ng-container matColumnDef="locCode">
+                <mat-header-cell *matHeaderCellDef> Loc Code </mat-header-cell>
+                <mat-cell *matCellDef="let courier"> {{ courier.locCode }} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="courierCode">
+                <mat-header-cell *matHeaderCellDef> Courier Code </mat-header-cell>
+                <mat-cell *matCellDef="let courier"> {{ courier.courierCode }} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="courierName">
+                <mat-header-cell *matHeaderCellDef> Courier Name </mat-header-cell>
+                <mat-cell *matCellDef="let courier"> {{ courier.courierName }} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="view">
+                <mat-header-cell *matHeaderCellDef> View </mat-header-cell>
+                <mat-cell *matCellDef="let courier">
+                    <button mat-icon-button color="primary" (click)="viewCourierDetails(courier)">
+                        <mat-icon>visibility</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+        
+            <mat-header-row *matHeaderRowDef="displayedCourierColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedCourierColumns;"></mat-row>
+        </mat-table>
+    </div>
+
+    <div class="contract-section">
+        <h2>Courier Contract</h2>
+        
+    
+        <mat-table [dataSource]="courierContracts" class="mat-elevation-z8">
+            <ng-container matColumnDef="courierCode">
+                <mat-header-cell *matHeaderCellDef> Courier Code </mat-header-cell>
+                <mat-cell *matCellDef="let contract"> {{ contract.courierCode }} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="contractStartDate">
+                <mat-header-cell *matHeaderCellDef> Start Date </mat-header-cell>
+                <mat-cell *matCellDef="let contract"> {{ contract.contractStartDate | date }} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="contractEndDate">
+                <mat-header-cell *matHeaderCellDef> End Date </mat-header-cell>
+                <mat-cell *matCellDef="let contract"> {{ contract.contractEndDate | date }} </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="view">
+                <mat-header-cell *matHeaderCellDef> View </mat-header-cell>
+                <mat-cell *matCellDef="let contract">
+                    <button mat-icon-button color="primary" (click)="openContractViewDialog(contract)">
+                        <mat-icon>visibility</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+        
+            <mat-header-row *matHeaderRowDef="displayedContractColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedContractColumns;"></mat-row>
+        </mat-table>
+    </div>
+</div> -->
+
+
+
+
+
+
+
+
+
+<div class="history-container">
+  <!-- Courier Section -->
+  <div class="courier-section">
+    <h2>Courier</h2>
+    <mat-table [dataSource]="couriers" class="mat-elevation-z8">
+      <ng-container matColumnDef="locCode">
+        <mat-header-cell *matHeaderCellDef> Loc Code </mat-header-cell>
+        <mat-cell *matCellDef="let courier"> {{ courier.locCode }} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="courierCode">
+        <mat-header-cell *matHeaderCellDef> Courier Code </mat-header-cell>
+        <mat-cell *matCellDef="let courier"> {{ courier.courierCode }} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="courierName">
+        <mat-header-cell *matHeaderCellDef> Courier Name </mat-header-cell>
+        <mat-cell *matCellDef="let courier"> {{ courier.courierName }} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="view">
+        <mat-header-cell *matHeaderCellDef> View </mat-header-cell>
+        <mat-cell *matCellDef="let courier">
+          <button mat-icon-button color="primary" (click)="viewCourierDetails(courier)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedCourierColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedCourierColumns;"></mat-row>
+    </mat-table>
+  </div>
+
+  <!-- Courier Contract Section -->
+  <div class="contract-section">
+    <h2>Courier Contract</h2>
+    <mat-table [dataSource]="courierContracts" class="mat-elevation-z8">
+      <ng-container matColumnDef="courierCode">
+        <mat-header-cell *matHeaderCellDef> Courier Code </mat-header-cell>
+        <mat-cell *matCellDef="let contract"> {{ contract.courierCode }} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="contractStartDate">
+        <mat-header-cell *matHeaderCellDef> Start Date </mat-header-cell>
+        <mat-cell *matCellDef="let contract"> {{ contract.contractStartDate | date }} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="contractEndDate">
+        <mat-header-cell *matHeaderCellDef> End Date </mat-header-cell>
+        <mat-cell *matCellDef="let contract"> {{ contract.contractEndDate | date }} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="view">
+        <mat-header-cell *matHeaderCellDef> View </mat-header-cell>
+        <mat-cell *matCellDef="let contract">
+          <button mat-icon-button color="primary" (click)="viewContractDetails(contract)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedContractColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedContractColumns;"></mat-row>
+    </mat-table>
+  </div>
+</div>
+
+<!-- Dialog for courier Details -->
+<!-- Dialog for Courier Details -->
+<ng-template #courierDialogTemplate let-data>
+  <mat-card class="parcel-details-card"> <!-- Use existing class for consistency -->
+    <mat-card-header>
+      <button mat-icon-button (click)="onClose()" class="close-button">
+        <mat-icon>close</mat-icon>
+      </button>
+      <span class="header-title">Courier Details</span>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="details-row">
+        <strong>Loc Code</strong>
+        <span>:&nbsp;{{data.locCode}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Courier Code</strong>
+        <span>:&nbsp;{{data.courierCode}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Courier Name</strong>
+        <span>:&nbsp;{{data.courierName}}</span>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="buttons">
+      <button mat-raised-button color="accent" (click)="changeCourierStatus(data.courierCode)">Change Status</button>
+   </mat-card-actions>
+   
+  </mat-card>
+</ng-template>
+
+<ng-template #contractDialogTemplate let-data>
+  <mat-card class="parcelDetails">
+    <mat-card-header>
+      <button mat-icon-button (click)="onClose()" class="close-button">
+        <mat-icon>close</mat-icon>
+      </button>
+      <span class="header-title">Courier Contract Details</span>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="details-row">
+        <strong>Contract No</strong>
+        <span>:&nbsp;{{data.courierContNo}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Contract Start Date</strong>
+        <span>:&nbsp;{{data.contractStartDate}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Contract End Date</strong>
+        <span>:&nbsp;{{data.contractEndDate}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Courier Code</strong>
+        <span>:&nbsp;{{data.courierCode}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Status</strong>
+        <span>:&nbsp;{{data.status}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Created By</strong>
+        <span>:&nbsp;{{data.createdBy}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Created Date</strong>
+        <span>:&nbsp;{{data.createdDate}}</span>
+      </div>
+      <div class="details-row">
+        <strong>Last Updated Date</strong>
+        <span>:&nbsp;{{data.lastUpdatedDate}}</span>
+      </div>
+     
+
+      <div *ngIf="data.discounts?.length" class="info-section">
+        <strong class="section-title">Discounts:</strong>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>From</th>
+              <th>To</th>
+              <th>Discount (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let discount of data.discounts">
+              <td>{{discount.fromMonthlyAmt}}</td>
+              <td>{{discount.toMonthlyAmt}}</td>
+              <td>{{discount.discountPercentage}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div *ngIf="data.rates?.length" class="info-section">
+        <strong class="section-title">Rates:</strong>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>From Weight (g)</th>
+              <th>To Weight (g)</th>
+              <th>From Distance (km)</th>
+              <th>To Distance (km)</th>
+              <th>Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rate of data.rates">
+              <td>{{rate.fromWtGms}}</td>
+              <td>{{rate.toWtGms}}</td>
+              <td>{{rate.fromDistanceKm}}</td>
+              <td>{{rate.toDistanceKm}}</td>
+              <td>{{rate.rate}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+    </mat-card-content>
+    <mat-card-actions class="buttons">
+      <button mat-raised-button color="primary" (click)="navigateToEditContract(data.courierContNo)">Edit</button>
+
+      <button mat-button color="accent" (click)="changeContractStatus(data.courierContNo)">
+        Change Status
+      </button>    
+    </mat-card-actions>
+  </mat-card>
+</ng-template>

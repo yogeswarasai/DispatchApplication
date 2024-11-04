@@ -1,0 +1,16 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <img src="../../../../assets/indianOilLogo.png" alt="Indian Oil Logo" class="logo">
+    <!-- <h2>IndianOil</h2> -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phoneNumber" required>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" routerLink="/disEmpVerOtp">Request OTP</button>
+    </form>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </mat-card>
+</div>

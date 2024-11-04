@@ -1,0 +1,74 @@
+/* Center the card on the page */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:500px;
+}
+
+.profile-card {
+  height: 500px;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.profile-photo-container {
+  height: 300px;
+  width: 100%;
+  display: flex;
+  align-items:flex-start;
+  justify-content: center;
+ 
+}
+
+.profile-icon {
+  font-size: 150px;
+  color: #3f51b5; /* Primary color */
+}
+
+mat-card-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items:start;
+}
+
+/* .profile-field {
+  margin: 8px 0;
+  font-size: 18px;
+} */
+.profile-photo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px; /* Adjust height as needed */
+}
+
+.profile-image {
+  width: 200px;  /* Adjust width as needed */
+  /* Adjust height as needed */
+  border-radius: 50%; /* Makes the image circular */
+  object-fit: cover; /* Ensures the image covers the container */
+}
+.profile-field  {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  width: 400px;
+  font-size: 15px;
+}
+
+.profile-field  strong {
+  flex-basis: 40%;
+  text-align: left;
+}
+
+.profile-field span {
+  flex-basis: 60%;
+  text-align: left;
+}

@@ -1,0 +1,82 @@
+.history-container {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between; /* Aligns the sections side by side */
+    flex-wrap: wrap; /* Ensures responsiveness */
+  }
+  
+  .parcel-section {
+    flex: 1; /* Makes the sections take up equal space */
+    margin-right: 20px;
+    margin-bottom: 20px;
+    max-width: 48%; /* Ensures the sections don't exceed half of the container */
+  }
+  
+  .filter-container {
+    display: flex;
+    justify-content:flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .mat-form-field {
+    width: 70%;
+  }
+  
+  .mat-table {
+    width: 100%;
+  }
+  
+  .details-container {
+    margin-top: 20px;
+  }
+  
+  .parcelDetails {
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .details-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    width: 400px;
+  }
+  
+  .details-row strong {
+    flex-basis: 40%;
+    text-align: left;
+  }
+  
+  .details-row span {
+    flex-basis: 60%;
+    text-align: left;
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  mat-card-header {
+    position: relative;
+    padding: 16px; /* Adjust based on your design */
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 16px; /* Adjust based on your design */
+    right: 16px; /* Adjust based on your design */
+    z-index: 1; /* Ensure it is above other content */
+  }
+  
+  .header-title {
+    /*margin-left: 70px;  Adjust based on the size of the close button */
+    /* font-size: 1.2em;
+    font-weight: bold; */
+    font-size: 26px;
+    color: brown;
+    padding: 20px 0 15px 0;
+  }
+  
+  
+  

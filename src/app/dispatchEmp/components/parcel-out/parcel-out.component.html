@@ -1,0 +1,159 @@
+<mat-card class="form-card">
+  <mat-card-title>Parcel Out</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="parcelOutForm" (ngSubmit)="onSubmit()" class="form-grid">
+
+      <!-- Row 1: Consignment Number and Consignment Date -->
+      <div class="form-row two-columns">
+        <!-- Consignment Number -->
+        <mat-form-field appearance="fill">
+          <mat-label>Consignment Number</mat-label>
+          <input matInput formControlName="consignmentNumber" placeholder="Enter consignment number" required>
+          <mat-error *ngIf="parcelOutForm.get('consignmentNumber')?.invalid">Consignment number is required</mat-error>
+        </mat-form-field>
+
+        <!-- Consignment Date -->
+        <mat-form-field appearance="fill">
+          <mat-label>Consignment Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="consignmentDate" required>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="parcelOutForm.get('consignmentDate')?.invalid">Consignment date is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Row 2: Sender Department and Sender Name -->
+      <div class="form-row two-columns">
+        <!-- Sender Department -->
+        <mat-form-field appearance="fill">
+          <mat-label>Sender Department</mat-label>
+          <mat-select formControlName="senderDepartment" required>
+            <mat-option *ngFor="let department of senderDepartments" [value]="department">
+              {{department}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="parcelOutForm.get('senderDepartment')?.invalid">Sender department is required</mat-error>
+        </mat-form-field>
+
+        <!-- Sender Name -->
+        <mat-form-field appearance="fill">
+          <mat-label>Sender Name</mat-label>
+          <input type="text" matInput formControlName="senderName" [matAutocomplete]="auto1" placeholder="Enter sender name">
+          <mat-autocomplete #auto1="matAutocomplete">
+            <mat-option *ngFor="let sender of filteredSenders | async" [value]="sender">
+              {{sender}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="parcelOutForm.get('senderName')?.invalid">Sender name is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Row 3: Recipient Location and Recipient Department -->
+      <div class="form-row three-columns">
+        <!-- Recipient Location Code -->
+        <!-- <mat-form-field appearance="fill">
+          <mat-label>Recipient Location Code</mat-label>
+          <input type="text" matInput formControlName="recipientLocCode" [matAutocomplete]="auto2" placeholder="Enter location code">
+          <mat-autocomplete #auto2="matAutocomplete">
+            <mat-option *ngFor="let location of filteredLocationCodes | async" [value]="location">
+              {{location}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="parcelOutForm.get('recipientLocCode')?.invalid">Recipient location code is required</mat-error>
+        </mat-form-field> -->
+
+        <mat-form-field appearance="fill">
+          <mat-label>Recipient Location Code</mat-label>
+          <input 
+            type="text" 
+            matInput 
+            formControlName="recipientLocCode" 
+            [matAutocomplete]="auto2" 
+            (input)="onRecipientLocCodeInput()" 
+            placeholder="Enter location code">
+          <mat-autocomplete #auto2="matAutocomplete">
+            <mat-option *ngFor="let location of filteredLocationCodes | async" [value]="location">
+              {{location}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="parcelOutForm.get('recipientLocCode')?.invalid">Recipient location code is required</mat-error>
+        </mat-form-field>
+
+        <!-- Recipient Department -->
+        <!-- <mat-form-field appearance="fill">
+          <mat-label>Recipient Department</mat-label>
+          <mat-select formControlName="recipientDepartment" required>
+            <mat-option *ngFor="let department of recipientDepartments" [value]="department">
+              {{department}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="parcelOutForm.get('recipientDepartment')?.invalid">Recipient department is required</mat-error>
+        </mat-form-field> -->
+
+        <mat-form-field appearance="fill">
+          <mat-label>Recipient Department</mat-label>
+          <mat-select formControlName="recipientDepartment" required>
+            <mat-option *ngFor="let department of recipientDepartments" [value]="department">
+              {{department}}
+            </mat-option>
+            <mat-option *ngIf="showOtherRecipientDepartmentOption" value="Others">Others</mat-option>
+          </mat-select>
+          <mat-error *ngIf="parcelOutForm.get('recipientDepartment')?.invalid">Recipient department is required</mat-error>
+        </mat-form-field>
+     
+
+     
+        <!-- Recipient Name -->
+        <mat-form-field appearance="fill">
+          <mat-label>Recipient Name</mat-label>
+          <input type="text" matInput formControlName="recipientName" [matAutocomplete]="auto3" placeholder="Enter recipient name">
+          <mat-autocomplete #auto3="matAutocomplete">
+            <mat-option *ngFor="let recipient of filteredRecipients | async" [value]="recipient">
+              {{recipient}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="parcelOutForm.get('recipientName')?.invalid">Recipient name is required</mat-error>
+        </mat-form-field>
+      </div>
+
+         <!-- Row 4: Recipient Name and Courier Name -->
+      <div class="form-row three-columns">
+
+        <!-- Courier Name -->
+        <mat-form-field appearance="fill">
+          <mat-label>Courier Name</mat-label>
+          <mat-select formControlName="courierName" required>
+            <mat-option *ngFor="let courier of couriers" [value]="courier">
+              {{courier}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="parcelOutForm.get('courierName')?.invalid">Courier name is required</mat-error>
+        </mat-form-field>
+      
+
+     
+        <!-- Weight -->
+        <mat-form-field appearance="fill">
+          <mat-label>Weight</mat-label>
+          <input matInput formControlName="weight" placeholder="Enter weight" required>
+          <mat-error *ngIf="parcelOutForm.get('weight')?.invalid">Weight is required</mat-error>
+        </mat-form-field>
+
+        <!-- Unit -->
+        <mat-form-field appearance="fill">
+          <mat-label>Unit</mat-label>
+          <mat-select formControlName="unit" required>
+            <mat-option value="kg">Kilogram</mat-option>
+            <mat-option value="g">Gram</mat-option>
+          </mat-select>
+          <mat-error *ngIf="parcelOutForm.get('unit')?.invalid">Unit is required</mat-error>
+        </mat-form-field>
+      </div>
+
+     <!-- Centered Submit Button -->
+     <div class="button-container">
+      <button mat-raised-button color="primary" class="submitButton">Submit</button>
+    </div>
+    </form>
+  </mat-card-content>
+</mat-card>
