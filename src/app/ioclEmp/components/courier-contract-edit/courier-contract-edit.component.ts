@@ -165,6 +165,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-courier-contract-edit',
@@ -186,11 +187,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class CourierContractEditComponent implements OnInit {
   contractForm: FormGroup;
+  fieldsDisabled: boolean = true; // Change this based on your logic
 
   constructor(
     private route: ActivatedRoute,
     private courierService: CourierhistoryService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private datePipe: DatePipe
   ) {
     // this.contractForm = this.fb.group({
     //   courierContNo: ['', Validators.required],
@@ -202,7 +205,9 @@ export class CourierContractEditComponent implements OnInit {
     // });
     this.contractForm = this.fb.group({
       courierCode: ['', Validators.required],
-      courierContNo: ['', Validators.required],
+        courierContNo: ['', Validators.required],
+      // courierContNo: [{ value: '', disabled: true }], // Disabled but still retains value
+
       contractStartDate: ['', Validators.required],
       contractEndDate: ['', Validators.required],
       courierDiscounts: this.fb.array([
@@ -225,40 +230,83 @@ export class CourierContractEditComponent implements OnInit {
     
   }
 
+  // ngOnInit(): void {
+  //   const courierContNo = this.route.snapshot.paramMap.get('courierContNo');
+  //   this.route.queryParams.subscribe(params => {
+  //     const contractNumber = params['courierContNo'] || courierContNo;
+  //     if (contractNumber) {
+  //       this.loadContractData(contractNumber);
+  //     }
+  //   });
+  //   console.log('Initialized contract form:', this.contractForm.value);
+
+  // }
   ngOnInit(): void {
     const courierContNo = this.route.snapshot.paramMap.get('courierContNo');
     this.route.queryParams.subscribe(params => {
       const contractNumber = params['courierContNo'] || courierContNo;
+      console.log('Extracted contract number:', contractNumber); // Log to confirm the value
       if (contractNumber) {
         this.loadContractData(contractNumber);
+      } else {
+        console.error('Contract number is not available');
       }
     });
   }
+  
+  // loadContractData(courierContNo: string): void {
+  //   this.courierService.getContractByContNo(courierContNo).subscribe({
+  //     next: (response) => {
+  //       if (response && response.length > 0) {
+  //         const contract = response[0];
+  //         console.log('Received contract data:', contract);
+
+  //         this.contractForm.patchValue({
+  //           courierContNo: contract.courierContNo.trim(),
+  //           courierCode: contract.courierCode,
+  //           contractStartDate: contract.contractStartDate,
+  //           contractEndDate: contract.contractEndDate,
+  //         });
+
+  //         // Load multiple discounts
+  //         this.setCourierDiscounts(contract.discounts || []);
+  //         this.setCourierRates(contract.rates || []);
+  //       } else {
+  //         console.error('No contract data found');
+  //       }
+  //     },
+  //     error: (error) => console.error('Failed to load contract data:', error)
+  //   });
+  // }
 
   loadContractData(courierContNo: string): void {
     this.courierService.getContractByContNo(courierContNo).subscribe({
-      next: (response) => {
-        if (response && response.length > 0) {
-          const contract = response[0];
-          console.log('Received contract data:', contract);
-
-          this.contractForm.patchValue({
-            courierContNo: contract.courierContNo.trim(),
-            courierCode: contract.courierCode,
-            contractStartDate: contract.contractStartDate,
-            contractEndDate: contract.contractEndDate,
-          });
-
-          // Load multiple discounts
-          this.setCourierDiscounts(contract.discounts || []);
-          this.setCourierRates(contract.rates || []);
-        } else {
-          console.error('No contract data found');
-        }
-      },
-      error: (error) => console.error('Failed to load contract data:', error)
+       next: (response) => {
+          if (response && response.length > 0) {
+             const contract = response[0];
+             console.log('Received contract data:', contract);
+             
+             this.contractForm.patchValue({
+                 courierContNo: contract.courierContNo.trim(),
+                courierCode: contract.courierCode,
+                contractStartDate: contract.contractStartDate,
+                contractEndDate: contract.contractEndDate,
+             });
+ 
+             // Debugging: Log to verify discount and rate arrays are set
+             this.setCourierDiscounts(contract.discounts || []);
+             console.log('Updated discounts in form:', this.contractForm.get('courierDiscounts')?.value);
+             
+             this.setCourierRates(contract.rates || []);
+             console.log('Updated rates in form:', this.contractForm.get('courierRates')?.value);
+          } else {
+             console.error('No contract data found');
+          }
+       },
+       error: (error) => console.error('Failed to load contract data:', error)
     });
-  }
+ }
+ 
 
   setCourierDiscounts(discounts: any[]): void {
     const discountArray = this.contractForm.get('courierDiscounts') as FormArray;
@@ -334,25 +382,75 @@ export class CourierContractEditComponent implements OnInit {
   //     });
   // }
 
-  onSubmitContract(): void {
-    const updatedContract = this.contractForm.value;
+  // onSubmitContract(): void {
+  //   const updatedContract = this.contractForm.value;
   
-    // Check if the contract number is present before proceeding
-    if (!updatedContract.courierContNo) {
-      alert('Contract number is required.');
-      return;
-    }
+  //   if (!updatedContract.courierContNo) {
+  //     alert('Contract number is required.');
+  //     return;
+  //   }
   
-    // Log the data being sent for easier debugging
-    console.log('Submitting contract update with data:', updatedContract);
+  //   console.log('Submitting contract update with data:', updatedContract);
     
-    // Call the method to update the contract
-    this.updateContract(updatedContract.courierContNo, updatedContract);
+  //   this.updateContract(updatedContract.courierContNo, updatedContract);
+  // }
+
+//   onSubmitContract(): void {
+//     const updatedContract = this.contractForm.value;
+//     console.log('Submitting contract update with data:', updatedContract);
+//     this.updateContract(updatedContract.courierContNo, updatedContract);
+//  }
+
+onSubmitContract(): void {
+  if (this.contractForm.invalid) {
+    alert('Please fill in all required fields.');
+    return;
   }
   
+  // Clone the form values to avoid directly modifying the form state
+  const updatedContract = { ...this.contractForm.value };
+  // Format date fields to 'YYYY-MM-DD' format
+  updatedContract.contractStartDate = this.datePipe.transform(updatedContract.contractStartDate, 'yyyy-MM-dd');
+  updatedContract.contractEndDate = this.datePipe.transform(updatedContract.contractEndDate, 'yyyy-MM-dd');
+  
+   // Explicitly set the discount and rate arrays
+   updatedContract.courierDiscounts = this.contractForm.get('courierDiscounts')?.value || [];
+   updatedContract.courierRates = this.contractForm.get('courierRates')?.value || [];
+  console.log('Submitting contract update with data:', updatedContract);
+  
+  // Log the courierContNo to ensure it's not undefined
+  const courierContNo = updatedContract.courierContNo;
+  console.log('Courier Contract No:', courierContNo);
+  
+  if (!courierContNo) {
+    alert('Contract number is required.');
+    return;
+  }
+  
+  this.updateContract(courierContNo, updatedContract);
+}
+ 
+  
+  // updateContract(courierContNo: string, updatedContract: any): void {
+  //   console.log('Updating contract with data:', updatedContract);
+  
+  //   this.courierService.updateContract(courierContNo, updatedContract)
+  //     .subscribe({
+  //       next: response => {
+  //         console.log('Contract updated successfully', response);
+  //         alert('Contract updated successfully!');
+  //       },
+  //       error: err => {
+  //         console.error('Error updating contract:', err);
+  //         alert('An error occurred while updating the contract. Please check console for details.');
+  //       }
+  //     });
+  // }
+  
+
   updateContract(courierContNo: string, updatedContract: any): void {
     console.log('Updating contract with data:', updatedContract);
-  
+    
     this.courierService.updateContract(courierContNo, updatedContract)
       .subscribe({
         next: response => {

@@ -88,9 +88,26 @@ export class CourierhistoryService {
 // }
 
   
+// updateContract(courierContNo: string, updatedContract: any): Observable<any> {
+//   return this.http.put(`${this.contractUrl}/${courierContNo}`, updatedContract, { responseType: 'text',withCredentials: true });
+// }
+
+
 updateContract(courierContNo: string, updatedContract: any): Observable<any> {
-  return this.http.put(`/api/contracts/${courierContNo}`, updatedContract, { responseType: 'text',withCredentials: true });
+  console.log('Updating contract with:', updatedContract); // Log the updated contract
+  const trimmedCourierContNo = courierContNo.trim();
+
+  return this.http.put(`${this.contractUrl}/${trimmedCourierContNo}`, updatedContract, { responseType: 'text', withCredentials: true }).pipe(
+    tap(response => {
+      console.log('Update response:', response); // Log the response for confirmation
+    }),
+    catchError((error) => {
+      console.error('Error occurred while updating contract:', error);
+      return throwError(error);
+    })
+  );
 }
+
 
 
   
