@@ -65,18 +65,32 @@ export class IoclEmployeeComponent {
     console.log('Searching for:', this.searchQuery);
   }
   
-  ngOnInit(): void {
+  // ngOnInit(): void {
 
-      this.empData=this.ioclEmpService.getEmpData();
-     // const roleId = params['role']; // Get role from query params
+  //     this.empData=this.ioclEmpService.getEmpData();
+  //     // const roleId = params['role']; // Get role from query params
+  //     this.menuService.getMenusByRole(this.empData.role).subscribe((menus: MstMenu[]) => {
+  //       console.log('Menus data:', menus);
+
+  //       this.menus = this.buildMenuHierarchy(menus);
+  //       console.log('Hierarchical menus data:', this.menus);
+  //     });
+      
+  // }
+  ngOnInit(): void {
+    this.empData = this.ioclEmpService.getEmpData();
+    if (this.empData) {
       this.menuService.getMenusByRole(this.empData.role).subscribe((menus: MstMenu[]) => {
         console.log('Menus data:', menus);
-
         this.menus = this.buildMenuHierarchy(menus);
         console.log('Hierarchical menus data:', this.menus);
       });
-      
+    } else {
+      // Redirect to login or handle unauthorized access
+      this.router.navigate(['/login']);
+    }
   }
+  
 
   buildMenuHierarchy(menuList: MstMenu[]): MstMenu[] {
     const menuMap: { [key: string]: MstMenu } = {};

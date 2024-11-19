@@ -11,14 +11,24 @@ export class MstCouriercontractService {
 
   constructor(private http: HttpClient) { }
 
-  // createContract(contractData: any): Observable<string> {
+  //  createContract(contractData: any): Observable<string> {
   //   const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  //   return this.http.post<string>(this.apiUrl, contractData, { headers ,withCredentials: true});
+  //   return this.http.post<string>(this.apiUrl, contractData, {headers,withCredentials: true});
+  // }
+  createContract(contractData: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, contractData, { withCredentials: true });
+  }
+  // createContractRatesAndDiscounts(data: any): Observable<any> {
+  //   const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  //   return this.http.post<any>(`${this.apiUrl}/create/rates/discounts`, data, { headers, withCredentials:true });
   // }
 
-  createContract(contractData: any): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(this.apiUrl, contractData, { headers, withCredentials: true, responseType: 'text' as 'json' });
+  createContractRatesAndDiscounts(data: any): Observable<any> {
+    return this.http.post<any>(`http://localhost:8182/api/courier-contracts/create/rates/discounts`, data, {
+        responseType: 'text' as 'json',
+        withCredentials: true
+    });
 }
+
 
 }

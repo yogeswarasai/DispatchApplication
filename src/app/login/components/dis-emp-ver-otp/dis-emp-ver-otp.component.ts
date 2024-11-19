@@ -83,7 +83,7 @@ export class DisEmpVerOtpComponent implements OnInit {
         const mobileNumber = this.loginForm.get('phoneNumber')?.value;
         const otp = this.otpControls.map(control => control.value).join('');
 
-        // Call the login method without passing CAPTCHA
+      //  Call the login method without passing CAPTCHA
         this.verOtp.login(mobileNumber, parseInt(otp))
             .subscribe(response => {
                 console.log('Login successful', response);
@@ -91,15 +91,28 @@ export class DisEmpVerOtpComponent implements OnInit {
                 // const profile = response.profile;
                 // Navigate to the profile page with profile data
                // this.router.navigate(['/dispatchEmployee'], { state: { profile } });
+               const profile = response.profile;
                 // Save the response in the ProfileService
               this.verOtp.setProfileData(response);
-              this.router.navigate(['/dispatchEmployee']);
+              this.router.navigate(['/dispatchEmployee'], { state: { profile } });
 
             }, error => {
                 console.error('Login failed', error);
             });
-    }
+    //     this.verOtp.login(mobileNumber, parseInt(otp)).subscribe({
+    //       next: (response) => {
+    //         console.log('Login successful:', response);
+    //         this.verOtp.setProfileData(response.profile); // Ensure this is executed
+    //         this.router.navigate(['/dispatchEmployee/home']); // Navigate after setting profile
+    //       },
+    //       error: (err) => {
+    //         console.error('Login failed:', err);
+    //       }
+    //     });
+        
+    // }
   }
+}
 
   changeMobileNumber(): void {
       // Ha

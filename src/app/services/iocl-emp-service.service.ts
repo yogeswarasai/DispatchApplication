@@ -31,12 +31,28 @@ export class IoclEmpServiceService {
   checkCaptcha(captchaValue: string): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/check-captcha/${captchaValue}`);
   }
+  // setEmpData(data: any) {
+  //   this.empData = data;
+  // }
+  // getEmpData() {
+  //   return this.empData;
+  // }
+
   setEmpData(data: any) {
     this.empData = data;
+    localStorage.setItem('empData', JSON.stringify(data)); // Save to localStorage
   }
+  
   getEmpData() {
+    if (!this.empData) {
+      const storedData = localStorage.getItem('empData'); // Retrieve from localStorage
+      if (storedData) {
+        this.empData = JSON.parse(storedData);
+      }
+    }
     return this.empData;
   }
+  
   signOut(): Observable<any> {
     return this.http.post(`${this.baseUrl}/signout`, { withCredentials: true }, { responseType: 'text' });
   }

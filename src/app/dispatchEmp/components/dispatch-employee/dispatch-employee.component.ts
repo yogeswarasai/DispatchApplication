@@ -4,7 +4,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { RouterOutlet } from '@angular/router';
-import { routes } from '../../../app.routes';
 import { RouterModule,Router} from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { HomeComponent } from '../home/home.component';
@@ -44,6 +43,7 @@ export class DispatchEmployeeComponent {
   searchQuery: string = '';
   profile:any;
 
+
   showReports: boolean = false;
 
   toggleReports() {
@@ -60,7 +60,43 @@ export class DispatchEmployeeComponent {
   ngOnInit(): void {
     // Retrieve the profile data from the service
     this.profile = this.verOtp.getProfileData();
-  }
+    console.log('Profile data on init:', this.profile);
+
+    // if (!this.profile) {
+    //   console.error('Profile data not found. Redirecting to login...');
+    //   this.router.navigate(['/login']);  // Redirect to login if no profile data
+    // }
+
+   }
+
+  // ngOnInit(): void {
+  //   try {
+  //     console.log(`[DEBUG] Initializing DispatchEmployeeComponent...`);
+  
+  //     // Retrieve profile data from the service
+  //     this.profile = this.verOtp.getProfileData();
+  //     console.log(`[DEBUG] Retrieved profile data:`, this.profile);
+  
+  //     // Check if profile data exists
+  //     if (!this.profile) {
+  //       console.error(`[ERROR] Profile data not found. Redirecting to login.`);
+  //       this.router.navigate(['/login']); // Redirect to login
+  //       return;
+  //     }
+  
+  //     // Extract and assign profile data safely
+  //     this.empName = this.profile.EmpName || 'Unknown'; // Fallback to 'Unknown' if EmpName is missing
+  //     console.log(`[INFO] Employee Name set to:`, this.empName);
+  
+  //     // Additional profile data handling (if needed)
+  //     console.log(`[INFO] Full profile data:`, this.profile);
+  
+  //   } catch (error) {
+  //     console.error(`[CRITICAL ERROR] An error occurred during initialization:`, error);
+  //     this.router.navigate(['/login']); // Redirect on critical error
+  //   }
+  // }
+  
 
   navigate(path: string) {
     this.router.navigate([path]);

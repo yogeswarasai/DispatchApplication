@@ -62,7 +62,8 @@ import { CourierContractEditComponent } from './ioclEmp/components/courier-contr
     DisMonthlyReportsComponent,
     MstCouriercontractComponent,
     CourierHistoryComponent,
-    CourierContractEditComponent
+    CourierContractEditComponent,
+   
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

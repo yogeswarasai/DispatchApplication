@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { HttpParams } from '@angular/common/http';
 
 
 
@@ -21,14 +22,21 @@ export class CourierhistoryService {
   getCourierContracts(): Observable<any[]> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      // Include Authorization token if needed
-      // 'Authorization': 'Bearer ' + token 
+      
     });
 
-    return this.http.get<any[]>(`${this.contractUrl}/history`, { headers, withCredentials: true }).pipe(
+    return this.http.get<any[]>(`${this.contractUrl}`, { headers, withCredentials: true }).pipe(
       catchError(this.handleError)
     );
   }
+
+  getContractsBasedOnCourierCode(courierCode: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.contractUrl}/${courierCode}`,{withCredentials: true });
+  }
+
+  getContractRateDiscountBasedOnCourierContNo(courierContNo: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.contractUrl}/rates/discounts/${courierContNo}`,{withCredentials: true });
+  } 
 
   getCouriers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.courierUrl}/all`, { withCredentials: true }).pipe(
@@ -52,6 +60,9 @@ export class CourierhistoryService {
       })
     );
   }
+  deleteContract(courierContNo: string): Observable<string> {
+    return this.http.delete<string>(`${this.contractUrl}/${courierContNo}`,{ responseType: 'text' as 'json', withCredentials: true });
+  }
   
   getContractByContNo(courierContNo: string): Observable<any> {
     const url = `${this.contractUrl}/${courierContNo.trim()}`;
@@ -64,7 +75,31 @@ export class CourierhistoryService {
   }
   
   
+  deleteContractRateDiscount(
+    courierContNo: string,
+    fromWtGms?: number,
+    toWtGms?: number,
+    fromDistanceKm?: number,
+    toDistanceKm?: number,
+    fromMonthlyAmt?: number,
+    toMonthlyAmt?: number
+  ): Observable<any> {
+    let params = new HttpParams();
+    
+    // Add query parameters only if they are provided
+    if (fromWtGms !== undefined) params = params.set('fromWtGms', fromWtGms.toString());
+    if (toWtGms !== undefined) params = params.set('toWtGms', toWtGms.toString());
+    if (fromDistanceKm !== undefined) params = params.set('fromDistanceKm', fromDistanceKm.toString());
+    if (toDistanceKm !== undefined) params = params.set('toDistanceKm', toDistanceKm.toString());
+    if (fromMonthlyAmt !== undefined) params = params.set('fromMonthlyAmt', fromMonthlyAmt.toString());
+    if (toMonthlyAmt !== undefined) params = params.set('toMonthlyAmt', toMonthlyAmt.toString());
 
+    // Construct the endpoint URL using the contract number as a path variable
+    const url = `${this.contractUrl}/delete/${courierContNo}`;
+    
+    // Make the DELETE request with the parameters
+    return this.http.delete(url, { responseType: 'text' as 'json', params,withCredentials:true });
+  }
 
   // Update contract details
   // updateContract(courierContNo: string, updatedContract: any): Observable<any> {
@@ -107,7 +142,9 @@ updateContract(courierContNo: string, updatedContract: any): Observable<any> {
     })
   );
 }
-
+updateCourier(courierCode: string, courierData: any): Observable<any> {
+  return this.http.put<any>(`${this.courierUrl}/${courierCode}`, courierData, {withCredentials: true });
+}
 
 
   
