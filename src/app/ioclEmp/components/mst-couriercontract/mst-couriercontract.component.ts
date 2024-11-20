@@ -87,6 +87,8 @@ export class MstCouriercontractComponent implements OnInit {
   //contractRateDiscountList: RateDiscount[]=[];
 
   contractRateDiscountList: any[] = [];
+  rateList:any[]=[];
+  discountList:any[]=[];
   contractRateDiscountDataSource = new MatTableDataSource<any>();
 
   displayedColumns: string[] = [
@@ -102,6 +104,10 @@ export class MstCouriercontractComponent implements OnInit {
     'discountPercentage',
     'actions'
   ];
+
+  rateDisplayedColumns: string[] = ['sno', 'courierContNo','fromWtGms', 'toWtGms', 'fromDistanceKm', 'toDistanceKm', 'rate', 'actions'];
+discountDisplayedColumns: string[] = ['sno','courierContNo', 'fromMonthlyAmt', 'toMonthlyAmt', 'discountPercentage', 'actions'];
+
 
 
   // discounts: Array<{ fromMonthlyAmt: number; toMonthlyAmt: number; discountPercentage: number }> = [];
@@ -124,6 +130,7 @@ export class MstCouriercontractComponent implements OnInit {
   editCourierContractNo: string = ''
   successMessage: string = '';
   selectedContractIndex: number | null = null;
+  selectedCourierIndex:number | null = null;
   selectedContractNo: string | null = null;
   selectedContractRate: string | null = null;
 
@@ -232,9 +239,11 @@ export class MstCouriercontractComponent implements OnInit {
             this.loadCouriers(); // Refresh list after update
             this.isEditMode = false;
             this.editCourierCode = '';
-            this.courierForm.reset();
             this.showCourierSuccessMessage = true;
             this.successMessage = "Courier updated successfully"; // Set update success message
+            this.courierForm.reset();
+            this.courierForm.get('courierCode')?.enable();
+
             setTimeout(() => {
               this.showCourierSuccessMessage = false;
             }, 3000);
@@ -269,7 +278,7 @@ export class MstCouriercontractComponent implements OnInit {
 
   editCourier(courier: Courier): void {
     this.isEditMode = true;
-    this.courierForm.reset();
+  //  this.courierForm.reset();
 
     this.editCourierCode = courier.courierCode;
     this.courierForm.patchValue({
@@ -388,33 +397,74 @@ export class MstCouriercontractComponent implements OnInit {
 
 
 
+  // deleteCourier(index: number, courierCode: string): void {
+  //   this.selectedCourierCode = courierCode;
+  //   this.showConfirmation = true;
+  // }
+
+  // confirmDelete(confirm: boolean): void {
+  //   if (confirm) {
+  //     this.courierHistoryService.changeCourierStatus(this.selectedCourierCode).subscribe({
+  //       next: () => {
+
+  //         const index = this.courierList.findIndex(c => c.courierCode === this.selectedCourierCode);
+  //         if (index !== -1) {
+  //           this.courierList.splice(index, 1);
+  //         }
+  //         this.loadCouriers();
+  //         this.showConfirmation = false;
+
+  //       },
+  //       error: (error) => {
+  //         console.error('Error deleting courier:', error);
+  //       }
+  //     });
+  //   } else {
+  //     this.showConfirmation = false;
+  //   }
+  // }
+
   deleteCourier(index: number, courierCode: string): void {
-    this.selectedCourierCode = courierCode;
     this.showConfirmation = true;
+    this.courierHistoryService.changeCourierStatus(courierCode).subscribe({
+      next: () => {
+        // Remove courier from the list
+        this.courierList.splice(index, 1);
+        this.courierList = [...this.courierList]; // Update the list to trigger change detection
+  
+        // Show success message
+        this.successMessage = 'Courier deleted successfully';
+        this.showCourierSuccessMessage = true;
+  
+        // Reset the form (if applicable)
+        this.courierForm.patchValue({
+          courierCode: '',
+          courierName: '',
+        });
+  
+        // Hide the message after 3 seconds
+        setTimeout(() => {
+          this.showCourierSuccessMessage = false;
+        }, 3000);
+      },
+      error: (error) => {
+        console.error('Error deleting courier:', error);
+      },
+    });
   }
-
+  
   confirmDelete(confirm: boolean): void {
-    if (confirm) {
-      this.courierHistoryService.changeCourierStatus(this.selectedCourierCode).subscribe({
-        next: () => {
-
-          const index = this.courierList.findIndex(c => c.courierCode === this.selectedCourierCode);
-          if (index !== -1) {
-            this.courierList.splice(index, 1);
-          }
-          this.loadCouriers();
-          this.showConfirmation = false;
-
-        },
-        error: (error) => {
-          console.error('Error deleting courier:', error);
-        }
-      });
-    } else {
-      this.showConfirmation = false;
+   // const index = this.courierList.findIndex(c => c.courierCode === this.selectedCourierCode);
+    if (confirm && this.selectedCourierIndex !== null && this.selectedCourierCode) {
+      this.deleteCourier(this.selectedCourierIndex, this.selectedCourierCode);
     }
-  }
+    this.loadCouriers();
+    this.showConfirmation = false;
+    this.selectedCourierIndex = null;
 
+  
+  }
+  
 
   onRowSelect(row: any, event: MouseEvent): void {
     // Check if the event target is not an action button
@@ -446,85 +496,100 @@ export class MstCouriercontractComponent implements OnInit {
   }
 
 
-  // onRowSelectofcontract(row: any): void {
-  
 
+
+  // onRowSelectofcontract(row: any,event: MouseEvent): void {
+
+  //   if ((<HTMLElement>event.target).classList.contains('delete-button') ||
+  //   (<HTMLElement>event.target).classList.contains('edit-button')) {
+  //   return; 
+  // }
   //   this.selectedCouriercontNo = row;
   //   this.showContractRateForm = true;
+  //   this.contractForm.reset();
+  //  this.contractForm.get('courierContNo')?.enable(); 
 
-  
+  //  this.contractForm.patchValue({
+  //   courierCode: row.courierCode
+  // });
+  //   this.rateList=[];
+  //   this.discountList=[];
+  //   this.contractratediscountForm.patchValue({
+  //     courierContNo: row.courierContNo
+      
+  //   });
   //   this.courierHistoryService.getContractRateDiscountBasedOnCourierContNo(row.courierContNo).subscribe({
   //     next: (data: any) => {
   //       if (data && Array.isArray(data.discounts) && Array.isArray(data.rates)) {
-  //         this.contractRateDiscountList = [...data.discounts, ...data.rates]; 
+  //         const mergedList = data.rates.map((rate: any, index: number) => {
+  //           const discount = data.discounts[index] || {}; 
+  //           return {
+  //             ...rate,
+  //             ...discount
+  //           };
+  //         });
+  
+  //         this.contractRateDiscountList = mergedList;
+        
+
   //       } else {
   //         console.error("Unexpected data structure:", data);
-  //         this.contractRateDiscountList = []; 
+  //         this.contractRateDiscountList = [];
   //       }
-        
-  //       this.contractratediscountForm.patchValue({
-  //         courierContNo: row.courierContNo
-  //       });
+  
+      
   //     },
+     
   //     error: (error) => {
   //       console.error('Error fetching contract rates and discounts:', error);
   //     }
   //   });
-  // }    
-  onRowSelectofcontract(row: any,event: MouseEvent): void {
-
+  // }
+  
+  onRowSelectofcontract(row: any, event: MouseEvent): void {
+    // Prevent row selection if delete or edit button is clicked
     if ((<HTMLElement>event.target).classList.contains('delete-button') ||
-    (<HTMLElement>event.target).classList.contains('edit-button')) {
-    return; // Prevents row selection if delete or edit was clicked
-  }
+        (<HTMLElement>event.target).classList.contains('edit-button')) {
+      return;
+    }
+  
     this.selectedCouriercontNo = row;
     this.showContractRateForm = true;
-  //  this.contractForm.reset();
-   // this.contractForm.get('courierCode')?.enable(); 
-   this.contractForm.get('courierContNo')?.enable(); 
-
-   this.contractForm.patchValue({
-    courierCode: row.courierCode
-  });
-    this.contractRateDiscountList = [];
- // Enable courierCode field
+    this.contractForm.reset();
+  
+    // Enable courierContNo field
+    this.contractForm.get('courierContNo')?.enable();
+  
+    // Patch the form with the selected row's courierContNo
     this.contractratediscountForm.patchValue({
       courierContNo: row.courierContNo
-      
     });
+  
+    // Clear the existing lists
+    this.rateList = [];
+    this.discountList = [];
+  
+    // Fetch rates and discounts for the selected courierContNo
     this.courierHistoryService.getContractRateDiscountBasedOnCourierContNo(row.courierContNo).subscribe({
       next: (data: any) => {
-        if (data && Array.isArray(data.discounts) && Array.isArray(data.rates)) {
-          const mergedList = data.rates.map((rate: any, index: number) => {
-            // Combine each rate with the corresponding discount by index
-            const discount = data.discounts[index] || {}; // Fallback to an empty object if no matching discount
-            return {
-              ...rate,
-              ...discount
-            };
-          });
-  
-          this.contractRateDiscountList = mergedList;
-        
-
+        // Ensure data contains the expected structure
+        if (data) {
+          // Assign rates and discounts separately
+          this.rateList = Array.isArray(data.rates) ? data.rates : [];
+          this.discountList = Array.isArray(data.discounts) ? data.discounts : [];
         } else {
           console.error("Unexpected data structure:", data);
-          this.contractRateDiscountList = [];
+          this.rateList = [];
+          this.discountList = [];
         }
-  
-        // Patch form with courierContNo
-        // this.contractratediscountForm.patchValue({
-        //   courierContNo: row.courierContNo
-        // });
-         
       },
-     
       error: (error) => {
         console.error('Error fetching contract rates and discounts:', error);
+        this.rateList = [];
+        this.discountList = [];
       }
     });
   }
-  
   
   
   selectCourier(courier: Courier): void {
@@ -689,109 +754,191 @@ export class MstCouriercontractComponent implements OnInit {
 
 
 
-  // loadContractRatesAndDiscounts(courierContNo: string) {
-  //   this.courierHistoryService.getContractRateDiscountBasedOnCourierContNo(courierContNo).subscribe({
-  //     next: (data) => {
-  //       this.contractRateDiscountList = data; // Update the history section with the new data
-  //       console.log('Loaded updated rates and discounts:', this.contractRateDiscountList);
-  //     },
-  //     error: (error) => {
-  //       console.error('Error loading contract rates and discounts:', error);
-  //     }
-  //   });
-  // }
-
-
 // Initialize MatTableDataSource for contractRateDiscountList
+
+// loadContractRatesAndDiscounts(courierContNo: string): void {
+//   this.courierHistoryService.getContractRateDiscountBasedOnCourierContNo(courierContNo).subscribe({
+//     next: (data: any) => {
+//       if (data && Array.isArray(data.discounts) && Array.isArray(data.rates)) {
+//         const mergedList = data.rates.map((rate: any, index: number) => {
+//           const discount = data.discounts[index] || {};
+//           return {
+//             ...rate,
+//             ...discount
+//           };
+//         });
+        
+//         this.contractRateDiscountList = mergedList;
+//         this.contractRateDiscountDataSource.data = this.contractRateDiscountList; // Set data to MatTableDataSource
+//       } else {
+//         console.error("Unexpected data structure:", data);
+//         this.contractRateDiscountList = [];
+//         this.contractRateDiscountDataSource.data = this.contractRateDiscountList; // Reset if data is unexpected
+//       }
+//     },
+//     error: (error) => {
+//       console.error('Error fetching contract rates and discounts:', error);
+//       this.contractRateDiscountList = [];
+//       this.contractRateDiscountDataSource.data = this.contractRateDiscountList; // Reset on error
+//     }
+//   });
+// }
 
 loadContractRatesAndDiscounts(courierContNo: string): void {
   this.courierHistoryService.getContractRateDiscountBasedOnCourierContNo(courierContNo).subscribe({
     next: (data: any) => {
-      if (data && Array.isArray(data.discounts) && Array.isArray(data.rates)) {
-        const mergedList = data.rates.map((rate: any, index: number) => {
-          const discount = data.discounts[index] || {};
-          return {
-            ...rate,
-            ...discount
-          };
-        });
+      if (data) {
+        // Assign rates and discounts separately to their respective lists
+        this.rateList = Array.isArray(data.rates) ? data.rates : [];
+        this.discountList = Array.isArray(data.discounts) ? data.discounts : [];
         
-        this.contractRateDiscountList = mergedList;
-        this.contractRateDiscountDataSource.data = this.contractRateDiscountList; // Set data to MatTableDataSource
+        // If needed, you can create separate data sources for MatTableDataSource
+        this.contractRateDiscountDataSource.data = this.rateList; // Assuming a MatTableDataSource for rates
+        this.contractRateDiscountDataSource.data = this.discountList; // Assuming a MatTableDataSource for discounts
       } else {
         console.error("Unexpected data structure:", data);
-        this.contractRateDiscountList = [];
-        this.contractRateDiscountDataSource.data = this.contractRateDiscountList; // Reset if data is unexpected
+        this.rateList = [];
+        this.discountList = [];
+        
+        // Reset the data sources
+        this.contractRateDiscountDataSource.data = this.rateList;
+        this.contractRateDiscountDataSource.data = this.discountList;
       }
     },
     error: (error) => {
       console.error('Error fetching contract rates and discounts:', error);
-      this.contractRateDiscountList = [];
-      this.contractRateDiscountDataSource.data = this.contractRateDiscountList; // Reset on error
+      
+      // Clear lists and data sources in case of an error
+      this.rateList = [];
+      this.discountList = [];
+      this.contractRateDiscountDataSource.data = this.rateList;
+      this.contractRateDiscountDataSource.data = this.discountList;
     }
   });
 }
 
+  // submitForm() {
+  //   console.log('Form values before validation:', this.contractratediscountForm.value);
   
+  //   const courierContNo = this.contractratediscountForm.get('courierContNo')?.value;
+  
+  //   if (this.contractratediscountForm.invalid) {
+  //     console.error('Form is invalid. Errors:', this.contractratediscountForm.errors);
+  //     return;
+  //   }
+  
+  //   const formValues = {
+  //     courierContNo: courierContNo,
+  //     courierRates: this.rates,
+  //     courierDiscounts: this.discounts,
+  //   };
+  //   console.log('Form Submitted', formValues);
+  
+  //   this.couriercontract.createContractRatesAndDiscounts(formValues)
+  //     .subscribe({
+  //       next: (response) => {
+  //         console.log('Contract rates and discounts created successfully:', response);
+  //         this.successMessage = 'Rates And Discounts Added Successfully';
+  
+  //         this.rates = [];
+  //         this.discounts = [];
+  
+  //         setTimeout(() => {
+         
+  //         this.rateGroup.reset(); 
+  //         this.discountGroup.reset(); 
+  //         }, 3000);
+  
+  //         this.loadContractRatesAndDiscounts(courierContNo);
+          
+  //         this.showContractSuccessMessage = true;
+      
+  //         setTimeout(() => {
+  //           this.showContractSuccessMessage = false;
+  //         }, 3000);
+  //       },
+  //       error: (error) => {
+  //         console.log("Data being sent:", formValues);
+  //         console.error('Error creating contract rates and discounts:', error);
+  //       }
+  //     });
+  // }
+
   submitForm() {
     console.log('Form values before validation:', this.contractratediscountForm.value);
   
+    // Retrieve the courier contract number from the form
     const courierContNo = this.contractratediscountForm.get('courierContNo')?.value;
   
+    // Check if the form is invalid
     if (this.contractratediscountForm.invalid) {
       console.error('Form is invalid. Errors:', this.contractratediscountForm.errors);
       return;
     }
   
+    // Prepare the form data
     const formValues = {
       courierContNo: courierContNo,
-      courierRates: this.rates,
-      courierDiscounts: this.discounts,
+      courierRates: this.rates.length > 0 ? this.rates : [], // Use an empty array if no rates are entered
+      courierDiscounts: this.discounts.length > 0 ? this.discounts : [] // Use an empty array if no discounts are entered
     };
+  
     console.log('Form Submitted', formValues);
   
-    this.couriercontract.createContractRatesAndDiscounts(formValues)
-      .subscribe({
-        next: (response) => {
-          console.log('Contract rates and discounts created successfully:', response);
-          this.successMessage = 'Rates And Discounts Added Successfully';
+    // Call the service to submit the data
+    this.couriercontract.createContractRatesAndDiscounts(formValues).subscribe({
+      next: (response) => {
+        console.log('Contract rates and discounts created successfully:', response);
   
-          this.rates = [];
-          this.discounts = [];
+        // Show success message
+        this.successMessage = 'Rates And Discounts Added Successfully';
+        this.showContractSuccessMessage = true;
   
-          setTimeout(() => {
-          //  this.contractratediscountForm.reset();
-          // this.rateGroup.reset({
-          //   fromWtGms: 0,
-          //   toWtGms: 0,
-          //   fromDistanceKm: 0,
-          //   toDistanceKm: 0,
-          //   rate: 0
-          // });
-        
-          // this.discountGroup.reset({
-          //   fromMonthlyAmt: 0,
-          //   toMonthlyAmt: 0,
-          //   discountPercentage: 0
-          // });
-          this.rateGroup.reset(); // Clears all fields in rateGroup
-          this.discountGroup.reset(); // Clears all fields in discountGroup
-          }, 3000);
+        // Clear the rates and discounts
+        this.rates = [];
+        this.discounts = [];
   
-          this.loadContractRatesAndDiscounts(courierContNo);
+        // Reset the rate and discount groups
+        setTimeout(() => {
+          const rateGroup = this.contractratediscountForm.get('rateGroup');
+          const discountGroup = this.contractratediscountForm.get('discountGroup');
           
-          this.showContractSuccessMessage = true;
-      
-          setTimeout(() => {
-            this.showContractSuccessMessage = false;
-          }, 3000);
-        },
-        error: (error) => {
-          console.log("Data being sent:", formValues);
-          console.error('Error creating contract rates and discounts:', error);
-        }
-      });
+          if (rateGroup) {
+            // rateGroup.reset({
+            //   fromWtGms: 0,
+            //   toWtGms: 0,
+            //   fromDistanceKm: 0,
+            //   toDistanceKm: 0,
+            //   rate: 0
+            // });
+            this.rateGroup.reset();       
+          }
+  
+          if (discountGroup) {
+            // discountGroup.reset({
+            //   fromMonthlyAmt: 0,
+            //   toMonthlyAmt: 0,
+            //   discountPercentage: 0
+            // });
+            this.discountGroup.reset(); 
+          }
+        }, 3000);
+  
+        // Load the updated contract rates and discounts
+        this.loadContractRatesAndDiscounts(courierContNo);
+  
+        // Hide the success message after a delay
+        setTimeout(() => {
+          this.showContractSuccessMessage = false;
+        }, 3000);
+      },
+      error: (error) => {
+        console.log("Data being sent:", formValues);
+        console.error('Error creating contract rates and discounts:', error);
+      }
+    });
   }
+  
 
   
   delete(index:number , contract: any): void {

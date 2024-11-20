@@ -1,11 +1,23 @@
-
+/* 
 .container {
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 20px;
   background-color: #f8f9fa;
+  width: 5000px;
+} */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  width: 1600px; /* Ensure this is set as per your desired value */
+  max-width: none; /* Override any inherited max-width limits */
+  flex-shrink: 0; /* Prevent shrinking */
 }
+
 
 .courier-section,
 .courier-contract-section {
@@ -92,10 +104,11 @@ table tr:nth-child(even) {
 table tr:nth-child(odd) {
   background-color: #ffffff;
 }
-
+/* 
 .mat-elevation-z8 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
+  width: 800px;
+} */
 
 button {
   margin-left: 10px;
@@ -246,6 +259,7 @@ button {
   display: flex; /* Flexbox for horizontal alignment */
   gap: 20px; /* Space between the sections */
   margin-top: 20px;
+ 
 }
 
 .form-card {
@@ -291,6 +305,7 @@ button {
   margin-bottom:10px;
   padding: 20px;
   border-radius: 100px;
+ 
 }
 
 
@@ -317,37 +332,121 @@ button {
 }
 
 /* Inner container for rate and discount sections, side by side */
-.rate-discount-container {
+/* .rate-discount-container {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Two equal-width columns */
-  gap: 20px; /* Space between columns */
+  grid-template-columns: 1fr 1fr; 
+  gap: 20px; 
   width: 100%;
 }
 
-/* Style each form card */
 .form-card {
+  display: inline;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: #f9f9f9;
+  height: 200px;
+  width: 800px;
 }
+
+.form-cards {
+  display: inline;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  height: 200px;
+  width: 700px;
+} */
 
 /* Full-width form fields */
 .mat-form-field {
   width: 100%;
 }
 
-.form-fields-container {
-  display: flex;
+/* .form-fields-container {
+  display: inline;
   flex-wrap: wrap;
-  gap: 8px; /* Adjust the gap size */
+  gap: 8px; 
+  width: 100px;
+
+} */
+/* .form-fields-container {
+  display: flex; 
+  flex-wrap: wrap;
+  gap: 3px; 
+  width: 50pc; 
 }
 
+ .form-fields-container input,
+.form-fields-container select,
+.form-fields-container textarea {
+  width: 100px; 
+  padding: 2px; 
+ 
+}
+*/
+.rate-discount-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Space between rate and discount sections */
+}
+
+.form-card {
+  /* flex: 1; */
+  display: flex;
+  padding: 10px;
+  border-radius: 8px;
+  /* min-width: 300px; 
+  max-width: 100%;  */
+  width: 850px;
+  margin-left: 5px;
+  margin-top: -40px;
+  margin-bottom: 10px;
+  
+}
+
+.form-cards {
+  /* flex: 1;  */
+  display: flex;
+  padding: 10px;
+  border-radius: 8px;
+  /* min-width: 300px;
+    max-width: 100%; */
+     width: 650px;
+    margin-right: 5px;
+    margin-top: -40px;
+    margin-bottom: 10px
+
+}
+
+.form-fields-container {
+  display: flex; /* Align fields inline */
+  flex-wrap: wrap; /* Allow wrapping for responsiveness */
+  gap: 8px; /* Space between fields */
+  width: 900px;
+}
+
+.form-fields-container mat-form-field {
+  flex: 1 0 120px; /* Set an initial size and allow wrapping */
+  min-width: 100px; /* Minimum size for small screens */
+  max-width: 164px; /* Maximum size for large screens */
+  box-sizing: border-box; /* Include padding and borders in width calculations */
+}
+
+.mat-form-field-wrapper {
+  overflow: visible; /* Ensure text isn't clipped */
+}
+
+.mat-input-element {
+  padding: 4px; /* Adjust padding to avoid clipping */
+  font-size: 14px; /* Maintain a readable font size */
+}
 .add-discount-btn {
   background-color: #f9f9f9; /* Light white background */
   color: red; /* Red text */
   border: 1px solid red; /* Red border to match the text color */
-  padding: 6px 16px; /* Adjust padding for button size */
+  padding: 1px 5px; /* Adjust padding for button size */
   border-radius: 4px; /* Rounded corners */
 }
 
@@ -363,4 +462,41 @@ button {
   align-items: center;
   width: 100%;
   margin-top: 20px;  /* Optional: for spacing */
+}
+
+
+
+
+
+.table-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.table-wrapper {
+  flex: 1;
+  min-width: 45%;
+  max-width: 48%;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+
+}
+
+.table-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center; /* Align title to the left */
+  color: #333; /* Optional: Adjust color for better readability */
+}
+
+.rates-table,
+.discounts-table {
+  width: 20%;
+  border: 1px solid #e0e0e0;
+  border-collapse: collapse;
+
 }
