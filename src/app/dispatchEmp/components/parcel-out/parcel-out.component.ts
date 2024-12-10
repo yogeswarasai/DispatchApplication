@@ -19,7 +19,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { TrnParcelOutService } from '../../../services/trn-parcel-out.service';
 import { MstCourier } from '../../../model/mstCourier';
 import { Router } from '@angular/router';
-
+import { catchError } from 'rxjs/operators';
 @Component({
   selector: 'app-parcel-out',
   standalone: true,
@@ -54,7 +54,18 @@ export class ParcelOutComponent implements OnInit {
     private router:Router
   ) {
     this.parcelOutForm = this.fb.group({
-      consignmentNumber: ['', Validators.required],
+    //  consignmentNumber: ['', Validators.required],
+    consignmentNumber: [
+      '',
+      [Validators.required],
+      [
+        (control) =>
+          this.parcelOutService.checkConsignmentExists(control.value).pipe(
+            map((exists) => (exists ? { consignmentExists: true } : null)),
+            catchError(() => of(null)) // Graceful error handling
+          ),
+      ],
+    ],
       consignmentDate: [this.datePipe.transform(new Date(), 'yyyy-MM-dd'), Validators.required],
       senderDepartment: ['', Validators.required],
       senderName: ['', Validators.required],
@@ -64,6 +75,7 @@ export class ParcelOutComponent implements OnInit {
       courierName: ['', Validators.required],
       weight: ['', Validators.required],
       unit: ['', Validators.required],
+      distance: ['', Validators.required]
     });
   }
 
@@ -103,15 +115,39 @@ export class ParcelOutComponent implements OnInit {
     ).subscribe(filtered => this.filteredRecipients = of(filtered));
   }
 
+  // onRecipientLocCodeInput(): void {
+  //   const recipientLocCode = this.parcelOutForm.get('recipientLocCode')?.value;
+  //   if (this.locationCodes.indexOf(recipientLocCode) === -1) {
+  //     this.showOtherRecipientDepartmentOption = true;
+  //   } else {
+  //     this.showOtherRecipientDepartmentOption = false;
+  //   }
+  // }
+
   onRecipientLocCodeInput(): void {
     const recipientLocCode = this.parcelOutForm.get('recipientLocCode')?.value;
+  
+    // Validate recipient location code
     if (this.locationCodes.indexOf(recipientLocCode) === -1) {
-      // The inputted location code is not in the list
       this.showOtherRecipientDepartmentOption = true;
+      this.parcelOutForm.patchValue({ distance: '' }); // Clear distance field if invalid code
+      this.parcelOutService.getDistance(recipientLocCode).subscribe(
+        (distance) => {
+          this.parcelOutForm.patchValue({ distance }); // Update form field with fetched distance
+        },
+        (error) => {
+          console.error('Error fetching distance:', error);
+          this.parcelOutForm.patchValue({ distance: '' }); // Clear distance field on error
+        }
+      );
+    
     } else {
       this.showOtherRecipientDepartmentOption = false;
-    }
+  
+      // Fetch distance using the servic
   }
+  
+}
 
   loadLocations(): void {
     this.parcelOutService.getLocations().subscribe(locations => {

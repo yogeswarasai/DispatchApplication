@@ -14,8 +14,11 @@
       <mat-form-field appearance="fill">
         <mat-label>Consignment Number</mat-label>
         <input matInput formControlName="consignmentNumber" placeholder="Enter Consignment Number" (input)="onConsignmentNumberChange()">
-        <mat-error *ngIf="parcelInForm.get('consignmentNumber')?.invalid && parcelInForm.get('consignmentNumber')?.touched">
+        <!-- <mat-error *ngIf=" parcelInForm.get('consignmentNumber')?.touched">
           Consignment Number is required
+        </mat-error> -->
+        <mat-error *ngIf="parcelInForm.get('consignmentNumber')?.hasError('consignmentExists')">
+          Consignment number already exists
         </mat-error>
         
         <!-- Loading indicator -->

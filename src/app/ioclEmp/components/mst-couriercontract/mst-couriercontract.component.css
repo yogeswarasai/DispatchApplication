@@ -315,21 +315,47 @@ button {
 }
 
 /* If applying to the form fields within each mat-card */
-
+/* 
 .courier-cont-no-container .mat-form-field {
-  flex-grow: 1; /* Allow the input field to take available space */
-}
-/* Courier Cont No container */
+  flex-grow: 1;}
 .courier-cont-no-container {
   display: flex;
   justify-content: center;
-  align-items: center; /* Vertically center the content */
+  align-items: center; 
    width: 100%;
-   margin-top: 10px; /* Add some space at the top to move it down */
+   margin-top: 10px; 
  
   margin-bottom: 10px;
+  
 
+} */
+.courier-cont-no-container {
+  display: flex; /* Enables flexbox */
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  background-color: #f9f9f9; /* Optional: Add a light background for the container */
+  height: 15vh;
 }
+
+.centered-field {
+  background-color: #f0f0f0; /* Light grey background for the field */
+  padding: 10px; /* Adds padding for spacing */
+  border-radius: 4px; /* Rounded corners for better aesthetics */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+  width: 300px; /* Optional: Set a fixed width for the input field */
+}
+
+.centered-field:hover {
+  background-color: #e0e0e0; /* Slightly darker grey on hover */
+}
+
+.centered-field input {
+  background-color: transparent; /* Keeps the input background clean */
+  color: black; /* Ensures the text color is clear */
+}
+
+
+
 
 /* Inner container for rate and discount sections, side by side */
 /* .rate-discount-container {
@@ -390,6 +416,8 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 20px; /* Space between rate and discount sections */
+  justify-content: center;
+  align-items: center; /* Centers items vertically */
 }
 
 .form-card {
@@ -442,19 +470,37 @@ button {
   padding: 4px; /* Adjust padding to avoid clipping */
   font-size: 14px; /* Maintain a readable font size */
 }
+/* .add-discount-btn {
+  background-color: #f9f9f9; 
+  color: red; 
+  border: 1px solid red; 
+  padding: 1px 5px; 
+  border-radius: 4px; 
+  justify-content: center;
+  text-align: center;
+  align-items: center; 
+
+} */
 .add-discount-btn {
-  background-color: #f9f9f9; /* Light white background */
-  color: red; /* Red text */
-  border: 1px solid red; /* Red border to match the text color */
-  padding: 1px 5px; /* Adjust padding for button size */
+  margin: 20px auto 0 auto; /* Center the button horizontally and add spacing */
+  display: block; /* Ensures the button is treated as a block element */
+  background-color: #5644bd; /* Slightly darker blue for better visibility */
+  color: white !important; /* White text for high contrast */
+  border: 1px solid #512599; /* Darker blue border for better definition */
+  padding: 10px 20px; /* Larger padding for better appearance */
   border-radius: 4px; /* Rounded corners */
+  text-align: center; /* Aligns text within the button */
+  font-weight: bold; /* Makes the text bold for emphasis */
+  cursor: pointer; /* Pointer cursor on hover */
 }
 
 .add-discount-btn:hover {
-  background-color: #f1f1f1; /* Slightly darker white on hover */
-  color: darkred; /* Dark red text on hover */
-  border-color: darkred; /* Dark red border on hover */
+  background-color: #4b2d9c; /* Darker blue on hover */
+  border-color: #3511b8; /* Matches hover state for a cohesive look */
+  color: white !important; /* Ensures white text remains on hover */
 }
+
+
 
 .submit-button-container {
   display: flex;

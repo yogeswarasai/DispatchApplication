@@ -11,6 +11,7 @@ export class TrnParcelOut {
   courierName?: string;
   weight?: number;
   unit?: string;
+  distance?:number;
   recordStatus: string = "A";
   createdBy?: string;
   createdDate?: Date;
@@ -28,6 +29,7 @@ export class TrnParcelOut {
     this.courierName = data.courierName;
     this.weight = data.weight;
     this.unit = data.unit;
+    this.distance=data.distance;
     this.recordStatus = data.recordStatus || 'A';
     this.createdBy = data.createdBy;
     this.createdDate = data.createdDate;

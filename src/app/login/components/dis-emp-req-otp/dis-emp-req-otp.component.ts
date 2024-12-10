@@ -1,5 +1,5 @@
 import { Component,OnInit} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators,AbstractControl, ValidationErrors } from '@angular/forms';
 import { ReqOtpService } from '../../services/req-otp.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -34,10 +34,36 @@ export class DisEmpReqOtpComponent implements OnInit{
   errorMessage:string='';
   constructor(private fb: FormBuilder, private reqOtp:ReqOtpService) { }
 
+  // ngOnInit(): void {
+  //   this.loginForm = this.fb.group({
+  //     phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
+  //   });
+  // }
+
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
+      phoneNumber: [
+        '',
+        [
+          Validators.required, // Field is required
+          Validators.pattern('^[0-9]{10}$'), // Accepts exactly 10 digits only
+        ],
+      ],
     });
+  }
+
+  // Getter for easier access in the template
+  get phoneNumber(): AbstractControl | null {
+    return this.loginForm.get('phoneNumber');
+  }
+
+  /**
+   * Prevent non-numeric characters from being entered
+   */
+  onInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9]/g, ''); // Replace non-numeric characters
+    this.loginForm.get('phoneNumber')?.setValue(input.value); // Update form control value
   }
 
   onSubmit(): void {

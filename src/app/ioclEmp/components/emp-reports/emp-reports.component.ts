@@ -146,7 +146,7 @@ export class EmpReportsComponent {
     if (parcelType === 'in') {
       this.displayedColumns = ['senderLocCode', 'senderName','senderDepartment', 'recipientName', 'recipientDepartment','courierName','recordStatus','receivedDate','consignmentDate','createdDate'];
     } else if (parcelType === 'out') {
-      this.displayedColumns = ['senderName','senderDepartment', 'recipientLocCode', 'recipientName','recipientDepartment','courierName', 'weight', 'unit','recordStatus','consignmentDate', 'createdDate'];
+      this.displayedColumns = ['senderName','senderDepartment', 'recipientLocCode', 'recipientName','recipientDepartment','courierName', 'weight', 'unit','distance','recordStatus','consignmentDate', 'createdDate'];
     }
   }
 }

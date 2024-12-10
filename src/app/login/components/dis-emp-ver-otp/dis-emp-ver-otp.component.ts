@@ -38,6 +38,8 @@ export class DisEmpVerOtpComponent implements OnInit {
   loginForm: FormGroup;
   otpControls: FormControl[] = [];
   captchaText: string = '';
+  otpError: string = ''; // Variable to hold OTP error message
+
 
   constructor(private fb: FormBuilder,private verOtp:DisEmpVerOtpService,private router: Router) {
     
@@ -68,51 +70,75 @@ export class DisEmpVerOtpComponent implements OnInit {
       }
   }
 
-  generateCaptcha(): void {
-      //this.captchaText = Math.random().toString(36).substring(2, 8).toUpperCase();
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < 6; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
+  onOtpKeyDown(event: KeyboardEvent, index: number): void {
+    const input = event.target as HTMLInputElement;
+    if (event.key === 'Backspace' && !input.value && index > 0) {
+      const previousInput = input.previousElementSibling as HTMLInputElement;
+      if (previousInput) {
+        previousInput.focus();
+        previousInput.value = ''; // Optional: clear the value of the previous input
+        this.otpControls[index - 1].setValue(''); // Clear the value in the form control
+      }
     }
-    this.captchaText = result;
   }
-
+  
+  generateCaptcha(): void {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    this.captchaText = Array.from({ length: 6 }, () =>
+      chars.charAt(Math.floor(Math.random() * chars.length))
+    ).join('');
+    console.log('Generated CAPTCHA:', this.captchaText); // For debugging
+  }
+  
+  validateCaptcha(): boolean {
+    const enteredCaptcha = this.loginForm.get('captcha')?.value;
+    console.log('Entered CAPTCHA:', enteredCaptcha);
+    console.log('Generated CAPTCHA:', this.captchaText);
+    return enteredCaptcha === this.captchaText;
+  }
+  
   onSubmit(): void {
+    if (!this.validateCaptcha()) {
+      this.otpError = 'Invalid captcha. Please try again.';
+      this.loginForm.get('captcha')?.reset();
+      this.generateCaptcha(); // Generate a new CAPTCHA
+      return;
+    }
+  
     if (this.loginForm.valid) {
-        const mobileNumber = this.loginForm.get('phoneNumber')?.value;
-        const otp = this.otpControls.map(control => control.value).join('');
-
-      //  Call the login method without passing CAPTCHA
-        this.verOtp.login(mobileNumber, parseInt(otp))
-            .subscribe(response => {
-                console.log('Login successful', response);
-                 // Assuming the response contains the user profile data
-                // const profile = response.profile;
-                // Navigate to the profile page with profile data
-               // this.router.navigate(['/dispatchEmployee'], { state: { profile } });
-               const profile = response.profile;
-                // Save the response in the ProfileService
-              this.verOtp.setProfileData(response);
-              this.router.navigate(['/dispatchEmployee'], { state: { profile } });
-
-            }, error => {
-                console.error('Login failed', error);
-            });
-    //     this.verOtp.login(mobileNumber, parseInt(otp)).subscribe({
-    //       next: (response) => {
-    //         console.log('Login successful:', response);
-    //         this.verOtp.setProfileData(response.profile); // Ensure this is executed
-    //         this.router.navigate(['/dispatchEmployee/home']); // Navigate after setting profile
-    //       },
-    //       error: (err) => {
-    //         console.error('Login failed:', err);
-    //       }
-    //     });
-        
-    // }
+      const mobileNumber = this.loginForm.get('phoneNumber')?.value;
+      const otp = this.otpControls.map((control) => control.value).join('');
+  
+      this.verOtp.login(mobileNumber, parseInt(otp)).subscribe(
+        (response) => {
+          console.log('Login successful', response);
+  
+          // Clear error message
+          this.otpError = '';
+          const profile = response.profile;
+  
+          // Save profile data and navigate
+          this.verOtp.setProfileData(response);
+          this.router.navigate(['/dispatchEmployee'], { state: { profile } });
+        },
+        (error) => {
+          console.error('Login failed', error);
+  
+          if (error.status === 400) {
+            this.otpError = 'Invalid OTP. Please try again.';
+            this.clearOtpFields(); // Clear OTP fields if invalid
+          } else {
+            this.otpError = 'An error occurred. Please try again later.';
+          }
+        }
+      );
+    }
   }
+  
+clearOtpFields(): void {
+  this.otpControls.forEach((control) => control.reset());
 }
+
 
   changeMobileNumber(): void {
       // Ha
@@ -124,4 +150,6 @@ export class DisEmpVerOtpComponent implements OnInit {
       // Handle resending OTP
       this.generateCaptcha();
   }
+
+
 }

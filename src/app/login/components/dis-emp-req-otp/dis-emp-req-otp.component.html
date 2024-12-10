@@ -3,10 +3,31 @@
     <img src="../../../../assets/indianOilLogo.png" alt="Indian Oil Logo" class="logo">
     <!-- <h2>IndianOil</h2> -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="outline">
+      <!-- <mat-form-field appearance="outline">
         <mat-label>Phone Number</mat-label>
         <input matInput formControlName="phoneNumber" required>
+      </mat-form-field> -->
+
+      <mat-form-field appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <input
+          matInput
+          formControlName="phoneNumber"
+          maxlength="10"
+          placeholder="Enter 10-digit phone number"
+          (input)="onInput($event)" 
+        />
+        <!-- Required Field Error -->
+        <mat-error *ngIf="phoneNumber?.hasError('required')">
+          Phone number is required.
+        </mat-error>
+      
       </mat-form-field>
+      
+      
+      
+      
+      
       <button mat-raised-button color="primary" type="submit" routerLink="/disEmpVerOtp">Request OTP</button>
     </form>
     <div *ngIf="errorMessage" class="error-message">

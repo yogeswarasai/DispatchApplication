@@ -6,6 +6,7 @@ import { TrnParcelOut } from '../model/trnParcelOut';
 import { StatusCodeModal } from '../model/statusCodeModal';
 import { Page } from '../model/page';
 import { HttpParams } from '@angular/common/http';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,6 +16,22 @@ export class TrnParcelOutService {
   private parcelOutUrl='http://localhost:8182/parcels-out';
 
   constructor(private http: HttpClient) {}
+
+
+  checkConsignmentExists(consignmentNumber: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.parcelOutUrl}/consignment/${consignmentNumber}/exists`);
+  }
+  
+
+  getDistance(recipientLocCode: string): Observable<number> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('token')}`, // Adjust based on token storage
+    });
+
+    const url = `${this.parcelOutUrl}/distance?recipientLocCode=${recipientLocCode}`;
+    return this.http.get<number>(url, { headers ,withCredentials:true});
+  }
+
 
   getLocations(): Observable<string[]> {
     return this.http.get<string[]>(`${this.baseUrl}/locNames`);

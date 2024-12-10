@@ -25,6 +25,7 @@ import { matchValidator } from '../../MatchValidator';
 import { MstCourier } from '../../../model/mstCourier';
 import { error } from 'console';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { catchError } from 'rxjs/operators';
 
 
 
@@ -76,7 +77,18 @@ export interface ParcelOutResponse {
       private router: Router
     ) {
       this.parcelInForm = this.fb.group({
-        consignmentNumber: ['', Validators.required],
+       // consignmentNumber: ['', Validators.required],
+       consignmentNumber: [
+        '',
+        [Validators.required],
+        [
+          (control) =>
+            this.parcelInService.checkConsignmentExists(control.value).pipe(
+              map((exists) => (exists ? { consignmentExists: true } : null)),
+              catchError(() => of(null)) // Graceful error handling
+            ),
+        ],
+      ],
         consignmentDate: [this.datePipe.transform(new Date(), 'yyyy-MM-dd'), Validators.required],
         receivedDate: [this.datePipe.transform(new Date(), 'yyyy-MM-dd'), Validators.required],
         senderLocCode: ['', Validators.required],
@@ -124,6 +136,30 @@ export interface ParcelOutResponse {
       ).subscribe(filtered => this.filteredRecipients = of(filtered));
     }
 
+    // onConsignmentNumberChange(): void {
+    //   const consignmentNumber = this.parcelInForm.get('consignmentNumber')?.value;
+    
+    //   // Clear previous data if consignment number is empty
+    //   if (!consignmentNumber) {
+    //     this.clearForm();
+    //     return;
+    //   }
+    
+    //   // Indicate loading state
+    //   this.loading = true;
+    
+    //   this.parcelInService.getParcelOutByConsignmentNumber(consignmentNumber).subscribe({
+    //     next: (response: ParcelOutResponse) => {
+    //       this.populateForm(response);
+    //       this.loading = false; // Hide loading state
+    //     },
+    //     error: (err) => {
+    //       console.error('Error fetching parcel data:', err);
+    //       this.loading = false; // Hide loading state
+    //       // Optionally show an error message to the user
+    //     }
+    //   });
+    // }
     onConsignmentNumberChange(): void {
       const consignmentNumber = this.parcelInForm.get('consignmentNumber')?.value;
     
@@ -138,17 +174,32 @@ export interface ParcelOutResponse {
     
       this.parcelInService.getParcelOutByConsignmentNumber(consignmentNumber).subscribe({
         next: (response: ParcelOutResponse) => {
-          this.populateForm(response);
+          if (response) {
+            // Populate form if valid data is returned
+            this.populateForm(response);
+          } else {
+            // Clear form if no data is returned
+            this.clearForm();
+          }
           this.loading = false; // Hide loading state
         },
         error: (err) => {
           console.error('Error fetching parcel data:', err);
+          this.clearForm(); // Clear form on error
           this.loading = false; // Hide loading state
           // Optionally show an error message to the user
-        }
+        },
       });
     }
+
     
+    // clearForm(): void {
+    //   this.parcelInForm.reset(); // Reset the entire form
+    //   this.parcelInForm.get('consignmentNumber')?.setValue(''); // Optionally retain consignmentNumber
+    // }
+    
+
+
     populateForm(parcelData: ParcelOutResponse): void {
       this.parcelInForm.patchValue({
         senderLocCode: parcelData.senderLocCode,
@@ -163,7 +214,9 @@ export interface ParcelOutResponse {
     
     // Optional method to clear form fields
     clearForm(): void {
+      const consignmentNumber = this.parcelInForm.get('consignmentNumber')?.value; // Retain current consignment number
       this.parcelInForm.reset({
+        consignmentNumber: consignmentNumber || '', // Preserve existing value or set to empty
         senderLocCode: '',
         consignmentDate: '',
         senderDepartment: '',
@@ -173,6 +226,7 @@ export interface ParcelOutResponse {
         courierName: '',
       });
     }
+    
     
 
     
@@ -328,16 +382,22 @@ export interface ParcelOutResponse {
     }
   
     // Extract only the code inside the brackets for senderLocCode
-    let senderLocCode = this.parcelInForm.get('senderLocCode')?.value;
-    if (senderLocCode) {
-      const match = senderLocCode.match(/\(([^)]+)\)/);  // Extract code inside parentheses
-      if (match && match[1]) {
-        senderLocCode = match[1];  // Assign only the code to senderLocCode
-        this.parcelInForm.get('senderLocCode')?.setValue(senderLocCode); // Update form value
-      }
-    }
+    // let senderLocCode = this.parcelInForm.get('senderLocCode')?.value;
+    // if (senderLocCode) {
+    //   const match = senderLocCode.match(/\(([^)]+)\)/);  // Extract code inside parentheses
+    //   if (match && match[1]) {
+    //     senderLocCode = match[1];  // Assign only the code to senderLocCode
+    //     this.parcelInForm.get('senderLocCode')?.setValue(senderLocCode); // Update form value
+    //   }
+    // }
   
     const parcelIn = this.parcelInForm.value;
+
+    if (parcelIn.senderLocCode && parcelIn.senderLocCode.includes('(')) {
+      const startIdx = parcelIn.senderLocCode.indexOf('(') + 1;
+      const endIdx = parcelIn.senderLocCode.indexOf(')');
+      parcelIn.senderLocCode = parcelIn.senderLocCode.substring(startIdx, endIdx);
+    }
   
     this.parcelInService.createParcel(parcelIn).subscribe({
       next: (response) => {

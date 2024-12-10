@@ -73,6 +73,91 @@ export class CourierhistoryService {
       catchError(this.handleError)
     );
   }
+  // updateCourierRate(
+  //   courierContNo: string,
+  //   updatedRate: any,
+  //   fromWtGms?: number,
+  //   toWtGms?: number,
+  //   fromDistanceKm?: number,
+  //   toDistanceKm?: number
+  // ): Observable<any> {
+  //   const url = `${this.contractUrl}/update-rate/${courierContNo}`;
+  
+    
+  //   let params = new HttpParams();
+  //   if (fromWtGms !== undefined) params = params.set('fromWtGms', fromWtGms.toString());
+  //   if (toWtGms !== undefined) params = params.set('toWtGms', toWtGms.toString());
+  //   if (fromDistanceKm !== undefined) params = params.set('fromDistanceKm', fromDistanceKm.toString());
+  //   if (toDistanceKm !== undefined) params = params.set('toDistanceKm', toDistanceKm.toString());
+  
+  //   return this.http.put<any>(url,updatedRate, {params, withCredentials: true });
+  // }
+  updateCourierRate(
+    courierContNo: string,
+    updatedRate: any,
+    fromWtGms: number,
+    toWtGms: number,
+    fromDistanceKm: number,
+    toDistanceKm: number
+  ): Observable<any> {
+    const params = new HttpParams()
+      .set('fromWtGms', fromWtGms.toString())
+      .set('toWtGms', toWtGms.toString())
+      .set('fromDistanceKm', fromDistanceKm.toString())
+      .set('toDistanceKm', toDistanceKm.toString());
+  
+    return this.http.put(`${this.contractUrl}/update-rate/${courierContNo}`, updatedRate, {
+      params,
+      withCredentials: true,
+    }).pipe(
+      catchError((error) => {
+        console.error('Error updating rate:', error);
+        if (error.status === 200 && typeof error.error === 'string' && error.error.startsWith('<!DOCTYPE html>')) {
+          console.error('Received HTML instead of JSON:', error.error);
+          return throwError(() => new Error('Unexpected HTML response.'));
+        }
+        return throwError(() => error); // Rethrow other errors
+      })
+    );
+  }
+  
+  
+  updateCourierDiscount(
+    courierContNo: string,
+    updatedDiscount: any,
+    fromMonthlyAmt: number,
+    toMonthlyAmt: number
+  ): Observable<any> {
+    // Initialize HttpParams
+    let params = new HttpParams();
+    
+    // Set parameters if they are defined
+    if (fromMonthlyAmt !== undefined) {
+      params = params.set('fromMonthlyAmt', fromMonthlyAmt.toString());
+    }
+    if (toMonthlyAmt !== undefined) {
+      params = params.set('toMonthlyAmt', toMonthlyAmt.toString());
+    }
+  
+    // Log the parameters to verify the correct query parameters
+    console.log('Query Params for Discount Update:', params);
+  
+    // Send the HTTP PUT request with the updated discount data and query parameters
+    return this.http.put(`${this.contractUrl}/update-discount/${courierContNo}`, updatedDiscount, {
+      params,        // Pass the query parameters with the request
+      withCredentials: true,  // Include credentials with the request
+    }).pipe(
+      catchError((error) => {
+        console.error('Error updating discount:', error);
+        // Handle the case when HTML is received instead of JSON
+        if (error.status === 200 && typeof error.error === 'string' && error.error.startsWith('<!DOCTYPE html>')) {
+          console.error('Received HTML instead of JSON:', error.error);
+          return throwError(() => new Error('Unexpected HTML response.'));
+        }
+        return throwError(() => error); // Rethrow other errors
+      })
+    );
+  }
   
   
   deleteContractRateDiscount(
@@ -81,8 +166,6 @@ export class CourierhistoryService {
     toWtGms?: number,
     fromDistanceKm?: number,
     toDistanceKm?: number,
-    fromMonthlyAmt?: number,
-    toMonthlyAmt?: number
   ): Observable<any> {
     let params = new HttpParams();
     
@@ -91,11 +174,28 @@ export class CourierhistoryService {
     if (toWtGms !== undefined) params = params.set('toWtGms', toWtGms.toString());
     if (fromDistanceKm !== undefined) params = params.set('fromDistanceKm', fromDistanceKm.toString());
     if (toDistanceKm !== undefined) params = params.set('toDistanceKm', toDistanceKm.toString());
+    // Construct the endpoint URL using the contract number as a path variable
+    const url = `${this.contractUrl}/delete/rate/${courierContNo}`;
+    
+    // Make the DELETE request with the parameters
+    return this.http.delete(url, { responseType: 'text' as 'json', params,withCredentials:true });
+  }
+
+
+  deleteContractDiscount(
+    courierContNo: string,
+    fromMonthlyAmt?: number,
+    toMonthlyAmt?: number
+  ): Observable<any> {
+    let params = new HttpParams();
+    
+    // Add query parameters only if they are provided
+   
     if (fromMonthlyAmt !== undefined) params = params.set('fromMonthlyAmt', fromMonthlyAmt.toString());
     if (toMonthlyAmt !== undefined) params = params.set('toMonthlyAmt', toMonthlyAmt.toString());
 
     // Construct the endpoint URL using the contract number as a path variable
-    const url = `${this.contractUrl}/delete/${courierContNo}`;
+    const url = `${this.contractUrl}/delete/discount/${courierContNo}`;
     
     // Make the DELETE request with the parameters
     return this.http.delete(url, { responseType: 'text' as 'json', params,withCredentials:true });

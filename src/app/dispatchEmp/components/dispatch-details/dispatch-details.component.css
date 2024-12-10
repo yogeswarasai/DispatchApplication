@@ -18,4 +18,34 @@ mat-form-field {
   font-size: 1rem; /* Optional: Adjust the font size to your preference */
 }
 
-  
+
+.download-button-container {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.dropdown-panel {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+mat-icon {
+  cursor: pointer;
+}
+
+.wide-field {
+  width: 70%; /* Make the field take full width of the container */
+}
+
+@media (min-width: 768px) {
+  .wide-field {
+    width: 20%; /* Adjust width for larger screens, if desired */
+  }
+}

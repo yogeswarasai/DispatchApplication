@@ -6,11 +6,29 @@
       <!-- Row 1: Consignment Number and Consignment Date -->
       <div class="form-row two-columns">
         <!-- Consignment Number -->
-        <mat-form-field appearance="fill">
+        <!-- <mat-form-field appearance="fill">
           <mat-label>Consignment Number</mat-label>
           <input matInput formControlName="consignmentNumber" placeholder="Enter consignment number" required>
           <mat-error *ngIf="parcelOutForm.get('consignmentNumber')?.invalid">Consignment number is required</mat-error>
+        </mat-form-field> -->
+
+        <mat-form-field appearance="fill">
+          <mat-label>Consignment Number</mat-label>
+          <input
+            matInput
+            formControlName="consignmentNumber"
+            placeholder="Enter consignment number"
+            required
+          />
+          <mat-error *ngIf="parcelOutForm.get('consignmentNumber')?.hasError('required')">
+            Consignment number is required
+          </mat-error>
+          <mat-error *ngIf="parcelOutForm.get('consignmentNumber')?.hasError('consignmentExists')">
+            Consignment number already exists
+          </mat-error>
         </mat-form-field>
+        
+        
 
         <!-- Consignment Date -->
         <mat-form-field appearance="fill">
@@ -48,12 +66,18 @@
         </mat-form-field>
       </div>
 
-      <!-- Row 3: Recipient Location and Recipient Department -->
       <div class="form-row three-columns">
-        <!-- Recipient Location Code -->
-        <!-- <mat-form-field appearance="fill">
+    
+<!-- 
+        <mat-form-field appearance="fill">
           <mat-label>Recipient Location Code</mat-label>
-          <input type="text" matInput formControlName="recipientLocCode" [matAutocomplete]="auto2" placeholder="Enter location code">
+          <input 
+            type="text" 
+            matInput 
+            formControlName="recipientLocCode" 
+            [matAutocomplete]="auto2" 
+            (input)="onRecipientLocCodeInput()" 
+            placeholder="Enter location code">
           <mat-autocomplete #auto2="matAutocomplete">
             <mat-option *ngFor="let location of filteredLocationCodes | async" [value]="location">
               {{location}}
@@ -79,16 +103,6 @@
           <mat-error *ngIf="parcelOutForm.get('recipientLocCode')?.invalid">Recipient location code is required</mat-error>
         </mat-form-field>
 
-        <!-- Recipient Department -->
-        <!-- <mat-form-field appearance="fill">
-          <mat-label>Recipient Department</mat-label>
-          <mat-select formControlName="recipientDepartment" required>
-            <mat-option *ngFor="let department of recipientDepartments" [value]="department">
-              {{department}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="parcelOutForm.get('recipientDepartment')?.invalid">Recipient department is required</mat-error>
-        </mat-form-field> -->
 
         <mat-form-field appearance="fill">
           <mat-label>Recipient Department</mat-label>
@@ -117,7 +131,7 @@
       </div>
 
          <!-- Row 4: Recipient Name and Courier Name -->
-      <div class="form-row three-columns">
+      <div class="form-row four-columns">
 
         <!-- Courier Name -->
         <mat-form-field appearance="fill">
@@ -148,7 +162,31 @@
           </mat-select>
           <mat-error *ngIf="parcelOutForm.get('unit')?.invalid">Unit is required</mat-error>
         </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Distance</mat-label>
+          <input matInput formControlName="distance" placeholder="Enter Distance" required>
+          <mat-error *ngIf="parcelOutForm.get('distance')?.invalid">Distance is required</mat-error>
+        </mat-form-field>
+
+
+        <!-- <mat-form-field appearance="fill">
+          <mat-label>Distance</mat-label>
+          <input 
+            type="text" 
+            matInput 
+            formControlName="distance" 
+            placeholder="Distance will be fetched automatically" 
+            readonly>
+          <mat-error *ngIf="parcelOutForm.get('distance')?.invalid">Distance is required</mat-error>
+        </mat-form-field> -->
+
+
       </div>
+
+   
+
+
 
      <!-- Centered Submit Button -->
      <div class="button-container">

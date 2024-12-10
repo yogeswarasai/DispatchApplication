@@ -30,6 +30,12 @@
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 20px;
   }
+
+  .four-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 20px;
+  }
   
   .button-container {
     grid-column: span 2;

@@ -39,7 +39,7 @@
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let element; let i = index">
        
-          <button mat-button class="delete-button" (click)="deleteCourier(i, element.courierCode); $event.stopPropagation()">Delete</button>
+          <button mat-button class="delete-button" (click)="openDelConfirmation(i, element.courierCode); $event.stopPropagation()">Delete</button>
 <button mat-button class="edit-button" (click)="editCourier(element); $event.stopPropagation()">Edit</button>
 
           <div *ngIf="showCourierSuccessMessage" class="success-message">
@@ -58,7 +58,7 @@
 </tr>
 
     </table>
-    <div *ngIf="showConfirmation" class="confirmation-box" [ngClass]="{'show': showConfirmation}">
+    <div *ngIf="showCourierConfirmation" class="confirmation-box">
       <div class="confirmation-content">
         <p>Are you sure you want to delete this record?</p>
         <div class="confirmation-buttons">
@@ -140,7 +140,7 @@
   
     <tr mat-header-row *matHeaderRowDef="['sno', 'courierCode', 'courierContNo', 'startDate', 'endDate', 'actions']"></tr>
     <tr mat-row *matRowDef="let row; columns: ['sno', 'courierCode', 'courierContNo', 'startDate', 'endDate', 'actions']"
-    [ngClass]="{'highlighted-row': selectedCouriercontNo?.courierContNo === row.courierContNo}"
+    [ngClass]="{'highlighted-row': selectedCouriercontNo?.courierContNo === row.courierContNo&&selectCourierCode?.courierCode === row.courierCode }"
   (click)="onRowSelectofcontract(row, $event)">
   </tr>
   </table>
@@ -161,11 +161,18 @@
 <mat-card *ngIf=showContractRateForm class="outer-form-card" [formGroup]="contractratediscountForm">
   <!-- Courier Contract Number Section -->
   <div class="courier-cont-no-container">
-    <mat-form-field appearance="fill">
+
+    <mat-form-field appearance="fill" class="centered-field">
+      <mat-label>Courier Code</mat-label>
+      <input matInput [value]="selectCourierCode?.courierCode || ''"  readonly />
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="centered-field">
       <mat-label>Courier Contract No</mat-label>
       <input matInput formControlName="courierContNo" placeholder="Enter Contract No" required />
       <!-- <mat-error *ngIf="contractratediscountForm.get('courierContNo')?.hasError('required')">Contract number is required.</mat-error> -->
     </mat-form-field>
+
+  
     <!-- <button class="close-buttons" (click)="closeContractrateForm()">Hide</button> -->
 
   </div>   
@@ -198,12 +205,16 @@
           <input matInput formControlName="rate" type="number" required />
         </mat-form-field>
       </div>
-        <button mat-button color="accent" type="button" (click)="addRate()" class="add-discount-btn">Add More</button>
+        <button mat-button color="accent" type="button" (click)="submitForm()" class="add-discount-btn">Save</button>
+
+        <div *ngIf="showContractSuccessMessage" class="success-message">
+          {{successMessage}}
+         </div>
        
-          <div *ngFor="let rate of rates; let i = index" class="added-items">
+          <!-- <div *ngFor="let rate of rates; let i = index" class="added-items">
           {{ rate.fromWtGms }}g - {{ rate.toWtGms }}g - {{ rate.fromDistanceKm }}km - {{ rate.toDistanceKm }}km - {{ rate.rate }}
           <button mat-button color="warn" (click)="removeRate(i)">✖</button>
-        </div>
+        </div> -->
       </mat-card-content>
     </mat-card>
 
@@ -225,12 +236,15 @@
           <input matInput formControlName="discountPercentage" type="number" required />
         </mat-form-field>
         </div>
-        <button mat-button color="accent" type="button" (click)="addDiscount()" class="add-discount-btn">Add More</button>
+        <button mat-button color="accent" type="button" (click)="submitForm()" class="add-discount-btn">Save</button>
         
-        <div *ngFor="let discount of discounts; let i = index" class="added-items">
+        <div *ngIf="showContractSuccessMessage" class="success-message">
+          {{successMessage}}    
+            </div>
+        <!-- <div *ngFor="let discount of discounts; let i = index" class="added-items">
           {{ discount.fromMonthlyAmt }} - {{ discount.toMonthlyAmt }} - {{ discount.discountPercentage }}%
           <button mat-button color="warn" (click)="removeDiscount(i)">✖</button>
-        </div>
+        </div> -->
       </mat-card-content>
     </mat-card>
 
@@ -242,9 +256,9 @@
   </div>
 
   <!-- Submit Button -->
-  <div class="submit-button-container">
+  <!-- <div class="submit-button-container">
     <button mat-raised-button color="primary" type="button" (click)="submitForm()">Submit</button>
-  </div>
+  </div> -->
 
 <!-- 
 <table mat-table [dataSource]="contractRateDiscountList" class="mat-elevation-z8">
@@ -361,7 +375,7 @@
           {{ element.courierContNo || '' }} 
         </td>
       </ng-container>
-      <ng-container matColumnDef="fromWtGms">
+      <!-- <ng-container matColumnDef="fromWtGms">
         <th mat-header-cell *matHeaderCellDef> FromWtGms </th>
         <td mat-cell *matCellDef="let element"> {{ element.fromWtGms || '' }} </td>
       </ng-container>
@@ -380,18 +394,73 @@
       <ng-container matColumnDef="rate">
         <th mat-header-cell *matHeaderCellDef> Rate </th>
         <td mat-cell *matCellDef="let element"> {{ element.rate || '' }} </td>
+      </ng-container> -->
+
+      <ng-container matColumnDef="fromWtGms">
+        <th mat-header-cell *matHeaderCellDef> FromWtGms </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.fromWtGms !== null && element.fromWtGms !== undefined ? element.fromWtGms : '' }}
+        </td>
       </ng-container>
+      
+      <ng-container matColumnDef="toWtGms">
+        <th mat-header-cell *matHeaderCellDef> ToWtGms </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.toWtGms !== null && element.toWtGms !== undefined ? element.toWtGms : '' }}
+        </td>
+      </ng-container>
+      
+      <ng-container matColumnDef="fromDistanceKm">
+        <th mat-header-cell *matHeaderCellDef> FromDistanceKm </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.fromDistanceKm !== null && element.fromDistanceKm !== undefined ? element.fromDistanceKm : '' }}
+        </td>
+      </ng-container>
+      
+      <ng-container matColumnDef="toDistanceKm">
+        <th mat-header-cell *matHeaderCellDef> ToDistanceKm </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.toDistanceKm !== null && element.toDistanceKm !== undefined ? element.toDistanceKm : '' }}
+        </td>
+      </ng-container>
+      
+      <ng-container matColumnDef="rate">
+        <th mat-header-cell *matHeaderCellDef> Rate </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.rate !== null && element.rate !== undefined ? element.rate : '' }}
+        </td>
+      </ng-container>
+      
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let element; let i = index">
-          <button mat-button class="delete-button" (click)="openDeleteConfirmations(i, element)">Delete</button>
+          <button mat-button class="delete-button" (click)="openDeleteConfirmationsforrate(element)">Delete</button>
+          <button mat-button class="edit-button" (click)="edittype(element, 'rate')">Edit</button>
+
+          <div *ngIf="showContractSuccessMessage" class="success-message">
+            {{ successMessage }}
+          </div>
           <!-- <button mat-button class="edit-button" (click)="edit(i)">Edit</button> -->
         </td>
+        
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="rateDisplayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: rateDisplayedColumns;"></tr>
     </table>
+    <div *ngIf="showRateConfirmation" class="confirmation-box">
+      <div class="confirmation-content">
+        <p>Are you sure you want to delete this contract?</p>
+        <div class="confirmation-buttons">
+          <button mat-button class="yes-button" (click)="confirmDelcontractRate(true)">Yes</button>
+          <button mat-button class="no-button" (click)="confirmDelcontractRate(false)">No</button>
+        </div>
+      </div>
+    </div> 
+    
   </div>
+
+
+
 
   <!-- Courier Discounts Table -->
   <div class="table-wrapper">
@@ -408,7 +477,7 @@
       {{ element.courierContNo || '' }} 
     </td>
   </ng-container>
-      <ng-container matColumnDef="fromMonthlyAmt">
+      <!-- <ng-container matColumnDef="fromMonthlyAmt">
         <th mat-header-cell *matHeaderCellDef> FromMonthlyAmt </th>
         <td mat-cell *matCellDef="let element"> {{ element.fromMonthlyAmt || '' }} </td>
       </ng-container>
@@ -419,18 +488,63 @@
       <ng-container matColumnDef="discountPercentage">
         <th mat-header-cell *matHeaderCellDef> DiscountPercentage </th>
         <td mat-cell *matCellDef="let element"> {{ element.discountPercentage || '' }} </td>
+      </ng-container> -->
+
+      <ng-container matColumnDef="fromMonthlyAmt">
+        <th mat-header-cell *matHeaderCellDef> FromMonthlyAmt </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.fromMonthlyAmt !== null && element.fromMonthlyAmt !== undefined ? element.fromMonthlyAmt : '' }}
+        </td>
       </ng-container>
+      
+      <ng-container matColumnDef="toMonthlyAmt">
+        <th mat-header-cell *matHeaderCellDef> ToMonthlyAmt </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.toMonthlyAmt !== null && element.toMonthlyAmt !== undefined ? element.toMonthlyAmt : '' }}
+        </td>
+      </ng-container>
+      
+      <ng-container matColumnDef="discountPercentage">
+        <th mat-header-cell *matHeaderCellDef> DiscountPercentage </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.discountPercentage !== null && element.discountPercentage !== undefined ? element.discountPercentage : '' }}
+        </td>
+      </ng-container>
+      
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let element; let i = index">
-          <button mat-button class="delete-button" (click)="openDeleteConfirmations(i, element)">Delete</button>
+          <button mat-button class="delete-button" (click)="openDeleteConfirmationsforDiscount(element)">Delete</button>
+          <button mat-button class="edit-button" (click)="edittype(element, 'discount')">Edit</button>
+
+          <div *ngIf="showContractSuccessMessage" class="success-message">
+            {{ successMessage }}
+          </div>
           <!-- <button mat-button class="edit-button" (click)="edit(i)">Edit</button> -->
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="discountDisplayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: discountDisplayedColumns;"></tr>
     </table>
+
+    <div *ngIf="showDiscountConfirmation " class="confirmation-box">
+      <div class="confirmation-content">
+        <p>Are you sure you want to delete this contract?</p>
+        <div class="confirmation-buttons">
+          <button mat-button class="yes-button" (click)="confirmDelcontractDiscount(true)">Yes</button>
+          <button mat-button class="no-button" (click)="confirmDelcontractDiscount(false)">No</button>
+        </div>
+      </div>
+    </div> 
+    
   </div>
+
+
+  
+  
+  
+
+
 </div>
 
 

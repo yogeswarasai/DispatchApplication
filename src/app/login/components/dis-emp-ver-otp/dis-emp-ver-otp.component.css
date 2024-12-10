@@ -143,4 +143,10 @@
    /* // border-radius: 20%; */
 }
 
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+}
+
   

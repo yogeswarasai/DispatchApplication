@@ -22,6 +22,11 @@ export class TrnParcelInService {
 
   constructor(private http: HttpClient) {}
 
+  
+  checkConsignmentExists(consignmentNumber: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.parcelInUrl}/consignment/${consignmentNumber}/exists`);
+  }
+
   getLocations(): Observable<string[]> {
     return this.http.get<string[]>(`${this.baseUrl}/locNames`);
   }

@@ -60,6 +60,7 @@ export class ParcelOutEditComponent {
       courierName: [this.parcelData.courierName,Validators.required],
       weight: [this.parcelData.weight, Validators.required],
       unit: [this.parcelData.unit, Validators.required],
+      distance:[this.parcelData.distance, Validators.required],
        createdDate: [this.parcelData.createdDate, Validators.required]
     });
   }
