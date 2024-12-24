@@ -30,5 +30,10 @@ export class MstCouriercontractService {
     });
 }
 
-
+checkCourierContractExists(courierContNo: string): Observable<boolean> {
+  return this.http.get<boolean>(
+    `${this.apiUrl}/courierContNo/${courierContNo}/exists`,
+    { withCredentials: true } // Correct placement inside an options object
+  );
+}
 }

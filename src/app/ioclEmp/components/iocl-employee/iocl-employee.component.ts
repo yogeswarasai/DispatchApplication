@@ -79,7 +79,7 @@ export class IoclEmployeeComponent {
   // }
   ngOnInit(): void {
     this.empData = this.ioclEmpService.getEmpData();
-    if (this.empData) {
+    if (this.empData && this.empData.role) {
       this.menuService.getMenusByRole(this.empData.role).subscribe((menus: MstMenu[]) => {
         console.log('Menus data:', menus);
         this.menus = this.buildMenuHierarchy(menus);

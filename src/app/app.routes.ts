@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/components/login/login.component';
-import { DisEmpReqOtpComponent } from './login/components/dis-emp-req-otp/dis-emp-req-otp.component';
+ import { DisEmpReqOtpComponent } from './login/components/dis-emp-req-otp/dis-emp-req-otp.component';
 import { IoclEmpComponent } from './login/components/iocl-emp/iocl-emp.component';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './dispatchEmp/components/home/home.component';
@@ -35,10 +35,12 @@ import { EmpDispatchDetailsComponent } from './ioclEmp/components/emp-dispatch-d
 import { MstCouriercontractComponent } from './ioclEmp/components/mst-couriercontract/mst-couriercontract.component';
 import { CourierHistoryComponent } from './ioclEmp/components/courier-history/courier-history.component';
 import { CourierContractEditComponent } from './ioclEmp/components/courier-contract-edit/courier-contract-edit.component';
+import { DisEmpComponent } from './login/components/dis-emp/dis-emp.component';
 export const routes: Routes = [
   { path: "login", component: LoginComponent },
-  { path: "disEmpReqOtp", component: DisEmpReqOtpComponent },
-  { path: "disEmpVerOtp", component: DisEmpVerOtpComponent },
+  //  { path: "disEmpReqOtp", component: DisEmpReqOtpComponent },  // otp based login remove comments
+   // { path: "disEmpVerOtp", component: DisEmpVerOtpComponent },   // otp based login remove comments
+  {path:"disEmpsignin",component:DisEmpComponent},//  with username and password remove comments
   { path: "ioclEmp", component: IoclEmpComponent },
   // {path:"ioclEmp",component:IoclEmpComponent},
   { path: '', redirectTo: 'login', pathMatch: 'full' },

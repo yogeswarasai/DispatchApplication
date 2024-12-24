@@ -103,12 +103,48 @@
         </div>
   
         <!-- Mobile Number -->
-        <div class="form-row">
+        <!-- <div class="form-row">
           <mat-form-field appearance="fill">
             <mat-label>Mobile Number</mat-label>
             <input matInput formControlName="mobileNumber" placeholder="Enter Mobile Number">
           </mat-form-field>
+        </div> -->
+        <!-- <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Mobile Number</mat-label>
+            <input matInput formControlName="mobileNumber" placeholder="Enter Mobile Number">
+            <mat-error *ngIf="userForm.get('mobileNumber')?.hasError('mobileNumberExists')">
+              Mobile number already exists. Please use a different number.
+            </mat-error>
+          </mat-form-field>
+        </div> -->
+        <div class="form-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Mobile Number</mat-label>
+            <input 
+              matInput 
+              formControlName="mobileNumber" 
+              placeholder="Enter Mobile Number" 
+              required 
+              maxlength="10" minlength="`10"
+              (input)="onInput($event)" 
+            />
+        
+            <!-- Display error message for mobile number existence -->
+            <mat-error *ngIf="userForm.get('mobileNumber')?.hasError('mobileNumberExists')">
+              Mobile number already exists. Please use a different number.
+            </mat-error>
+            <mat-error *ngIf="userForm.get('mobileNumber')?.hasError('minlength')">
+              Mobile number must be exactly 10 digits.
+            </mat-error>
+            <!-- Display error message for invalid mobile number (non-numeric or not 10 digits) -->
+            <mat-error *ngIf="userForm.get('mobileNumber')?.hasError('pattern')">
+              Mobile number must be exactly 10 digits and numeric.
+            </mat-error>
+          </mat-form-field>
         </div>
+        
+        
   
         <!-- Role ID -->
         <div class="form-row">

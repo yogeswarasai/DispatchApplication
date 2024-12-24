@@ -19,6 +19,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MstUser } from '../../../model/mstUser';
 import { MstUserService } from '../../../services/mst-user.service';
 import { Router } from '@angular/router';
+import { IoclEmpServiceService } from '../../../services/iocl-emp-service.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -53,24 +54,30 @@ export class UserEditComponent {
   editForm!: FormGroup;
   userData!:MstUser ;
   isDisabled:boolean=true;
+  empRoles:string[]=[];
 
   constructor(
     private mstUserService:MstUserService,
     private fb: FormBuilder,
     private router:Router,
-    private snackBar:MatSnackBar
+    private snackBar:MatSnackBar,
+    private IoclEmpService:IoclEmpServiceService
     
   ) { }
 
   ngOnInit() {
+    this.loadRoles(); // Load roles first
+
     this.userData = this.mstUserService.getUserData();
 
     this.editForm = this.fb.group({
       locCode: [{ value: this.userData.locCode, disabled: true },Validators.required],
       userId: [{ value: this.userData.userId, disabled: true },Validators.required],
       userName:[this.userData.userName,Validators.required],
-      mobileNumber: [this.userData.mobileNumber, [Validators.required, Validators.pattern('^[0-9]+$')]],
-      roleId: [this.userData.roleId,Validators.required],
+      mobileNumber: [
+        this.userData.mobileNumber, 
+        [Validators.required, Validators.pattern('^[0-9]+$'), Validators.minLength(10), Validators.maxLength(10)],
+      ],         roleId: [this.userData.roleId,Validators.required],
     });
   }
 
@@ -95,6 +102,25 @@ export class UserEditComponent {
   //     }
   //   );
   // }
+
+  loadRoles(): void {
+    this.IoclEmpService.getRoles().subscribe((roles) => {
+      this.empRoles = roles;
+  
+      // Patch the form value to ensure roleId matches
+      this.editForm.patchValue({
+        roleId: this.userData.roleId,
+      });
+    });
+  }
+  
+
+  onInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    // You can leave this method empty if you don't want to prevent any non-numeric characters
+    // But it will not update or validate until form validation is triggered
+    this.editForm.get('mobileNumber')?.updateValueAndValidity();
+  }
 
   onSubmit() {
     if (this.editForm.invalid) {

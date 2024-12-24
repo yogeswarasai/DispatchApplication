@@ -132,6 +132,15 @@ export class DispatchDetailsComponent {
   sortColumn: string = '';  // Added this to track the column being sorted
   sortDirection: 'asc' | 'desc' = 'asc';  // Initialize sortDirection
 
+  currentSortColumn: string | null = null; // Track the current column being sorted
+  sortOrder: 'asc' | 'desc' = 'asc'; // Track the current sort order
+
+  ngOnInit() {
+    // Initialize filteredData with fullData on component load
+    this.filteredData = [...this.fullData];
+  }
+
+
   constructor(
     private fb: FormBuilder,
     private reportsService: ReportsService,
@@ -143,71 +152,149 @@ export class DispatchDetailsComponent {
       parcelType: [''],
       senderLocCode: [''],
       senderDepartment: [''],
-      consignmentNumber: ['']  // Add this form control for consignment number search
+      searchBy: [''] , // Add this form control for consignment number search
+      sortBy: [''],  // Make sure this field exists
+      sortOrder: [''] // Make sure this field exists
 
     });
   }
 
+// onSubmit() {
+//   const formData = this.filterForm.value;
+//   console.log('Form Data:', formData); // Log the form data to see the values
+
+//   // Format the date values for comparison
+//   const fromDate = formatDate(formData.fromDate, 'yyyy-MM-dd', 'en-US');
+//   const toDate = formatDate(formData.toDate, 'yyyy-MM-dd', 'en-US');
+//   console.log('Formatted fromDate:', fromDate); // Log formatted fromDate
+//   console.log('Formatted toDate:', toDate); // Log formatted toDate
+
+//   // Call the service to fetch data
+//   this.reportsService.getHistoryByDate(fromDate, toDate, formData.parcelType, false).subscribe(
+//     (data) => {
+//       console.log('Fetched Data:', data); // Log the data fetched from the API
+
+//       // Update the full data and filtered data
+//       this.fullData = data;
+//       this.filteredData = [...data];
+
+//       console.log('Filtered Data:', this.filteredData); // Log the filtered data
+
+//       // Update dropdown options if applicable
+//       this.updateDropdownOptions();
+//       this.filterForm.patchValue({ searchBy: '' });
+
+
+//       // Update columns based on the parcel type
+//       this.setDisplayedColumns(formData.parcelType);
+//       console.log('Displayed Columns:', this.displayedColumns); // Log the displayed columns
+
+//       // Set the filtered status and show download button
+//       this.isFiltered = true;
+//       this.isDownloadVisible = true;
+//     },
+//     (error) => {
+//       console.error('Error fetching dispatch history:', error);
+
+//       // Handle error and reset data
+//       this.filteredData = [];
+//       this.isFiltered = true;
+//       this.isDownloadVisible = false;
+//       this.filterForm.patchValue({ searchBy: '' });
+//     }
+//   );
+// }
+
 onSubmit() {
   const formData = this.filterForm.value;
-  console.log('Form Data:', formData); // Log the form data to see the values
+  console.log('Form Data Submitted:', formData); // Debugging log for form data
 
-  // Format the date values for comparison
+  // Format dates for API compatibility
   const fromDate = formatDate(formData.fromDate, 'yyyy-MM-dd', 'en-US');
   const toDate = formatDate(formData.toDate, 'yyyy-MM-dd', 'en-US');
-  console.log('Formatted fromDate:', fromDate); // Log formatted fromDate
-  console.log('Formatted toDate:', toDate); // Log formatted toDate
+  console.log('Formatted Dates:', { fromDate, toDate });
 
-  // Call the service to fetch data
-  this.reportsService.getHistoryByDate(fromDate, toDate, formData.parcelType, false).subscribe(
-    (data) => {
-      console.log('Fetched Data:', data); // Log the data fetched from the API
+  // Fetch data using the reports service
+  this.reportsService
+    .getHistoryByDate(
+      fromDate,
+      toDate,
+      formData.parcelType,  // Parcel type filter
+      false,                // exportPdf (not exporting here)
+      false,                // exportExcel (not exporting here)
+      formData.senderLocCode?.trim() || '',  // Sender location code (optional)
+      formData.senderDepartment?.trim() || '',  // Sender department (optional)
+      formData.searchBy?.trim() || '',  // Search filter (optional)
+      '',  // Sort by (not specified in this context)
+      ''   // Sort order (not specified in this context)
+    )
+    .subscribe(
+      (data) => {
+        console.log('Data Fetched Successfully:', data); // Log fetched data
 
-      // Update the full data and filtered data
-      this.fullData = data;
-      this.filteredData = [...data];
+        // Update data and state variables
+        this.fullData = data;
+        this.filteredData = [...data];
+        this.isFiltered = true;
+        this.isDownloadVisible = true;
 
-      console.log('Filtered Data:', this.filteredData); // Log the filtered data
+        console.log('Filtered Data Updated:', this.filteredData);
 
-      // Update dropdown options if applicable
-      this.updateDropdownOptions();
+        // Update dropdown options (assumes a helper method exists)
+        this.updateDropdownOptions();
 
-      // Update columns based on the parcel type
-      this.setDisplayedColumns(formData.parcelType);
-      console.log('Displayed Columns:', this.displayedColumns); // Log the displayed columns
+        // Reset the search filter
+        this.filterForm.patchValue({ searchBy: '' });
 
-      // Set the filtered status and show download button
-      this.isFiltered = true;
-      this.isDownloadVisible = true;
-    },
-    (error) => {
-      console.error('Error fetching dispatch history:', error);
+        // Adjust displayed columns based on parcel type
+        this.setDisplayedColumns(formData.parcelType);
+        console.log('Displayed Columns Set:', this.displayedColumns);
+      },
+      (error) => {
+        console.error('Error Fetching Dispatch History:', error);
 
-      // Handle error and reset data
-      this.filteredData = [];
-      this.isFiltered = true;
-      this.isDownloadVisible = false;
-    }
-  );
+        // Reset data and UI state on error
+        this.fullData = [];
+        this.filteredData = [];
+        this.isFiltered = true;
+        this.isDownloadVisible = false;
+
+        // Reset the search filter
+        this.filterForm.patchValue({ searchBy: '' });
+      }
+    );
 }
 
 
-/**
- * Filter data based on consignment number input.
- */
-onConsignmentNumberSearch() {
-  const consignmentNumber = this.filterForm.value.consignmentNumber.trim().toLowerCase();
+// onConsignmentNumberSearch() {
+//   const consignmentNumber = this.filterForm.value.consignmentNumber.trim().toLowerCase();
 
-  if (consignmentNumber) {
-    // Dynamically filter the data as user types
-    this.filteredData = this.fullData.filter((item) =>
-      item.consignmentNumber.toLowerCase().includes(consignmentNumber)
-    );
+//   if (consignmentNumber) {
+//     this.filteredData = this.fullData.filter((item) =>
+//       item.consignmentNumber.toLowerCase().includes(consignmentNumber)
+//     );
+//   } else {
+//     this.filteredData = [...this.fullData];
+//   }
+// }
+onSearch() {
+  const searchTerm = this.filterForm.value.searchBy?.trim().toLowerCase();
+
+  if (searchTerm) {
+    this.filteredData = this.fullData.filter((item) => {
+      // Check all fields in the item
+      return Object.keys(item).some((key) => {
+        const fieldValue = item[key];
+        // Convert the field value to a string and compare
+        return fieldValue?.toString().toLowerCase().includes(searchTerm);
+      });
+    });
   } else {
     // Reset to full data if the search box is empty
     this.filteredData = [...this.fullData];
   }
 }
+
 
 resetToMainFilters() {
   this.filteredData = [...this.fullData]; // Restore to full data
@@ -316,6 +403,196 @@ resetToMainFilters() {
     this.updateDropdownOptions(selectedLocation);
   }
 
+
+  
+  // sortDatas(column: string, order: 'asc' | 'desc') {
+  //   // Update form fields for sorting
+  //   this.filterForm.patchValue({
+  //     sortBy: column,
+  //     sortOrder: order
+  //   });
+  
+  //   if (column === 'senderLocCode') {
+  //     this.filteredData = [...this.filteredData].sort((a, b) => {
+  //       const valueA = (a[column] || '').toString().toLowerCase();
+  //       const valueB = (b[column] || '').toString().toLowerCase();
+  //       return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+  //     });
+  //   } else if (column === 'senderDepartment') {
+  //     this.filteredData = [...this.filteredData].sort((a, b) => {
+  //       const locComparison = (a['senderLocCode'] || '').toString().toLowerCase()
+  //         .localeCompare((b['senderLocCode'] || '').toString().toLowerCase());
+        
+  //       if (locComparison !== 0) {
+  //         return locComparison;
+  //       }
+  
+  //       const valueA = (a[column] || '').toString().toLowerCase();
+  //       const valueB = (b[column] || '').toString().toLowerCase();
+  //       return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+  //     });
+  //   } else if (column === 'senderName') {
+  //     this.filteredData = [...this.filteredData].sort((a, b) => {
+  //       const locComparison = (a['senderLocCode'] || '').toString().toLowerCase()
+  //         .localeCompare((b['senderLocCode'] || '').toString().toLowerCase());
+        
+  //       if (locComparison !== 0) {
+  //         return locComparison;
+  //       }
+  
+  //       const deptComparison = (a['senderDepartment'] || '').toString().toLowerCase()
+  //         .localeCompare((b['senderDepartment'] || '').toString().toLowerCase());
+  //       if (deptComparison !== 0) {
+  //         return deptComparison;
+  //       }
+  
+  //       const valueA = (a[column] || '').toString().toLowerCase();
+  //       const valueB = (b[column] || '').toString().toLowerCase();
+  //       return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+  //     });
+  //   }
+  // }
+
+  sortDatas(column: string, order: 'asc' | 'desc') {
+    // Update form fields for sorting
+    this.filterForm.patchValue({
+      sortBy: column,
+      sortOrder: order
+    });
+  
+    // Sorting for senderLocCode
+    if (column === 'senderLocCode') {
+      this.filteredData = [...this.filteredData].sort((a, b) => {
+        const valueA = (a[column] || '').toString().toLowerCase();
+        const valueB = (b[column] || '').toString().toLowerCase();
+        return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      });
+    }
+    // Sorting for senderDepartment
+    else if (column === 'senderDepartment') {
+      this.filteredData = [...this.filteredData].sort((a, b) => {
+        const locComparison = (a['senderLocCode'] || '').toString().toLowerCase()
+          .localeCompare((b['senderLocCode'] || '').toString().toLowerCase());
+        
+        if (locComparison !== 0) {
+          return locComparison;
+        }
+  
+        const valueA = (a[column] || '').toString().toLowerCase();
+        const valueB = (b[column] || '').toString().toLowerCase();
+        return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      });
+    }
+    // Sorting for senderName
+    else if (column === 'senderName') {
+      this.filteredData = [...this.filteredData].sort((a, b) => {
+        const locComparison = (a['senderLocCode'] || '').toString().toLowerCase()
+          .localeCompare((b['senderLocCode'] || '').toString().toLowerCase());
+        
+        if (locComparison !== 0) {
+          return locComparison;
+        }
+  
+        const deptComparison = (a['senderDepartment'] || '').toString().toLowerCase()
+          .localeCompare((b['senderDepartment'] || '').toString().toLowerCase());
+        if (deptComparison !== 0) {
+          return deptComparison;
+        }
+  
+        const valueA = (a[column] || '').toString().toLowerCase();
+        const valueB = (b[column] || '').toString().toLowerCase();
+        return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      });
+    }
+    // Sorting for recipientLocCode
+    else if (column === 'recipientLocCode') {
+      this.filteredData = [...this.filteredData].sort((a, b) => {
+        const valueA = (a[column] || '').toString().toLowerCase();
+        const valueB = (b[column] || '').toString().toLowerCase();
+        return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      });
+    }
+    // Sorting for recipientDepartment
+    else if (column === 'recipientDepartment') {
+      this.filteredData = [...this.filteredData].sort((a, b) => {
+        const locComparison = (a['recipientLocCode'] || '').toString().toLowerCase()
+          .localeCompare((b['recipientLocCode'] || '').toString().toLowerCase());
+        
+        if (locComparison !== 0) {
+          return locComparison;
+        }
+  
+        const valueA = (a[column] || '').toString().toLowerCase();
+        const valueB = (b[column] || '').toString().toLowerCase();
+        return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      });
+    }
+    // Sorting for recipientName
+    else if (column === 'recipientName') {
+      this.filteredData = [...this.filteredData].sort((a, b) => {
+        const locComparison = (a['recipientLocCode'] || '').toString().toLowerCase()
+          .localeCompare((b['recipientLocCode'] || '').toString().toLowerCase());
+        
+        if (locComparison !== 0) {
+          return locComparison;
+        }
+  
+        const deptComparison = (a['recipientDepartment'] || '').toString().toLowerCase()
+          .localeCompare((b['recipientDepartment'] || '').toString().toLowerCase());
+        if (deptComparison !== 0) {
+          return deptComparison;
+        }
+  
+        const valueA = (a[column] || '').toString().toLowerCase();
+        const valueB = (b[column] || '').toString().toLowerCase();
+        return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      });
+    }
+  }
+  
+  
+  
+  // sortDatas(column: string, order: 'asc' | 'desc') {
+  //   if (column === 'senderLocCode') {
+  //     // Sort only by location
+  //     this.filteredData = [...this.filteredData].sort((a, b) => {
+  //       const valueA = (a['senderLocCode'] || '').toString().toLowerCase();
+  //       const valueB = (b['senderLocCode'] || '').toString().toLowerCase();
+  //       return order === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+  //     });
+  //   } else if (column === 'senderDepartment') {
+  //     // Sort departments within the currently sorted location groups
+  //     this.filteredData = [...this.filteredData].sort((a, b) => {
+  //       // Preserve current location sorting
+  //       const locComparison = (a['senderLocCode'] || '').toString().toLowerCase()
+  //         .localeCompare((b['senderLocCode'] || '').toString().toLowerCase());
+  //       if (locComparison !== 0) return locComparison;
+  
+  //       // Sort departments within each location
+  //       const deptA = (a['senderDepartment'] || '').toString().toLowerCase();
+  //       const deptB = (b['senderDepartment'] || '').toString().toLowerCase();
+  //       return order === 'asc' ? deptA.localeCompare(deptB) : deptB.localeCompare(deptA);
+  //     });
+  //   } else if (column === 'senderName') {
+  //     // Sort names within the currently sorted department and location groups
+  //     this.filteredData = [...this.filteredData].sort((a, b) => {
+  //       // Maintain location grouping
+  //       const locComparison = (a['senderLocCode'] || '').toString().toLowerCase()
+  //         .localeCompare((b['senderLocCode'] || '').toString().toLowerCase());
+  //       if (locComparison !== 0) return locComparison;
+  
+  //       // Maintain department grouping within the same location
+  //       const deptComparison = (a['senderDepartment'] || '').toString().toLowerCase()
+  //         .localeCompare((b['senderDepartment'] || '').toString().toLowerCase());
+  //       if (deptComparison !== 0) return deptComparison;
+  
+  //       // Sort by sender name within the same department and location
+  //       const nameA = (a['senderName'] || '').toString().toLowerCase();
+  //       const nameB = (b['senderName'] || '').toString().toLowerCase();
+  //       return order === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+  //     });
+  //   }
+  // }
   
 
   updateDropdownOptions(selectedLocation?: string) {
@@ -337,31 +614,11 @@ resetToMainFilters() {
   
  
   
-  // onDownload() {
-  //   const formData = this.filterForm.value;
+  // onDownload(format: "pdf" | "excel"): void {
+  //   const formData = this.filterForm.value;  // Assuming you're using a form for inputs
   //   console.log('Form Data before downloading:', formData);  // Debugging log
   
-  //   const { fromDate, toDate, parcelType, senderLocCode, senderDepartment } = formData;
-  //   console.log('Download initiated with values:', { fromDate, toDate, parcelType, senderLocCode, senderDepartment });
-  
-  //   // Call backend service to download the PDF
-  //   this.reportsService.getHistoryByDate(
-  //     formatDate(fromDate, 'yyyy-MM-dd', 'en-US'),
-  //     formatDate(toDate, 'yyyy-MM-dd', 'en-US'),
-  //     parcelType,
-  //     true, // Export PDF
-  //     senderLocCode, // Make sure this value is passed
-  //     senderDepartment // And this one
-  //   ).subscribe((blob) => {
-  //     this.downloadPdf(blob, `dispatch_history_${parcelType}.pdf`);
-  //   });
-  // }
-
-  // onDownload() {
-  //   const formData = this.filterForm.value;
-  //   console.log('Form Data before downloading:', formData); // Debugging log
-  
-  //   const { fromDate, toDate, parcelType, senderLocCode, senderDepartment, consignmentNumber } = formData;
+  //   const { fromDate, toDate, parcelType, senderLocCode, senderDepartment, searchBy } = formData;
   
   //   console.log('Download initiated with values:', {
   //     fromDate,
@@ -369,69 +626,138 @@ resetToMainFilters() {
   //     parcelType,
   //     senderLocCode,
   //     senderDepartment,
-  //     consignmentNumber,
+  //     searchBy,
   //   });
   
-  //   // Call backend service to download the PDF
+  //   // Set the export flags based on the selected format
+  //   const exportPdf = format === 'pdf';
+  //   const exportExcel = format === 'excel';
+  
+  //   // Call the backend service to get the data (PDF/Excel)
   //   this.reportsService
   //     .getHistoryByDate(
-  //       formatDate(fromDate, 'yyyy-MM-dd', 'en-US'),
-  //       formatDate(toDate, 'yyyy-MM-dd', 'en-US'),
+  //       formatDate(fromDate, 'yyyy-MM-dd', 'en-US'),  // Format date for API
+  //       formatDate(toDate, 'yyyy-MM-dd', 'en-US'),    // Format date for API
   //       parcelType,
-  //       true, // Export PDF
-  //       senderLocCode, // Include sender location
-  //       senderDepartment, // Include sender department
-  //       consignmentNumber?.trim() // Include consignment number if present
+  //       exportPdf,  // Export PDF flag
+  //       exportExcel, // Export Excel flag
+  //       senderLocCode, // Sender location
+  //       senderDepartment, // Sender department
+  //       searchBy?.trim() // Consignment number (if present)
   //     )
   //     .subscribe(
   //       (blob) => {
-  //         this.downloadPdf(blob, `dispatch_history_${parcelType}.pdf`);
+  //         // If PDF is selected
+  //         if (exportPdf) {
+  //           this.downloadPdf(blob, `dispatch_history_${parcelType}.pdf`);
+  //         }
+  //         // If Excel is selected
+  //         else if (exportExcel) {
+  //           this.downloadExcel(blob, `dispatch_history_${parcelType}.xlsx`);
+  //         }
   //       },
   //       (error) => {
-  //         console.error('Error downloading PDF:', error);
+  //         console.error('Error downloading file:', error);
   //       }
   //     );
   // }
-  // Function to handle both PDF and Excel download
-  onDownload(format: "pdf" | "excel"): void {
-    const formData = this.filterForm.value;  // Assuming you're using a form for inputs
-    console.log('Form Data before downloading:', formData);  // Debugging log
   
-    const { fromDate, toDate, parcelType, senderLocCode, senderDepartment, consignmentNumber } = formData;
+
+  // onDownload(format: 'pdf' | 'excel'): void {
+  //   const formData = this.filterForm.value; // Get form data
+  //   console.log('Form Data before downloading:', formData); // Debugging log
   
-    console.log('Download initiated with values:', {
-      fromDate,
-      toDate,
-      parcelType,
-      senderLocCode,
-      senderDepartment,
-      consignmentNumber,
-    });
+  //   const {
+  //     fromDate,
+  //     toDate,
+  //     parcelType,
+  //     senderLocCode,
+  //     senderDepartment,
+  //     searchBy,
+  //     sortBy,
+  //     sortOrder,
+  //   } = formData;
   
-    // Set the export flags based on the selected format
+  //   console.log('Download initiated with values:', {
+  //     fromDate,
+  //     toDate,
+  //     parcelType,
+  //     senderLocCode,
+  //     senderDepartment,
+  //     searchBy,
+  //     sortBy,
+  //     sortOrder,
+  //   });
+  
+  //   // Validate sorting inputs (apply defaults if missing)
+  //   const validSortBy = sortBy || ''; // If no sortBy provided, use an empty string to indicate no sorting
+  //   const validSortOrder = sortOrder || ''; // If no sortOrder provided, use an empty string to indicate no sorting
+  
+  //   // Set the export flags based on the selected format
+  //   const exportPdf = format === 'pdf';
+  //   const exportExcel = format === 'excel';
+  
+  //   // Call the backend service to get the data (PDF/Excel) with sorting (if any)
+  //   this.reportsService
+  //     .getHistoryByDate(
+  //       formatDate(fromDate, 'yyyy-MM-dd', 'en-US'), // Format date for API
+  //       formatDate(toDate, 'yyyy-MM-dd', 'en-US'), // Format date for API
+  //       parcelType,
+  //       exportPdf, // Export PDF flag
+  //       exportExcel, // Export Excel flag
+  //       senderLocCode?.trim(), // Sender location (trimmed)
+  //       senderDepartment?.trim(), // Sender department (trimmed)
+  //       searchBy?.trim(), // Consignment number (if present, trimmed)
+  //       validSortBy, // Sorting field (can be empty)
+  //       validSortOrder // Sorting order (can be empty)
+  //     )
+  //     .subscribe(
+  //       (blob) => {
+  //         // If PDF is selected
+  //         if (exportPdf) {
+  //           this.downloadPdf(blob, `dispatch_history_${parcelType}.pdf`);
+  //         }
+  //         // If Excel is selected
+  //         else if (exportExcel) {
+  //           this.downloadExcel(blob, `dispatch_history_${parcelType}.xlsx`);
+  //         }
+  //       },
+  //       (error) => {
+  //         console.error('Error downloading file:', error);
+  //       }
+  //     );
+  // }
+  onDownload(format: 'pdf' | 'excel'): void {
+    const formData = this.filterForm.value;
+    const { fromDate, toDate, parcelType, senderLocCode, senderDepartment, searchBy, sortBy, sortOrder } = formData;
+  
+    console.log('Download initiated with sorting:', { sortBy, sortOrder });
+  
+    // Validate sorting inputs
+    const validSortBy = sortBy || '';
+    const validSortOrder = sortOrder || '';
+  
     const exportPdf = format === 'pdf';
     const exportExcel = format === 'excel';
   
-    // Call the backend service to get the data (PDF/Excel)
     this.reportsService
       .getHistoryByDate(
-        formatDate(fromDate, 'yyyy-MM-dd', 'en-US'),  // Format date for API
-        formatDate(toDate, 'yyyy-MM-dd', 'en-US'),    // Format date for API
+        formatDate(fromDate, 'yyyy-MM-dd', 'en-US'),
+        formatDate(toDate, 'yyyy-MM-dd', 'en-US'),
         parcelType,
-        exportPdf,  // Export PDF flag
-        exportExcel, // Export Excel flag
-        senderLocCode, // Sender location
-        senderDepartment, // Sender department
-        consignmentNumber?.trim() // Consignment number (if present)
+        exportPdf,
+        exportExcel,
+        senderLocCode?.trim(),
+        senderDepartment?.trim(),
+        searchBy?.trim(),
+        validSortBy,
+        validSortOrder
       )
       .subscribe(
         (blob) => {
-          // If PDF is selected
           if (exportPdf) {
             this.downloadPdf(blob, `dispatch_history_${parcelType}.pdf`);
-          }
-          // If Excel is selected
-          else if (exportExcel) {
+          } else if (exportExcel) {
             this.downloadExcel(blob, `dispatch_history_${parcelType}.xlsx`);
           }
         },
@@ -440,6 +766,8 @@ resetToMainFilters() {
         }
       );
   }
+  
+  
   
   downloadPdf(blob: Blob, filename: string): void {
     const fileURL = URL.createObjectURL(blob);
@@ -460,6 +788,9 @@ resetToMainFilters() {
     a.click();
     document.body.removeChild(a);
   }
+
+
+  
   
   sortData(column: string) {
     if (this.sortColumn === column) {

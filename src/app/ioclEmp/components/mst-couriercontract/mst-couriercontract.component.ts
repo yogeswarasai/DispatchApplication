@@ -20,8 +20,13 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { formatDate } from '@angular/common'; // Import for formatting date
 import { FormArray } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { Observable,  } from 'rxjs';
 
 
+import { catchError } from 'rxjs';
+import { of } from 'rxjs';
+import { map } from 'rxjs';
 
 
 interface Courier {
@@ -150,13 +155,49 @@ originalDiscountValues: {
 
   ) {
     this.courierForm = this.fb.group({
-      courierCode: ['', Validators.required],
-      courierName: ['', Validators.required]
-    });
+   //  courierCode: ['', Validators.required],
+   courierCode: [
+    '',
+    [Validators.required],
+    [
+      (control: AbstractControl): Observable<ValidationErrors | null> =>
+        control.value
+          ? this.courierService.checkCourierExists(control.value).pipe(
+              map((exists) => (exists ? { CourierExists: true } : null)),
+              catchError((error) => {
+                if (error.status === 400) {
+                  return of({ CourierExists: true }); // Map backend error to validation error
+                }
+                return of(null); // Graceful fallback for other errors
+              })
+            )
+          : of(null) // No value means no validation needed
+    ]
+  ],
+  courierName: ['', Validators.required]
+});
     this.contractForm = this.fb.group({
 
       courierCode: [{ value: '', disabled: true }, Validators.required],
-      courierContNo: ['', Validators.required],
+     // courierContNo: ['', Validators.required],
+     courierContNo: [
+      '',
+      [Validators.required],
+      [
+        (control: AbstractControl): Observable<ValidationErrors | null> =>
+          control.value
+            ? this.couriercontract.checkCourierContractExists(control.value).pipe(
+                map((exists) => (exists ? { ContractExists: true } : null)),
+                catchError((error) => {
+                  if (error.status === 400) {
+                    return of({ ContractExists: true }); // Map backend error to validation error
+                  }
+                  return of(null); // Graceful fallback for other errors
+                })
+              )
+            : of(null) // No value means no validation needed
+      ]
+    ],
       contractStartDate: ['', Validators.required],
       contractEndDate: ['', Validators.required]
     });

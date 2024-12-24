@@ -32,18 +32,52 @@
    </div>
 
    <div class="row">
-    <mat-form-field>
+    <!-- <mat-form-field>
       <mat-label>Mobile Number</mat-label>
       <input matInput placeholder="Mobile Number" formControlName="mobileNumber">
+    </mat-form-field> -->
+    <mat-form-field appearance="fill">
+      <mat-label>Mobile Number</mat-label>
+      <input 
+        matInput 
+        formControlName="mobileNumber" 
+        placeholder="Enter Mobile Number" 
+        required 
+        maxlength="10" 
+        (input)="onInput($event)" 
+      />
+  
+      <!-- Display error message for mobile number existence -->
+      <mat-error *ngIf="editForm.get('mobileNumber')?.hasError('mobileNumberExists')">
+        Mobile number already exists. Please use a different number.
+      </mat-error>
+      <mat-error *ngIf="editForm.get('mobileNumber')?.hasError('minlength')">
+        Mobile number must be exactly 10 digits.
+      </mat-error>
+      <!-- Display error message for invalid mobile number (non-numeric or not 10 digits) -->
+      <mat-error *ngIf="editForm.get('mobileNumber')?.hasError('pattern')">
+        Mobile number must be exactly 10 digits and numeric.
+      </mat-error>
     </mat-form-field>
   </div>
 
-  <div class="row">
+  <!-- <div class="row">
     <mat-form-field>
       <mat-label>Role Id</mat-label>
       <input matInput placeholder="Role Id" formControlName="roleId">
     </mat-form-field>
+  </div> -->
+  <div class="row">
+    <mat-form-field appearance="fill">
+      <mat-label>Role ID</mat-label>
+      <mat-select formControlName="roleId" placeholder="Select Role ID">
+        <mat-option *ngFor="let role of empRoles" [value]="role">
+          {{ role }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
+  
 
   <div class="button-container">
     <button mat-raised-button color="primary" type="submit"  class="submitButton">Update</button>

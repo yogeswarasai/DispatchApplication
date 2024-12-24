@@ -60,4 +60,7 @@ getDispatchUsers(): Observable<MstUser[]> {
   return this.http.get<MstUser[]>(`${this.apiUrl}/dispatch`,{withCredentials:true});
 }
  
+checkMobileNumber(mobileNumber: number): Observable<boolean> {
+  return this.http.get<boolean>(`${this.apiUrl}/check-mobile?mobileNumber=${mobileNumber}`);
+}
 }

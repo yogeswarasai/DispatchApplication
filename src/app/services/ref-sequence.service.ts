@@ -27,6 +27,10 @@ export class RefSequenceService {
     
   }
 
+  checkLocationExists(locCode: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/locCode/${locCode}/exists`);
+  }
+
   createSequence(refSequence: RefSequence): Observable<StatusCodeModal> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post<StatusCodeModal>(this.apiUrl, refSequence, { headers });

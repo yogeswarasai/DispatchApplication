@@ -20,6 +20,7 @@ import { TrnParcelOutService } from '../../../services/trn-parcel-out.service';
 import { MstCourier } from '../../../model/mstCourier';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 @Component({
   selector: 'app-parcel-out',
   standalone: true,
@@ -73,13 +74,21 @@ export class ParcelOutComponent implements OnInit {
       recipientDepartment: ['', Validators.required],
       recipientName: ['', Validators.required],
       courierName: ['', Validators.required],
-      weight: ['', Validators.required],
+      // weight: ['', Validators.required],
+      weight: ['', [Validators.required, Validators.pattern('^[0-9]+(\\.[0-9]+)?$')]], // Allows integer and decimal numbers
       unit: ['', Validators.required],
       distance: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
+  
+    
+    this.parcelOutForm.patchValue({
+      unit: 'g'
+    });
+            // Other form controls...
+    
     this.loadLocations();
     this.loadSenderDepartments();
     this.loadCouriers();
@@ -115,39 +124,89 @@ export class ParcelOutComponent implements OnInit {
     ).subscribe(filtered => this.filteredRecipients = of(filtered));
   }
 
+  
+
   // onRecipientLocCodeInput(): void {
   //   const recipientLocCode = this.parcelOutForm.get('recipientLocCode')?.value;
+  
+  //   // Validate recipient location code
   //   if (this.locationCodes.indexOf(recipientLocCode) === -1) {
   //     this.showOtherRecipientDepartmentOption = true;
+  //     this.parcelOutForm.patchValue({ distance: '' }); // Clear distance field if invalid code
+  //     this.parcelOutService.getDistance(recipientLocCode).subscribe(
+  //       (distance) => {
+  //         this.parcelOutForm.patchValue({ distance }); // Update form field with fetched distance
+  //       },
+  //       (error) => {
+  //         console.error('Error fetching distance:', error);
+  //         this.parcelOutForm.patchValue({ distance: '' }); // Clear distance field on error
+  //       }
+  //     );
+    
   //   } else {
   //     this.showOtherRecipientDepartmentOption = false;
-  //   }
+  
+  //     // Fetch distance using the servic
   // }
+  
+//}
+onRecipientLocCodeInput(): void {
+  // Get the value from the form
+  const recipientLocCodeInput = this.parcelOutForm.get('recipientLocCode')?.value;
 
-  onRecipientLocCodeInput(): void {
-    const recipientLocCode = this.parcelOutForm.get('recipientLocCode')?.value;
-  
-    // Validate recipient location code
-    if (this.locationCodes.indexOf(recipientLocCode) === -1) {
-      this.showOtherRecipientDepartmentOption = true;
-      this.parcelOutForm.patchValue({ distance: '' }); // Clear distance field if invalid code
-      this.parcelOutService.getDistance(recipientLocCode).subscribe(
-        (distance) => {
-          this.parcelOutForm.patchValue({ distance }); // Update form field with fetched distance
-        },
-        (error) => {
-          console.error('Error fetching distance:', error);
-          this.parcelOutForm.patchValue({ distance: '' }); // Clear distance field on error
-        }
-      );
-    
-    } else {
-      this.showOtherRecipientDepartmentOption = false;
-  
-      // Fetch distance using the servic
+  console.log('Recipient Loc Code Input:', recipientLocCodeInput); // Debugging
+
+  // Extract location code from the input
+  const recipientLocCode = this.extractLocCode(recipientLocCodeInput);
+
+  if (!recipientLocCode) {
+    console.error('Invalid location format! Please select a valid location.');
+    this.parcelOutForm.patchValue({ distance: '' }); // Clear distance field
+    return;
   }
-  
+
+  console.log('Extracted Location Code:', recipientLocCode);
+
+  // Fetch the distance based on the extracted code
+  this.parcelOutService.getDistance(recipientLocCode).subscribe(
+    (distance) => {
+      console.log('Fetched Distance:', distance); // Debugging
+      this.parcelOutForm.patchValue({ distance }); // Update the distance field
+    },
+    (error) => {
+      console.error('Error fetching distance:', error);
+      this.parcelOutForm.patchValue({ distance: '' }); // Clear distance if error occurs
+    }
+  );
 }
+
+extractLocCode(input: string): string | null {
+  // Match digits inside parentheses (e.g., "(4401)")
+  const match = input?.match(/\((\d+)\)/);
+  if (match) {
+    return match[1]; // Extract and return the numeric code
+  }
+
+  // If the input is purely numeric, return it directly
+  const isNumeric = /^\d+$/.test(input?.trim());
+  if (isNumeric) {
+    return input?.trim();
+  }
+
+  return null; // Return null if format is invalid
+}
+
+
+onRecipientLocCodeSelect(event: MatAutocompleteSelectedEvent): void {
+  const selectedValue = event.option.value; // Get the selected value from dropdown
+  console.log('Selected Value:', selectedValue); // Debugging
+
+  // Trigger the same logic as input
+  this.parcelOutForm.patchValue({ recipientLocCode: selectedValue });
+  this.onRecipientLocCodeInput(); // Call the input handling logic
+}
+
+
 
   loadLocations(): void {
     this.parcelOutService.getLocations().subscribe(locations => {

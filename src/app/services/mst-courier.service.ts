@@ -20,4 +20,9 @@ export class MstCourierService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post<any>(this.apiUrl, courierData, { headers });
   }
+  
+  checkCourierExists(courierCode: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/courierCode/${courierCode}/exists`);
+  }
+
 }

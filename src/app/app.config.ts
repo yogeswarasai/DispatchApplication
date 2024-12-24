@@ -10,7 +10,7 @@ import { LOCALE_ID } from '@angular/core'; // LOCALE_ID from @angular/core
 import localeGb from '@angular/common/locales/en-GB'; // Import the en-GB locale
 
 
-// Register the 'en-GB' locale for date formatting
+// Register the 'en-GB' locale for dateting
 registerLocaleData(localeGb);
 
 export const appConfig: ApplicationConfig = {

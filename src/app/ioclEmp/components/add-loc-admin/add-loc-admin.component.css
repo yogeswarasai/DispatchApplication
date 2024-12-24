@@ -71,6 +71,10 @@
     color: #f44336;
     font-size: 12px;
   }
+  .mat-form-field.error .mat-form-field-underline {
+    border-color: red; /* Red underline for error */
+  }
+ 
   
   /* Hint message styling */
   mat-hint {

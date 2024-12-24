@@ -20,14 +20,95 @@ mat-form-field {
 
 
 
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.dropdown-panel {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+mat-icon {
+  cursor: pointer;
+}
+
+.wide-field {
+  width: 70%; /* Make the field take full width of the container */
+}
+
+@media (min-width: 768px) {
+  .wide-field {
+    width: 20%; /* Adjust width for larger screens, if desired */
+  }
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sort-icons {
+  display: flex;
+  gap: 4px; /* Space between arrows */
+}
+
+.sort-icon {
+  cursor: pointer; /* Make arrows clickable */
+  color: gray; /* Optional: Make it look subtle */
+  transition: color 0.3s ease;
+}
+
+.sort-icon:hover {
+  color: black; /* Highlight color on hover */
+}
+
+th.mat-header-cell {
+  text-decoration: none; /* Remove underline */
+  cursor: default; /* Prevent text pointer on header text */
+}
+
+.results-section {
+  position: relative;
+}
+
+.reports-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.consignment-search {
+  display: flex;
+  align-items: center; /* Aligns children (input and buttons) horizontally */
+  justify-content: space-between; /* Adds space between input and buttons */
+  margin-bottom: 30px;
+}
+
+.search-form {
+  display: flex;
+  flex: 1;  /* Ensures the search form takes available space */
+}
+
+.download-button-container {
+  display: flex;
+  justify-content: flex-end;  /* Aligns buttons to the right */
+  gap: 10px;  /* Adds space between the buttons */
+}
 
 
 
 
+.reports-header h3 {
+  margin: 0;
+}
+
+/* .download-button-container button {
+  margin-left: auto;
+} */
 
 
-
-
-
-
-  

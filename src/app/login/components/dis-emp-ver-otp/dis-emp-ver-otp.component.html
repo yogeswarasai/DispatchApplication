@@ -43,6 +43,19 @@
       -->
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    
       <div class="login-container">
         <div class="login-card">
           <img src="../../../../assets/indianOilLogo.png" alt="IndianOil Logo" class="logo">
@@ -53,7 +66,6 @@
               <input matInput formControlName="phoneNumber" readonly>
             </mat-form-field>
       
-            <!-- OTP Input Fields -->
             <div class="otp-container">
               <input *ngFor="let otpControl of otpControls; let i = index"
                      type="text" 
@@ -63,10 +75,7 @@
                      (keydown)="onOtpKeyDown($event, i)">
             </div>
       
-            <!-- Display OTP Error -->
-            <!-- <div *ngIf="otpError" class="error-message">
-              {{ otpError }}
-            </div> -->
+       
       
             <mat-form-field appearance="fill">
               <mat-label>Captcha</mat-label>
@@ -93,4 +102,4 @@
           </div>
         </div>
       </div>
-      
+   

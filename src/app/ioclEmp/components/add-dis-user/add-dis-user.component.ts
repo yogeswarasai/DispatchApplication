@@ -61,7 +61,10 @@ export class AddDisUserComponent
     locationCodes: string[] = []; // Populate this with your location codes
     empCodes: string[] = []; // Populate this with your sender codes
     empName: string = ''; // Populate this with your recipient codes
-    
+    hide = false;
+
+    mobileNumberExists = false;  // Flag to indicate if the mobile number exists
+
     constructor(
       private fb: FormBuilder,
       private mstUserService: MstUserService,
@@ -74,9 +77,10 @@ export class AddDisUserComponent
         // locCode: ['', Validators.required],
         userId: ['', Validators.required],
         userName: ['', Validators.required],
-        mobileNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+        mobileNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$'),Validators.minLength(10),Validators.maxLength(10) ]],
         roleId: ['', Validators.required],
-    
+        password:['', Validators.required]
+
       });
     }
     
@@ -172,41 +176,111 @@ export class AddDisUserComponent
     }
     
    
+    // onSubmit(): void {
+    //   if (this.userForm.invalid) {
+    //     this.snackBar.open('Please fill all required fields.', 'Close', {
+    //       duration: 3000,
+    //       verticalPosition: 'top'
+    //     });
+    //     const user = this.userForm.value;
+    //     console.log('user  Data:', user);
+    //     return;
+    //   }
+    
+    //   const user = this.userForm.value;
+    
+    //   this.mstUserService.createLocAdmin(user).subscribe({
+    //     next: (response) => {
+    //       this.snackBar.open('user submitted successfully!', 'Close', {
+    //         duration: 3000,
+    //         verticalPosition: 'top'
+    //       });
+    //       console.log('user  Data:', user);
+    //       // this.parcelInForm.reset();
+    //       this.userForm.markAsPristine();
+    //       this.userForm.markAsUntouched();
+    //        this.userForm.reset();
+    //        this.router.navigate(['/ioclEmployee/dispatch']); // Redirect to history after save
+    //     },
+    //     error: (err) => {
+    //       this.snackBar.open('Failed to submit user. Please try again.', 'Close', {
+    //         duration: 3000,
+    //         verticalPosition: 'top'
+    //       });
+    //       const user = this.userForm.value;
+    //     console.log('user  Data:', user);
+    //     }
+    //   });
+    // }
+
     onSubmit(): void {
       if (this.userForm.invalid) {
         this.snackBar.open('Please fill all required fields.', 'Close', {
           duration: 3000,
           verticalPosition: 'top'
         });
-        const user = this.userForm.value;
-        console.log('user  Data:', user);
         return;
       }
     
       const user = this.userForm.value;
     
-      this.mstUserService.createLocAdmin(user).subscribe({
-        next: (response) => {
-          this.snackBar.open('user submitted successfully!', 'Close', {
-            duration: 3000,
-            verticalPosition: 'top'
-          });
-          console.log('user  Data:', user);
-          // this.parcelInForm.reset();
-          this.userForm.markAsPristine();
-          this.userForm.markAsUntouched();
-           this.userForm.reset();
-           this.router.navigate(['/ioclEmployee/dispatch']); // Redirect to history after save
+      // Check if the mobile number already exists before proceeding
+      this.mstUserService.checkMobileNumber(user.mobileNumber).subscribe({
+        next: (exists: boolean) => {
+          if (exists) {
+            // Set the custom error for mobileNumberExists
+            this.userForm.get('mobileNumber')?.setErrors({ mobileNumberExists: true });
+    
+            // Show error message using snackBar
+            this.snackBar.open('Mobile number already exists. Please use a different number.', 'Close', {
+              duration: 3000,
+              verticalPosition: 'top'
+            });
+          } else {
+            // Clear any previous errors for mobile number
+            this.userForm.get('mobileNumber')?.setErrors(null);
+    
+            // Proceed with the user creation process
+            this.mstUserService.createLocAdmin(user).subscribe({
+              next: (response) => {
+                this.snackBar.open('User submitted successfully!', 'Close', {
+                  duration: 3000,
+                  verticalPosition: 'top'
+                });
+                console.log('User Data:', user);
+                this.userForm.markAsPristine();
+                this.userForm.markAsUntouched();
+                this.userForm.reset();
+                this.router.navigate(['/ioclEmployee/dispatch']); // Redirect to history after save
+              },
+              error: (err) => {
+                this.snackBar.open('Failed to submit user. Please try again.', 'Close', {
+                  duration: 3000,
+                  verticalPosition: 'top'
+                });
+              }
+            });
+          }
         },
         error: (err) => {
-          this.snackBar.open('Failed to submit user. Please try again.', 'Close', {
+          this.snackBar.open('Error validating mobile number. Please try again.', 'Close', {
             duration: 3000,
             verticalPosition: 'top'
           });
-          const user = this.userForm.value;
-        console.log('user  Data:', user);
         }
       });
+    }
+    
+
+    togglePasswordVisibility() {
+      this.hide = !this.hide;
+    }
+
+    onInput(event: Event): void {
+      const input = event.target as HTMLInputElement;
+      // You can leave this method empty if you don't want to prevent any non-numeric characters
+      // But it will not update or validate until form validation is triggered
+      this.userForm.get('mobileNumber')?.updateValueAndValidity();
     }
   }
     

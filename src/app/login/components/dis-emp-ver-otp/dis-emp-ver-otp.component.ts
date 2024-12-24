@@ -38,7 +38,7 @@ export class DisEmpVerOtpComponent implements OnInit {
   loginForm: FormGroup;
   otpControls: FormControl[] = [];
   captchaText: string = '';
-  otpError: string = ''; // Variable to hold OTP error message
+  otpError: string = ''; 
 
 
   constructor(private fb: FormBuilder,private verOtp:DisEmpVerOtpService,private router: Router) {
@@ -48,7 +48,6 @@ export class DisEmpVerOtpComponent implements OnInit {
           otp: this.fb.array([]),
           captcha: ['', Validators.required],
       });
-      // Initialize OTP controls
       for (let i = 0; i < 6; i++) {
           const control = new FormControl('', [Validators.required, Validators.maxLength(1)]);
           this.otpControls.push(control);
@@ -76,8 +75,8 @@ export class DisEmpVerOtpComponent implements OnInit {
       const previousInput = input.previousElementSibling as HTMLInputElement;
       if (previousInput) {
         previousInput.focus();
-        previousInput.value = ''; // Optional: clear the value of the previous input
-        this.otpControls[index - 1].setValue(''); // Clear the value in the form control
+        previousInput.value = ''; 
+        this.otpControls[index - 1].setValue(''); 
       }
     }
   }
@@ -87,7 +86,7 @@ export class DisEmpVerOtpComponent implements OnInit {
     this.captchaText = Array.from({ length: 6 }, () =>
       chars.charAt(Math.floor(Math.random() * chars.length))
     ).join('');
-    console.log('Generated CAPTCHA:', this.captchaText); // For debugging
+    console.log('Generated CAPTCHA:', this.captchaText); 
   }
   
   validateCaptcha(): boolean {
@@ -101,7 +100,7 @@ export class DisEmpVerOtpComponent implements OnInit {
     if (!this.validateCaptcha()) {
       this.otpError = 'Invalid captcha. Please try again.';
       this.loginForm.get('captcha')?.reset();
-      this.generateCaptcha(); // Generate a new CAPTCHA
+      this.generateCaptcha(); 
       return;
     }
   
@@ -113,11 +112,9 @@ export class DisEmpVerOtpComponent implements OnInit {
         (response) => {
           console.log('Login successful', response);
   
-          // Clear error message
           this.otpError = '';
           const profile = response.profile;
   
-          // Save profile data and navigate
           this.verOtp.setProfileData(response);
           this.router.navigate(['/dispatchEmployee'], { state: { profile } });
         },
@@ -126,7 +123,7 @@ export class DisEmpVerOtpComponent implements OnInit {
   
           if (error.status === 400) {
             this.otpError = 'Invalid OTP. Please try again.';
-            this.clearOtpFields(); // Clear OTP fields if invalid
+            this.clearOtpFields(); 
           } else {
             this.otpError = 'An error occurred. Please try again later.';
           }
@@ -141,15 +138,13 @@ clearOtpFields(): void {
 
 
   changeMobileNumber(): void {
-      // Ha
       this.router.navigate(['/disEmpReqOtp']);
       
-  }
+   }
 
   resendOtp(): void {
-      // Handle resending OTP
       this.generateCaptcha();
   }
 
 
-}
+ }

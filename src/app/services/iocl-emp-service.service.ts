@@ -22,6 +22,10 @@ export class IoclEmpServiceService {
     const loginRequest = { id, password, captcha_value };
     return this.http.post(`${this.baseUrl}/signin`, loginRequest, { withCredentials: true });
   }
+  authenticateUserdis(id: string, password: string, captcha_value: string): Observable<any> {
+    const loginRequest = { id, password, captcha_value };
+    return this.http.post(`${this.disUrl}/signin`, loginRequest, { withCredentials: true });
+  }
 
   // Service method to get captcha
   getCaptcha(): Observable<any> {
@@ -109,15 +113,65 @@ export class IoclEmpServiceService {
     });
   }
 
-  getHistoryByDate(fromDate: string, toDate: string, type: string): Observable<any[]> {
+  // getHistoryByDate(fromDate: string, toDate: string, type: string): Observable<any[]> {
+  //   let params = new HttpParams()
+  //     .set('fromDate', fromDate)
+  //     .set('toDate', toDate)
+  //     .set('type', type);
+  //   return this.http.get<any[]>(`${this.baseUrl}/history/employee`, { params, withCredentials: true });
+  // }
+  getHistoryByDate(
+    fromDate: string,
+    toDate: string,
+    parcelType: string,
+    exportPdf: boolean,
+    exportExcel: boolean,
+    senderLocCode?: string,
+    senderDepartment?: string,
+    searchBy?: string,
+    sortBy?: string,
+    sortOrder: string = 'asc'
+  ): Observable<any> {
     let params = new HttpParams()
       .set('fromDate', fromDate)
       .set('toDate', toDate)
-      .set('type', type);
-    return this.http.get<any[]>(`${this.baseUrl}/history/employee`, { params, withCredentials: true });
+      .set('type', parcelType)
+      .set('exportPdf', exportPdf.toString())
+      .set('exportExcel', exportExcel.toString())
+      .set('sortOrder', sortOrder);
+  
+    if (senderLocCode) {
+      params = params.set('senderLocCode', senderLocCode);
+    }
+  
+    if (senderDepartment) {
+      params = params.set('senderDepartment', senderDepartment);
+    }
+  
+    if (searchBy) {
+      params = params.set('searchBy', searchBy);
+    }
+  
+    if (sortBy) {
+      params = params.set('sortBy', sortBy);
+    }
+  
+    if (exportPdf || exportExcel) {
+      // Request for exporting data as a file
+      return this.http.get(`${this.baseUrl}/history/employee`, {
+        params,
+        responseType: 'blob',
+        withCredentials: true,
+      });
+    } else {
+      // Request for JSON response
+      return this.http.get<any[]>(`${this.baseUrl}/history/employee`, {
+        params,
+        withCredentials: true,
+      });
+    }
   }
-
-
+  
   getHistoryByDaily(type: string): Observable<any[]> {
     let params = new HttpParams()
       .set('type', type);

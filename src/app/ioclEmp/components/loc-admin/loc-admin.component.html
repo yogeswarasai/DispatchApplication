@@ -17,8 +17,8 @@
   <mat-card-content>
     <div class="action-bar">
       <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Filter By EmpName</mat-label>
-        <input matInput placeholder="Enter Emp Name" [(ngModel)]="empNameFilter" (input)="applyFilter()">
+        <mat-label>Filter By AnyName</mat-label>
+        <input matInput placeholder="Search All Fields" [(ngModel)]="empNameFilter" (input)="applyFilter()">
       </mat-form-field>
       <button mat-button (click)="clearFilter()" color="primary">Clear</button>
     </div>
@@ -139,7 +139,7 @@
 <ng-template #confirmDialogTemplate let-data>
   <mat-card>
     <mat-card-content>
-      <p style="font-weight: bold;">Are you sure you want to change the status of {{data.userName}}</p>
+      <p style="font-weight: bold;">Are you sure you want to delete the user {{data.userName}}</p>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button color="primary" (click)="deleteUser(data.locCode, data.userId)">Yes</button>

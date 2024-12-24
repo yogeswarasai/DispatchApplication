@@ -1,13 +1,8 @@
 <div class="login-container">
   <mat-card class="login-card">
     <img src="../../../../assets/indianOilLogo.png" alt="Indian Oil Logo" class="logo">
-    <!-- <h2>IndianOil</h2> -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <!-- <mat-form-field appearance="outline">
-        <mat-label>Phone Number</mat-label>
-        <input matInput formControlName="phoneNumber" required>
-      </mat-form-field> -->
-
+   
       <mat-form-field appearance="outline">
         <mat-label>Phone Number</mat-label>
         <input
@@ -17,7 +12,6 @@
           placeholder="Enter 10-digit phone number"
           (input)="onInput($event)" 
         />
-        <!-- Required Field Error -->
         <mat-error *ngIf="phoneNumber?.hasError('required')">
           Phone number is required.
         </mat-error>

@@ -55,6 +55,7 @@ export class DisUserEditComponent
   userData!:MstUser ;
   isDisabled:boolean=true;
   empRoles:string[]=[];
+  hide = true;
 
   constructor(
     private mstUserService:MstUserService,
@@ -72,18 +73,34 @@ loadRoles():void{
   }
   )
 }
-
+onInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  // You can leave this method empty if you don't want to prevent any non-numeric characters
+  // But it will not update or validate until form validation is triggered
+  this.editForm.get('mobileNumber')?.updateValueAndValidity();
+}
   ngOnInit() {
+
+    
     this.userData = this.mstUserService.getUserData();
 
     this.editForm = this.fb.group({
       //locCode: [{ value: this.userData.locCode, disabled: true },Validators.required],
       userId: [{ value: this.userData.userId, disabled: true },Validators.required],
       userName:[this.userData.userName,Validators.required],
-      mobileNumber: [this.userData.mobileNumber, [Validators.required, Validators.pattern('^[0-9]+$')]],
+      mobileNumber: [
+        this.userData.mobileNumber, 
+        [Validators.required, Validators.pattern('^[0-9]+$'), Validators.minLength(10), Validators.maxLength(10)],
+      ],      
+      password:[this.userData.password,Validators.required],
       roleId: [{value:this.userData.roleId, disabled: true },Validators.required],
     });
   }
+
+  togglePasswordVisibility() {
+    this.hide = !this.hide;
+  }
+
 
   onSubmit() {
     if (this.editForm.invalid) {
@@ -92,7 +109,7 @@ loadRoles():void{
     }
   
     const updatedData = this.editForm.value;
-  
+  this.togglePasswordVisibility
     // Assuming recipientLocCode and inTrackingId are part of the parcelData
     const empLocCode = this.ioclEmpServcie.getEmpData().locCode.trim();
     const empUserId = this.userData.userId;

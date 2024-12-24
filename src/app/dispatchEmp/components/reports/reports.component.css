@@ -28,6 +28,10 @@
   margin-top: 20px;
 } */
 
+.download-button-container {
+  margin-top: 10px;
+  text-align: center;
+}
 /* 
 .no-data-message {
   margin-top: 20px;

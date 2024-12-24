@@ -83,48 +83,62 @@
   <!-- Submit Button -->
   <button mat-raised-button color="primary" type="submit">Filter</button>
 </form>
+<div *ngIf="isFiltered" class="consignment-search">
+  <form [formGroup]="filterForm" class="search-form">
+    <mat-form-field appearance="fill" class="wide-field">
+      <mat-label>Search All Fields</mat-label>
+      <input 
+        matInput 
+        placeholder="Enter search term" 
+        formControlName="searchBy" 
+        (input)="onSearch()" 
+      />
+    </mat-form-field>
+  </form>
+
+  <div *ngIf="isDownloadVisible;" class="download-button-container">
+    <button mat-raised-button color="accent" (click)="onDownload('pdf')">Download PDF</button>
+  
+    <button 
+      mat-raised-button 
+      (click)="onDownload('excel')" 
+      style="background-color: green; color: white;">
+      Download Excel
+    </button>
+  </div>
+</div>
 
 
+<!-- 
+<div *ngIf="isDownloadVisible;" class="download-button-container">
+  <button mat-raised-button color="accent" (click)="onDownload('pdf')">Download PDF</button>
 
+  <button 
+  mat-raised-button 
+  (click)="onDownload('excel')" 
+  style="background-color: green; color: white;">
+  Download Excel
+</button>
+</div> -->
 
 <!-- Filtered Data Section -->
 <div *ngIf="filteredData.length > 0" class="results-section">
   <div class="reports-header">
     <h3>Filtered Parcels</h3>
+    
   </div>
  
 
-  <div *ngIf="isFiltered" class="consignment-search">
-    <!-- Ensure the form control is correctly linked -->
-    <form [formGroup]="filterForm">
-      <mat-form-field appearance="fill" class="wide-field">
-        <mat-label>Search by Consignment Number</mat-label>
-        <!-- Use matInput for material design styling -->
-        <input 
-          matInput 
-          placeholder="Enter consignment number" 
-          formControlName="consignmentNumber" 
-          (input)="onConsignmentNumberSearch()" 
-        />
-      </mat-form-field>
-    </form>
-  </div>
-  
+ 
   <!-- Table to Display Data -->
   <table mat-table [dataSource]="filteredData" class="mat-elevation-z8">
     <!-- Sender Location Column -->
-    <ng-container matColumnDef="senderLocCode">
+    <!-- <ng-container matColumnDef="senderLocCode">
       <th mat-header-cell *matHeaderCellDef>
         <div class="column-header">
           <span>Sender Location</span>
         </div>
-        <!-- <mat-select
-          (selectionChange)="applyFilter('senderLocCode', $event.value)"
-          placeholder="Select Location"
-          panelClass="dropdown-panel"
-        >
-          <mat-option *ngFor="let loc of allSenderLocCodes" [value]="loc">{{ loc }}</mat-option>
-        </mat-select> -->
+     
         <mat-select (selectionChange)="applyFilter('senderLocCode', $event.value)" placeholder="Select Location">
           <mat-option *ngFor="let loc of allSenderLocCodes" [value]="loc">{{ loc }}</mat-option>
         </mat-select>
@@ -137,29 +151,92 @@
         <div class="column-header">
           <span>Sender Department</span>
         </div>
-        <!-- <mat-select
-          (selectionChange)="applyFilter('senderDepartment', $event.value)"
-          placeholder="Select Department"
-          panelClass="dropdown-panel"
-        >
-          <mat-option *ngFor="let dept of allSenderDepartments" [value]="dept">{{ dept }}</mat-option>
-        </mat-select> -->
+  
 
 <mat-select (selectionChange)="applyFilter('senderDepartment', $event.value)" placeholder="Select Department">
   <mat-option *ngFor="let dept of allSenderDepartments" [value]="dept">{{ dept }}</mat-option>
 </mat-select>
       </th>
       <td mat-cell *matCellDef="let element">{{ element.senderDepartment }}</td>
+    </ng-container> -->
+    <ng-container matColumnDef="senderLocCode">
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header">
+          <span>Sender Location</span>
+          <div class="sort-icons">
+            <!-- Upward Arrow for Ascending Order -->
+            <mat-icon 
+              (click)="sortDatas('senderLocCode', 'asc')" 
+              class="sort-icon">
+              arrow_upward
+            </mat-icon>
+            <!-- Downward Arrow for Descending Order -->
+            <mat-icon 
+              (click)="sortDatas('senderLocCode', 'desc')" 
+              class="sort-icon">
+              arrow_downward
+            </mat-icon>
+          </div>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.senderLocCode }}</td>
+    </ng-container>
+    
+    <ng-container matColumnDef="senderDepartment">
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header">
+          <span>Sender Department</span>
+          <div class="sort-icons">
+            <!-- Upward Arrow for Ascending Order -->
+            <mat-icon 
+              (click)="sortDatas('senderDepartment', 'asc')" 
+              class="sort-icon">
+              arrow_upward
+            </mat-icon>
+            <!-- Downward Arrow for Descending Order -->
+            <mat-icon 
+              (click)="sortDatas('senderDepartment', 'desc')" 
+              class="sort-icon">
+              arrow_downward
+            </mat-icon>
+          </div>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.senderDepartment }}</td>
+    </ng-container>
+    
+    
+    <ng-container matColumnDef="senderName">
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header">
+          <span>Sender Name</span>
+          <div class="sort-icons">
+            <!-- Upward Arrow for Ascending Order -->
+            <mat-icon 
+              (click)="sortDatas('senderName', 'asc')" 
+              class="sort-icon">
+              arrow_upward
+            </mat-icon>
+            <!-- Downward Arrow for Descending Order -->
+            <mat-icon 
+              (click)="sortDatas('senderName', 'desc')" 
+              class="sort-icon">
+              arrow_downward
+            </mat-icon>
+          </div>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.senderName }}</td>
     </ng-container>
 
     <!-- Sender Location Column -->
 
     <!-- Other Columns -->
-    <ng-container matColumnDef="senderName">
+    <!-- <ng-container matColumnDef="senderName">
       <th mat-header-cell *matHeaderCellDef>Sender Name</th>
       <td mat-cell *matCellDef="let element">{{ element.senderName }}</td>
-    </ng-container>
-    <ng-container matColumnDef="recipientLocCode">
+    </ng-container> -->
+    <!-- <ng-container matColumnDef="recipientLocCode">
       <th mat-header-cell *matHeaderCellDef>Recipient Location</th>
       <td mat-cell *matCellDef="let element">{{ element.recipientLocCode }}</td>
     </ng-container>
@@ -170,7 +247,76 @@
     <ng-container matColumnDef="recipientName">
       <th mat-header-cell *matHeaderCellDef>Recipient Name</th>
       <td mat-cell *matCellDef="let element">{{ element.recipientName }}</td>
+    </ng-container> -->
+
+    <ng-container matColumnDef="recipientLocCode">
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header">
+          <span>Recipient Location</span>
+          <div class="sort-icons">
+            <!-- Upward Arrow for Ascending Order -->
+            <mat-icon 
+              (click)="sortDatas('recipientLocCode', 'asc')" 
+              class="sort-icon">
+              arrow_upward
+            </mat-icon>
+            <!-- Downward Arrow for Descending Order -->
+            <mat-icon 
+              (click)="sortDatas('recipientLocCode', 'desc')" 
+              class="sort-icon">
+              arrow_downward
+            </mat-icon>
+          </div>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.recipientLocCode }}</td>
     </ng-container>
+    <ng-container matColumnDef="recipientDepartment">
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header">
+          <span>Recipient Department</span>
+          <div class="sort-icons">
+            <!-- Upward Arrow for Ascending Order -->
+            <mat-icon 
+              (click)="sortDatas('recipientDepartment', 'asc')" 
+              class="sort-icon">
+              arrow_upward
+            </mat-icon>
+            <!-- Downward Arrow for Descending Order -->
+            <mat-icon 
+              (click)="sortDatas('recipientDepartment', 'desc')" 
+              class="sort-icon">
+              arrow_downward
+            </mat-icon>
+          </div>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.recipientDepartment }}</td>
+    </ng-container>
+    <ng-container matColumnDef="recipientName">
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="column-header">
+          <span>Recipient Name</span>
+          <div class="sort-icons">
+            <!-- Upward Arrow for Ascending Order -->
+            <mat-icon 
+              (click)="sortDatas('recipientName', 'asc')" 
+              class="sort-icon">
+              arrow_upward
+            </mat-icon>
+            <!-- Downward Arrow for Descending Order -->
+            <mat-icon 
+              (click)="sortDatas('recipientName', 'desc')" 
+              class="sort-icon">
+              arrow_downward
+            </mat-icon>
+          </div>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.recipientName }}</td>
+    </ng-container>
+
+
     <ng-container matColumnDef="courierName">
       <th mat-header-cell *matHeaderCellDef>Courier Name</th>
       <td mat-cell *matCellDef="let element">{{ element.courierName }}</td>
@@ -207,9 +353,8 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-
+<!-- 
   <div *ngIf="isDownloadVisible; else noDownload" class="download-button-container">
-    <!-- <button mat-raised-button color="accent" (click)="onDownload()">Download PDF</button> -->
     <button mat-raised-button color="accent" (click)="onDownload('pdf')">Download PDF</button>
 
     <button 
@@ -222,7 +367,7 @@
   <ng-template #noDownload>
     <p>Button not visible because no data is available to download.</p>
   </ng-template>
-  
+   -->
 
   
 </div>

@@ -20,4 +20,13 @@ export class CourierService {
       withCredentials: true // Ensure credentials are included if needed
     });
   }
+
+  
+  checkCourierExists(courierCode: string): Observable<boolean> {
+    return this.http.get<boolean>(
+      `${this.baseUrl}/courierCode/${courierCode}/exists`,
+      { withCredentials: true } // Correct placement inside an options object
+    );
+  }
+  
 }

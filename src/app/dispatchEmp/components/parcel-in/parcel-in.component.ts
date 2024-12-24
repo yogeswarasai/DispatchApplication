@@ -213,12 +213,29 @@ export interface ParcelOutResponse {
     }
     
     // Optional method to clear form fields
+    // clearForm(): void {
+    //   const consignmentNumber = this.parcelInForm.get('consignmentNumber')?.value; // Retain current consignment number
+    //   this.parcelInForm.reset({
+    //     consignmentNumber: consignmentNumber || '', // Preserve existing value or set to empty
+    //     senderLocCode: '',
+    //     consignmentDate: '',
+    //     senderDepartment: '',
+    //     senderName: '',
+    //     recipientName: '',
+    //     recipientDepartment: '',
+    //     courierName: '',
+    //   });
+    // }
     clearForm(): void {
       const consignmentNumber = this.parcelInForm.get('consignmentNumber')?.value; // Retain current consignment number
+      const consignmentDate = this.parcelInForm.get('consignmentDate')?.value; // Retain current consignment date
+      const receivedDate = this.parcelInForm.get('receivedDate')?.value; // Retain current received date
+    
       this.parcelInForm.reset({
         consignmentNumber: consignmentNumber || '', // Preserve existing value or set to empty
+        consignmentDate: consignmentDate || '', // Preserve consignment date
+        receivedDate: receivedDate || '', // Preserve received date
         senderLocCode: '',
-        consignmentDate: '',
         senderDepartment: '',
         senderName: '',
         recipientName: '',

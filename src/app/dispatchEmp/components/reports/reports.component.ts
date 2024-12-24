@@ -65,51 +65,51 @@ export class ReportsComponent {
   //     );
   // }
 
-  onSubmit() {
-    const formData = this.filterForm.value;
-    const fromDate = formatDate(formData.fromDate, 'yyyy-MM-dd', 'en-US');
-    const toDate = formatDate(formData.toDate, 'yyyy-MM-dd', 'en-US');
+  // onSubmit() {
+  //   const formData = this.filterForm.value;
+  //   const fromDate = formatDate(formData.fromDate, 'yyyy-MM-dd', 'en-US');
+  //   const toDate = formatDate(formData.toDate, 'yyyy-MM-dd', 'en-US');
   
-    this.reportsService.getHistoryByDate(fromDate, toDate, formData.parcelType)
-      .subscribe(
-        data => {
-          this.filteredData = data;
-          this.setDisplayedColumns(formData.parcelType);
-          this.isFiltered = true;  // Mark as filtered
-          this.isDownloadVisible = true; // Enable the download button
-          console.log("Download Visible:", this.isDownloadVisible); // Debug line
-        },
-        error => {
-          console.error('Error fetching dispatch history:', error);
-          this.filteredData = [];
-          this.isFiltered = true;
-          this.isDownloadVisible = false; // Disable the download button on error
-          console.log("Download Visible (on error):", this.isDownloadVisible); // Debug line
-        }
-      );
-  }
+  //   this.reportsService.getHistoryByDate(fromDate, toDate, formData.parcelType)
+  //     .subscribe(
+  //       data => {
+  //         this.filteredData = data;
+  //         this.setDisplayedColumns(formData.parcelType);
+  //         this.isFiltered = true;  // Mark as filtered
+  //         this.isDownloadVisible = true; // Enable the download button
+  //         console.log("Download Visible:", this.isDownloadVisible); // Debug line
+  //       },
+  //       error => {
+  //         console.error('Error fetching dispatch history:', error);
+  //         this.filteredData = [];
+  //         this.isFiltered = true;
+  //         this.isDownloadVisible = false; // Disable the download button on error
+  //         console.log("Download Visible (on error):", this.isDownloadVisible); // Debug line
+  //       }
+  //     );
+  // }
   
-  onDownload() {
-    const formData = this.filterForm.value;
-    const fromDate = formatDate(formData.fromDate, 'yyyy-MM-dd', 'en-US');
-    const toDate = formatDate(formData.toDate, 'yyyy-MM-dd', 'en-US');
+  // onDownload() {
+  //   const formData = this.filterForm.value;
+  //   const fromDate = formatDate(formData.fromDate, 'yyyy-MM-dd', 'en-US');
+  //   const toDate = formatDate(formData.toDate, 'yyyy-MM-dd', 'en-US');
   
-    this.reportsService.getHistoryByDate(fromDate, toDate, formData.parcelType, true)
-      .subscribe(
-        blob => {
-          this.reportsService.downloadPdf(blob, `dispatch_history_${formData.parcelType}.pdf`);
-        },
-        error => {
-          console.error('Error downloading PDF:', error);
-        }
-      );
-  }
+  //   this.reportsService.getHistoryByDate(fromDate, toDate, formData.parcelType, true)
+  //     .subscribe(
+  //       blob => {
+  //         this.reportsService.downloadPdf(blob, `dispatch_history_${formData.parcelType}.pdf`);
+  //       },
+  //       error => {
+  //         console.error('Error downloading PDF:', error);
+  //       }
+  //     );
+  // }
   
-  private setDisplayedColumns(parcelType: string) {
-    if (parcelType === 'in') {
-      this.displayedColumns = ['SenderLocation','SenderDepartment', 'SenderName','RecipientDepartment', 'RecipientName', 'consignmentDateTime','ConsignmentNumber','courierName','EntryDateTime'];
-    } else if (parcelType === 'out') {
-      this.displayedColumns = ['senderName','senderDepartment', 'recipientLocCode', 'recipientName','recipientDepartment', 'weight', 'unit','distance','courierName','recordStatus','consignmentDate','createdDate'];
-    }
-  }
+  // private setDisplayedColumns(parcelType: string) {
+  //   if (parcelType === 'in') {
+  //     this.displayedColumns = ['SenderLocation','SenderDepartment', 'SenderName','RecipientDepartment', 'RecipientName', 'consignmentDateTime','ConsignmentNumber','courierName','EntryDateTime'];
+  //   } else if (parcelType === 'out') {
+  //     this.displayedColumns = ['senderName','senderDepartment', 'recipientLocCode', 'recipientName','recipientDepartment', 'weight', 'unit','distance','courierName','recordStatus','consignmentDate','createdDate'];
+  //   }
+  // }
 }

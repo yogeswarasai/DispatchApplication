@@ -86,7 +86,7 @@
           <mat-error *ngIf="parcelOutForm.get('recipientLocCode')?.invalid">Recipient location code is required</mat-error>
         </mat-form-field> -->
 
-        <mat-form-field appearance="fill">
+        <!-- <mat-form-field appearance="fill">
           <mat-label>Recipient Location Code</mat-label>
           <input 
             type="text" 
@@ -101,9 +101,29 @@
             </mat-option>
           </mat-autocomplete>
           <mat-error *ngIf="parcelOutForm.get('recipientLocCode')?.invalid">Recipient location code is required</mat-error>
+        </mat-form-field> -->
+
+        <mat-form-field appearance="fill">
+          <mat-label>Recipient Location Code</mat-label>
+          <input 
+            type="text" 
+            matInput 
+            formControlName="recipientLocCode" 
+            [matAutocomplete]="auto2" 
+            (input)="onRecipientLocCodeInput()" 
+            placeholder="Enter location code">
+          
+          <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="onRecipientLocCodeSelect($event)">
+            <mat-option *ngFor="let location of filteredLocationCodes | async" [value]="location">
+              {{location}}
+            </mat-option>
+          </mat-autocomplete>
+          
+          <mat-error *ngIf="parcelOutForm.get('recipientLocCode')?.invalid">
+            Recipient location code is required
+          </mat-error>
         </mat-form-field>
-
-
+        
         <mat-form-field appearance="fill">
           <mat-label>Recipient Department</mat-label>
           <mat-select formControlName="recipientDepartment" required>
@@ -147,11 +167,31 @@
 
      
         <!-- Weight -->
-        <mat-form-field appearance="fill">
+        <!-- <mat-form-field appearance="fill">
           <mat-label>Weight</mat-label>
           <input matInput formControlName="weight" placeholder="Enter weight" required>
           <mat-error *ngIf="parcelOutForm.get('weight')?.invalid">Weight is required</mat-error>
+        </mat-form-field> -->
+        <mat-form-field appearance="fill">
+          <mat-label>Weight</mat-label>
+          <input 
+            matInput 
+            formControlName="weight" 
+            placeholder="Enter weight" 
+            required
+            maxlength="10"
+          >
+          <!-- Error: Weight is required -->
+          <mat-error *ngIf="parcelOutForm.get('weight')?.hasError('required')">
+            Weight is required.
+          </mat-error>
+          
+          <!-- Error: Weight must be a valid number -->
+          <mat-error *ngIf="parcelOutForm.get('weight')?.hasError('pattern')">
+            Weight must be a numeric value.
+          </mat-error>
         </mat-form-field>
+        
 
         <!-- Unit -->
         <mat-form-field appearance="fill">

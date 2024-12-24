@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardHeader, MatCardSubtitle, MatCardTitle, MatCardTitleGroup } from '@angular/material/card';
 import { DisEmpVerOtpService } from '../../../login/services/dis-emp-ver-otp.service';
 import { MatMenuModule } from '@angular/material/menu'; 
+import { IoclEmpServiceService } from '../../../services/iocl-emp-service.service';
 @Component({
   selector: 'app-dispatch-employee',
   standalone: true,
@@ -50,7 +51,7 @@ export class DispatchEmployeeComponent {
     this.showReports = !this.showReports;
   }
   
-  constructor(private router: Router,private verOtp:DisEmpVerOtpService) {
+  constructor(private router: Router,private disservice:IoclEmpServiceService,private verotp: DisEmpVerOtpService) {
      // Access profile data from router state
     //  const navigation = this.router.getCurrentNavigation();
     //  if (navigation?.extras.state) {
@@ -59,7 +60,10 @@ export class DispatchEmployeeComponent {
   }
   ngOnInit(): void {
     // Retrieve the profile data from the service
-    this.profile = this.verOtp.getProfileData();
+ //  this.profile = this.verOtp.getProfileData();
+   this.profile = this.disservice.getEmpData();
+
+
     console.log('Profile data on init:', this.profile);
 
     // if (!this.profile) {
@@ -114,7 +118,7 @@ export class DispatchEmployeeComponent {
     console.log('Searching for:', this.searchQuery);
   }
   logout(): void {
-    this.verOtp.logout().subscribe({
+    this.verotp.logout().subscribe({
       next: () => {
         // Handle successful logout, e.g., navigate to the login page
         console.log("user logout success ")

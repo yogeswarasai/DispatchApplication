@@ -16,27 +16,64 @@
                   {{ locCode }}
                 </mat-option>
               </mat-autocomplete>
+              <mat-error *ngIf="seqForm.get('locCode')?.hasError('LocationExists')">
+                Location code already exists.
+              </mat-error>
               <mat-error *ngIf="seqForm.get('locCode')?.invalid && seqForm.get('locCode')?.touched">
                 Loc Code is required
               </mat-error>
+             
+              <mat-error *ngIf="seqForm.get('locCode')?.hasError('invalidFormat')">
+                Invalid location format. Please select a valid location.
+              </mat-error>
+            
             </mat-form-field>
+          
+            
+
+          
           </div>
   
-        <!-- Mobile Number -->
-        <div class="form-row">
+        <!-- <div class="form-row">
           <mat-form-field appearance="fill">
             <mat-label>In Sequence Number</mat-label>
             <input matInput formControlName="inSequenceNo" placeholder=" Max InSequenceNo Is 0">
           </mat-form-field>
         </div>
 
-         <!-- Mobile Number -->
          <div class="form-row">
             <mat-form-field appearance="fill">
               <mat-label>Out Sequence Number</mat-label>
               <input matInput formControlName="outSequenceNo" placeholder=" Max OutSequenceNo Is 0">
             </mat-form-field>
+          </div> -->
+
+          <div class="form-row">
+            <mat-form-field appearance="fill">
+              <mat-label>In Sequence Number</mat-label>
+              <input 
+                matInput 
+                formControlName="inSequenceNo" 
+                type="number" 
+                placeholder="Max InSequenceNo Is 0"
+                (input)="validateNumber('inSequenceNo')"
+              >
+            </mat-form-field>
           </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Out Sequence Number</mat-label>
+              <input 
+                matInput 
+                formControlName="outSequenceNo" 
+                type="number" 
+                placeholder="Max OutSequenceNo Is 0"
+                (input)="validateNumber('outSequenceNo')"
+              >
+            </mat-form-field>
+          </div>
+          
   
         
   

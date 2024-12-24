@@ -10,6 +10,7 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { DisEmpVerOtpService } from '../../../login/services/dis-emp-ver-otp.service';
+import { IoclEmpServiceService } from '../../../services/iocl-emp-service.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -51,10 +52,10 @@ export class ProfileComponent {
   // }
   profile: any;
 
-  constructor(private verOtp: DisEmpVerOtpService) {}
+  constructor(private verOtp: DisEmpVerOtpService,private disservice: IoclEmpServiceService) {}
 
   ngOnInit(): void {
-    this.profile = this.verOtp.getProfileData();
+    this.profile = this.disservice.getEmpData();
   }
 
 }

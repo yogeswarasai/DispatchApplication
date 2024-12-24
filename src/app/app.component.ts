@@ -29,6 +29,7 @@ import { DisMonthlyReportsComponent } from './dispatchEmp/components/dis-monthly
 import { MstCouriercontractComponent } from './ioclEmp/components/mst-couriercontract/mst-couriercontract.component';
 import { CourierHistoryComponent } from './ioclEmp/components/courier-history/courier-history.component';
 import { CourierContractEditComponent } from './ioclEmp/components/courier-contract-edit/courier-contract-edit.component';
+import { DisEmpComponent } from './login/components/dis-emp/dis-emp.component';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -63,7 +64,7 @@ import { CourierContractEditComponent } from './ioclEmp/components/courier-contr
     MstCouriercontractComponent,
     CourierHistoryComponent,
     CourierContractEditComponent,
-   
+    DisEmpComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

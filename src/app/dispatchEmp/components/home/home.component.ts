@@ -15,6 +15,7 @@ import { DisEmpVerOtpService } from '../../../login/services/dis-emp-ver-otp.ser
 import { HomeService } from '../../../services/home.service';
 import { formatDate } from '@angular/common'; // Import for formatting date
 import { ParcelTotals } from '../../../model/parcelTotals';
+import { IoclEmpServiceService } from '../../../services/iocl-emp-service.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -47,10 +48,10 @@ export class HomeComponent {
   profile: any;
   displayedColumns: string[] = ['totalParcels','ParcelIn','ParcelOut'];
   dataSource = new MatTableDataSource<any>();
-  constructor(private verOtp:DisEmpVerOtpService,private home:HomeService) {}
+  constructor(private verOtp:DisEmpVerOtpService,private home:HomeService, private disservice:IoclEmpServiceService) {}
   ngOnInit(): void {
     // Retrieve the profile data from the service
-    this.profile = this.verOtp.getProfileData();
+    this.profile = this.disservice.getEmpData();
     // this.home.getParcelTotals()
     //   .subscribe((data: ParcelTotals) => {
     //     this.dataSource.data = [data]; // Note the use of 'data' as an array here
