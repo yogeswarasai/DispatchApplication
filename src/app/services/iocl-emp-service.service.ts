@@ -4,14 +4,15 @@ import { Observable } from 'rxjs';
 import { Page } from '../model/page';
 import { TrnParcelIn } from '../model/trnParcelIn';
 import { TrnParcelOut } from '../model/trnParcelOut';
-
+import { environment } from '../Environment';
 @Injectable({
   providedIn: 'root'
 })
 export class IoclEmpServiceService {
-  private baseUrl = 'http://localhost:8182/api/v1/employee';
-  private disUrl = 'http://localhost:8182/api/v1/dispatch';
-
+  // private baseUrl = 'http://localhost:8182/api/v1/employee';
+  // private disUrl = 'http://localhost:8182/api/v1/dispatch';
+  private baseUrl = `${environment.apiUrl}/api/v1/employee`;
+  private disUrl = `${environment.apiUrl}/api/v1/dispatch`;
   empData: any = '';
   userHistory: any = '';
 
@@ -29,11 +30,17 @@ export class IoclEmpServiceService {
 
   // Service method to get captcha
   getCaptcha(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/get-captcha`);
+    return this.http.get(`${this.baseUrl}/get-captcha`, { withCredentials: true });
+  }
+  getCaptchadis(): Observable<any> {
+    return this.http.get(`${this.disUrl}/get-captcha`, { withCredentials: true });
   }
 
   checkCaptcha(captchaValue: string): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/check-captcha/${captchaValue}`);
+  }
+  checkCaptchadis(captchaValue: string): Observable<any> {
+    return this.http.get<any>(`${this.disUrl}/check-captcha/${captchaValue}`);
   }
   // setEmpData(data: any) {
   //   this.empData = data;

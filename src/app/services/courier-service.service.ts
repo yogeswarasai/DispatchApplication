@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../Environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourierService {
-  private baseUrl = `http://localhost:8182/api/couriers`;  // Replace with actual backend URL in production
+  // private baseUrl = `http://localhost:8182/api/couriers`;  // Replace with actual backend URL in production
+  private baseUrl = `${environment.apiUrl}api/couriers`; // Dynamically uses the API URL from the environment
 
   constructor(private http: HttpClient) {}
 

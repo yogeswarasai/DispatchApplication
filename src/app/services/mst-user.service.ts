@@ -4,13 +4,15 @@ import { MstUser } from '../model/mstUser';
 import { Observable } from 'rxjs';
 import { MstUserDTO } from '../model/mstUserDto';
 import { Page } from '../model/page';
-
+import { environment } from '../Environment';
 @Injectable({
   providedIn: 'root'
 })
 export class MstUserService {
 
-  private apiUrl = 'http://localhost:8182/users';
+  // private apiUrl = 'http://localhost:8182/users';
+  private apiUrl = `${environment.apiUrl}/users`;
+
   userDetails:any='';
 
   constructor(private http: HttpClient) { }

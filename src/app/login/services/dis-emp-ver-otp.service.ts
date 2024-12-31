@@ -3,12 +3,14 @@ import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-
+import { environment } from '../../Environment';
 @Injectable({
   providedIn: 'root'
 })
 export class DisEmpVerOtpService {
-  private baseUrl = 'http://localhost:8182/api/v1/dispatch'; 
+  // private baseUrl = 'http://localhost:8182/api/v1/dispatch'; 
+  private baseUrl = `${environment.apiUrl}/api/v1/dispatch`; 
+
   private profileData: any;
 
   constructor(private http: HttpClient) {}

@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { MstCourier } from '../model/mstCourier';
 import { Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
-
+import { environment } from '../Environment';
 @Injectable({
   providedIn: 'root'
 })
 export class MstCourierService {
 
-  private apiUrl = 'http://localhost:8080/parcels-in/api/couriers';
+  private apiUrl = `${environment.apiUrl}/parcels-in/api/couriers`;
 
   constructor(private http: HttpClient) { }
 

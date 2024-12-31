@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../Environment';
 @Injectable({
   providedIn: 'root'
 })
 export class ReportsService {
 
-  private baseUrl = 'http://localhost:8182/api/v1/dispatch';
+  // private baseUrl = 'http://localhost:8182/api/v1/dispatch';
+  private baseUrl = `${environment.apiUrl}/api/v1/dispatch`;
   constructor(private http: HttpClient) { }
 
 // downloadPdf(blob: Blob, fileName: string): void {

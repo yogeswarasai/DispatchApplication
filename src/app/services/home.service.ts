@@ -3,6 +3,7 @@ import { HttpClient,HttpParams,HttpHeaders} from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { ParcelTotals } from '../model/parcelTotals';
 import { throwError } from 'rxjs';
+import { environment } from '../Environment';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,8 +11,8 @@ export class HomeService {
 
   //private apiUrl = 'http://localhost:8182/api/v1/dispatch/totalsByDate';
 
-  private apiUrl = 'http://localhost:8182/api/v1/dispatch/totalsByDate';
-
+  // private apiUrl = 'http://localhost:8182/api/v1/dispatch/totalsByDate';
+  private apiUrl = `${environment.apiUrl}/api/v1/dispatch/totalsByDate`;
   constructor(private http: HttpClient) {}
 
   getParcelTotals(): Observable<ParcelTotals> {

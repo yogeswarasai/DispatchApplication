@@ -6,14 +6,16 @@ import { TrnParcelOut } from '../model/trnParcelOut';
 import { StatusCodeModal } from '../model/statusCodeModal';
 import { Page } from '../model/page';
 import { HttpParams } from '@angular/common/http';
-
+import { environment } from '../Environment';
 @Injectable({
   providedIn: 'root'
 })
 export class TrnParcelOutService {
 
-  private baseUrl = 'http://localhost:8182/api/v1/dispatch';
-  private parcelOutUrl='http://localhost:8182/parcels-out';
+  // private baseUrl = 'http://localhost:8182/api/v1/dispatch';
+  // private parcelOutUrl='http://localhost:8182/parcels-out';
+  private baseUrl = `${environment.apiUrl}/api/v1/dispatch`;
+  private parcelOutUrl=`${environment.apiUrl}/parcels-out`;
 
   constructor(private http: HttpClient) {}
 

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Page } from '../model/page';
-
+import { environment } from '../Environment';
 import { RefSequence } from '../model/refSequence';
 import { StatusCodeModal } from '../model/statusCodeModal';
 
@@ -11,7 +11,9 @@ import { StatusCodeModal } from '../model/statusCodeModal';
 })
 export class RefSequenceService {
 
-  private apiUrl = 'http://localhost:8182/sequences';
+  // private apiUrl = 'http://localhost:8182/sequences';
+  private apiUrl = `${environment.apiUrl}/sequences`;
+
 
   constructor(private http: HttpClient) { }
   getAllSequences(page: number = 0, size: number = 8): Observable<Page<RefSequence>> {

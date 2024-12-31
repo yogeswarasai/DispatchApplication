@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
-
+import { environment } from '../Environment';
 
 
 @Injectable({
@@ -13,8 +13,10 @@ import { HttpParams } from '@angular/common/http';
 })
 export class CourierhistoryService {
 
-  private courierUrl = 'http://localhost:8182/api/couriers'; // Replace with your API endpoint
-  private contractUrl = 'http://localhost:8182/api/courier-contracts'; // Replace with your API endpoint
+  // private courierUrl = 'http://localhost:8182/api/couriers'; // Replace with your API endpoint
+  // private contractUrl = 'http://localhost:8182/api/courier-contracts'; // Replace with your API endpoint
+  private courierUrl = `${environment.apiUrl}/api/couriers`; // Replace with your API endpoint
+  private contractUrl = `${environment.apiUrl}/api/courier-contracts`; // Replace with your API endpoint
   
   constructor(private http: HttpClient) {}
 

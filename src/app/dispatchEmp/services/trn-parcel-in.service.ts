@@ -12,13 +12,16 @@ import { Page } from '../../model/page';
 import { HttpParams } from '@angular/common/http';
 import { ParcelOutResponse } from '../components/parcel-in/parcel-in.component';
 import { HttpHeaders } from '@angular/common/http';
+import { environment } from '../../Environment';
 @Injectable({
   providedIn: 'root'
 })
 export class TrnParcelInService {
 
-  private baseUrl = 'http://localhost:8182/api/v1/dispatch';
-  private parcelInUrl='http://localhost:8182/parcels-in';
+  // private baseUrl = 'http://localhost:8182/api/v1/dispatch';
+  // private parcelInUrl='http://localhost:8182/parcels-in';
+  private baseUrl = `${environment.apiUrl}/api/v1/dispatch`;
+  private parcelInUrl=`${environment.apiUrl}/parcels-in`;
 
   constructor(private http: HttpClient) {}
 
@@ -56,7 +59,9 @@ export class TrnParcelInService {
     // const headers = new HttpHeaders({
     //     'Content-Type': 'application/json',
     // });
-    return this.http.get<MstCourier[]>('http://localhost:8182/api/couriers/names', { withCredentials: true });
+    // return this.http.get<MstCourier[]>('http://localhost:8182/api/couriers/names', { withCredentials: true });
+    return this.http.get<MstCourier[]>(`${environment.apiUrl}/api/couriers/names`, { withCredentials: true });
+
 }
   createParcel(parcelIn: TrnParcelIn): Observable<any> {
     return this.http.post<any>(`${this.parcelInUrl}`, parcelIn, { withCredentials: true });
@@ -92,7 +97,7 @@ getParcelOutByConsignmentNumber(consignmentNumber: string): Observable<ParcelOut
     // 'Authorization': 'Bearer ' + token 
   });
 
-  return this.http.get<ParcelOutResponse>(`http://localhost:8182/parcels-out/out/${consignmentNumber}`, {
+  return this.http.get<ParcelOutResponse>(`${environment.apiUrl}/parcels-out/out/${consignmentNumber}`, {
       headers
   });
 }

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { environment } from '../Environment';
 @Injectable({
   providedIn: 'root'
 })
 export class MstCouriercontractService {
 
-  private apiUrl = 'http://localhost:8182/api/courier-contracts'; // Replace with your backend API endpoint
-
+  // private apiUrl = 'http://localhost:8182/api/courier-contracts'; // Replace with your backend API endpoint
+  private apiUrl = `${environment.apiUrl}/api/courier-contracts`;
   constructor(private http: HttpClient) { }
 
   //  createContract(contractData: any): Observable<string> {
@@ -24,7 +24,9 @@ export class MstCouriercontractService {
   // }
 
   createContractRatesAndDiscounts(data: any): Observable<any> {
-    return this.http.post<any>(`http://localhost:8182/api/courier-contracts/create/rates/discounts`, data, {
+    // return this.http.post<any>(`http://localhost:8182/api/courier-contracts/create/rates/discounts`, data, {
+      return this.http.post<any>(`${environment.apiUrl}/api/courier-contracts/create/rates/discounts`, data, {
+
         responseType: 'text' as 'json',
         withCredentials: true
     });

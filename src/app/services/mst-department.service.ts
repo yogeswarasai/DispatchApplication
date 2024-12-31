@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class MstDepartmentService {
 
-  private apiUrl = 'http://localhost:8080/parcels-in/api/departments';
+  private apiUrl = 'http://localhost:8080/dispatch-app/parcels-in/api/departments';
 
   constructor(private http: HttpClient) { }
 

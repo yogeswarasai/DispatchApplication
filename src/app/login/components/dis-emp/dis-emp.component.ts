@@ -70,7 +70,7 @@ export class DisEmpComponent {
     //   }
     // }
     generateCaptcha() {
-      this.ioclEmpService.getCaptcha().subscribe({
+      this.ioclEmpService.getCaptchadis().subscribe({
         next: (res: any) => {
           console.log('Captcha response:', res);
           this.captchaText = res.captchaValue;
@@ -85,7 +85,7 @@ export class DisEmpComponent {
       if (this.loginForm.valid) {
         const { userId, password, captchaInput } = this.loginForm.value;
         console.log('Submitting captcha:', captchaInput);
-        this.ioclEmpService.checkCaptcha(captchaInput).subscribe({
+        this.ioclEmpService.checkCaptchadis(captchaInput).subscribe({
           next: (res: any) => {
             console.log('Captcha check response:', res);
         
